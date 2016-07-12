@@ -7,6 +7,8 @@
 
   window.titan = {
 
+    debug: false,
+
     connected: false,
     users: 0,
 
@@ -15,8 +17,10 @@
     tracks: [],
     players: {},
 
+    activeMusic: null,
+    activeMusicVolume: 0.5,
 
-    loadAudio: function(url, key, volume, loop) {
+    loadAudio: function(url, key, type, volume, loop) {
       var audio = new Audio();
       volume = volume || 0.5;
       loop = loop || false;
@@ -25,6 +29,7 @@
       }
       audio.id = key;
       audio.src = url;
+      audio.type = type;
       audio.volume = volume;
       audio.preload = 'auto';
       audio.addEventListener('canplaythrough', titan.audioLoaded, false);
@@ -34,7 +39,9 @@
 
 
     audioLoaded: function(e) {
-      console.log(e);
+      if (titan.debug) {
+        console.log(e);
+      }
     },
 
 
@@ -42,7 +49,7 @@
       var audio = e.target,
           key = audio.id;
 
-      if (audio.loop) {
+      if (!audio.loop) {
 
       }
     },
@@ -64,7 +71,7 @@
         }
         obj[index] = arr;
         titan.tracks.push(obj);
-        titan.loadAudio(arr, index, volume, loop);
+        titan.loadAudio(arr, index, type, volume, loop);
       }
     },
 
@@ -78,13 +85,32 @@
       titan.players[key].volume = volume;
     },
 
+    setMusicVolume: function(volume) {
+      titan.activeMusicVolume = volume;
+      if (titan.activeMusic !== null) {
+        titan.activeMusic.volume = titan.activeMusicVolume;
+      }
+    },
 
     stop: function(key) {
-      titan.players[key].stop();
+      titan.players[key].pause();
+      titan.players[key].currentTime = 0;
+    },
+
+
+    pause: function(key) {
+      titan.players[key].pause();
     },
 
 
     play: function(key) {
+      if (titan.players[key].type == 'music') {
+        if (titan.activeMusic !== null) {
+          titan.stop(titan.activeMusic.id);
+        }
+        titan.activeMusic = titan.players[key];
+        titan.activeMusic.volume = titan.activeMusicVolume;
+      }
       titan.players[key].play();
     },
 
@@ -111,15 +137,24 @@
         titan.users = response.users;
         titan.el.innerHTML = 'Connected - ' + titan.users + ' active user(s)';
       });
+      titan.socket.on('setVolume', function(response) {
+        response = JSON.parse(response);
+        titan.setVolume(response.key, response.volume);
+      });
+      titan.socket.on('setMusicVolume', function(response) {
+        console.log('Adjusting Music Volume');
+        response = JSON.parse(response);
+        titan.setMusicVolume(response.volume);
+      });
       titan.socket.on('stop', function(response) {
         console.log('Stopping audio');
         response = JSON.parse(response);
-        titan.players[response.key].stop();
+        titan.stop(response.key);
       });
       titan.socket.on('play', function(response) {
         console.log('Playing audio');
         response = JSON.parse(response);
-        titan.players[response.key].play();
+        titan.play(response.key);
       });
 
     },
@@ -153,17 +188,30 @@
     {url: 'audio/sound/connect.ogg', key: 'connect', type: 'sound', loop: false},
     {url: 'audio/sound/disconnect.ogg', key: 'disconnect', type: 'sound', loop: false},
 
-    // Event Sounds
+    // Fun Sounds
     {url: 'audio/sound/crowd_cheer2.ogg', key: 'critical', type: 'sound', loop: false},
-    {url: 'audio/sound/boos.ogg', key: 'criticalMiss', type: 'sound', loop: false},
+    {url: 'audio/sound/the-price-is-right-losing-horn.ogg', key: 'criticalMiss', type: 'sound', loop: false},
     {url: 'audio/sound/toasty.ogg', key: 'toasty', type: 'sound', volume: 1.0, loop: false},
+    {url: 'audio/sound/levelup.ogg', key: 'levelup', type: 'sound', volume: 1.0, loop: false},
 
     // Environment Sounds
 
 
     // Music
+    {url: 'audio/music/music_1.ogg', key: 'music1', type: 'music', loop: true},
+    {url: 'audio/music/music_3a.ogg', key: 'music3', type: 'music', loop: true},
+    {url: 'audio/music/siren_song_lp.ogg', key: 'sirenSong', type: 'music', loop: true},
     {url: 'audio/music/music_eerie_flute1.ogg', key: 'eerieFlute1', type: 'music', loop: true},
+    {url: 'audio/music/music_forest_action1.ogg', key: 'forestAction1', type: 'music', loop: true},
+    {url: 'audio/music/celtic_harp_choir2.ogg', key: 'celticHarpChoir', type: 'music', loop: true},
+    {url: 'audio/music/city_wonder_cue_a.ogg', key: 'cityWonder', type: 'music', loop: true},
     {url: 'audio/music/hurdy_gurdy2.ogg', key: 'hurdyGurdy2', type: 'music', loop: true},
+    {url: 'audio/music/lute_ballad.ogg', key: 'luteBallad', type: 'music', loop: true},
+    {url: 'audio/music/combat1.ogg', key: 'combat1', type: 'music', loop: true},
+    {url: 'audio/music/music_forest_combat1.ogg', key: 'combat2', type: 'music', loop: true},
+    {url: 'audio/music/drum_music_1c.ogg', key: 'combat3', type: 'music', loop: true},
+    {url: 'audio/music/Toccata_and_Fugue_in_D_minor.ogg', key: 'tocattaFugue', type: 'music', loop: true},
+    {url: 'audio/music/Harpsichord_Concerto.ogg', key: 'harpsichordConcerto', type: 'music', loop: true},
   ];
 
   window.onload = (function() {

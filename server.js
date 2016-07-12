@@ -13,7 +13,9 @@ var version = '0.0.4',
   SETTINGS = {port: 8080},
   // SETTINGS = require('./settings.json'),
   users,
-  active = [];
+  active = {},
+  activeMusic = null,
+  activeMusicVolume = 0.5;
 
 app.set('views', __dirname + '/client/views');
 app.set('view engine', 'jade');
@@ -35,38 +37,54 @@ io.on('connection', function(socket) {
   clientCount += 1;
 
   socket.emit('active', JSON.stringify({active: active}));
+  if (activeMusic !== null) {
+    socket.emit('play', JSON.stringify({key: activeMusic}));
+  }
+  socket.emit('setMusicVolume', JSON.stringify({volume: activeMusicVolume}));
   io.sockets.emit('users', JSON.stringify({users: clientCount}));
 
-  socket.on('login', function() {
-    console.log('User %s authenticated');
-  });
-
-  socket.on('chat', function(msg) {
-    console.log('message: ' + msg);
-
-    io.emit('chat', msg);
-  });
-
-  socket.on('command', function(msg) {
-    console.log('command: ' + msg);
-  });
-
   socket.on('load', function(data) {
-    console.log('Map requested');
-
-    if (data && data.id) {
-      data = JSON.parse(data);
-    }
-
     // socket.emit('load');
   });
 
-  socket.on('play', function(data) {
-    console.log('Playing Audio');
+  socket.on('setVolume', function(data) {
+    console.log('Adjusting Audio Volume');
 
     if (!data) {
       console.error('empty data');
       return;
+    }
+
+    io.sockets.emit('setVolume', JSON.stringify({key: data.key, volume: data.volume}));
+  });
+
+  socket.on('setMusicVolume', function(data) {
+    console.log('Adjusting Music Volume');
+
+    if (!data) {
+      console.error('empty data');
+      return;
+    }
+
+    activeMusicVolume = data.volume;
+
+    io.sockets.emit('setMusicVolume', JSON.stringify({volume: data.volume}));
+  });
+
+  socket.on('play', function(data) {
+    console.log('Playing Audio');
+    console.log(data);
+
+    if (!data) {
+      console.error('empty data');
+      return;
+    }
+
+    if (data.type == 'music') {
+      activeMusic = data.key;
+    }
+    else {
+      active[data.key] = data;
     }
 
     io.sockets.emit('play', JSON.stringify({key: data.key}));
@@ -79,14 +97,22 @@ io.on('connection', function(socket) {
       console.error('empty data');
       return;
     }
+    if (data.type == 'music') {
+      activeMusic = null;
+    }
+    else {
+      delete active[data.key];
+    }
 
     io.sockets.emit('stop', JSON.stringify({key: data.key}));
   });
 
   socket.on('disconnect', function(){
     console.log('User disconnected');
+
     clientCount -= 1;
   });
+
 });
 
 

@@ -4,17 +4,36 @@ html(lang="en")
   head
     title Titan Audio Admin
     meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+    link(rel="stylesheet", href="css/main.css", type="text/css", media="screen")
   body
     h1 Titan Audio Admin
     h3(id='connection')
 
     div(id='Sounds')
       h3 Common Use
-      button(id='critical') Critical Hit
+      button(id='critical', ) Critical Hit
       button(id='criticalMiss') Critical Miss
       button(id='toasty') Toasty
+      button(id='levelup') Level Up
+
       h3 Music
+        label Volume
+          input(type='number', id='musicVolume', min=1, max=10, value=5)
+
+      button(id='music1') Mysterious Investigation
+      button(id='forestAction1') Mysterious Action
+      button(id='sirenSong') Siren Song
       button(id='eerieFlute1') Eerie Flute
+      button(id='celticHarpChoir') Celtic Harp Choir
+      button(id='cityWonder') City Wonder
+      button(id='tocattaFugue') Tocatta &amp; Fugue
+      button(id='harpsichordConcerto') Harpsichord Concerto
+      button(id='luteBallad') Lute Ballad
+      button(id='hurdyGurdy2') Hurdy Gurdy
+      button(id='music3') Signs of Battle
+      button(id='combat1') Combat1
+      button(id='combat2') Combat2
+      button(id='combat3') Combat3 (Drums)
 
     script(type='text/javascript', src='/socket.io/socket.io.js')
     script(type='text/javascript', src='js/titan.js')
@@ -23,21 +42,49 @@ html(lang="en")
         'use strict';
 
         var container = document.getElementById('Sounds');
-        for (var i = 0; i < container.children.length; i+=1) {
-          container.children[i].addEventListener('click', playSound, false);
+
+        function setVolume(e) {
+          titan.setVolume(e.target.id, e.target.value/10);
+          titan.broadcast('setVolume', {key: e.target.id, volume: e.target.value/10});
+        }
+
+        function setMusicVolume(e) {
+          titan.setMusicVolume(e.target.value/10);
+          titan.broadcast('setMusicVolume', {volume: e.target.value/10});
         }
 
         function playSound(e) {
+          if (e.target.tagName.toLowerCase() != 'button') {
+            return false;
+          }
+
+          var audio = titan.players[e.target.id],
+            type = audio.type,
+            volume = audio.volume,
+            loop = audio.loop,
+            key = audio.id,
+            data = {key: key, type: type, volume: volume, loop: loop};
+
           if (e.target.className == 'active') {
-            titan.broadcast('stop', {key: e.target.id});
+            titan.broadcast('stop', data);
             e.target.className = '';
           }
           else {
-            titan.broadcast('play', {key: e.target.id});
+            titan.broadcast('play', data);
             e.target.className = 'active';
           }
 
           e.stopPropagation();
           return false;
         }
+
+        window.addEventListener('connected', function() {
+          //- document.getElementById('musicVolume').value = titan.activeMusicVolume * 10;
+        });
+
+        document.getElementById('musicVolume').addEventListener('change', setMusicVolume, false);
+        for (var i = 0; i < container.children.length; i+=1) {
+          container.children[i].addEventListener('click', playSound, false);
+        }
+
       })();
