@@ -48,14 +48,14 @@
     },
 
 
-    addTracks: function(arr, index, type, loop) {
+    addTracks: function(arr, index, type, volume, loop) {
       if (Object.prototype.toString.call(arr) === '[object Array]') {
         for (var i=0; i<arr.length; i+=1) {
           titan.addTracks(arr[i]);
         }
       }
       else if (Object.prototype.toString.call(arr) === '[object Object]') {
-        titan.addTracks(arr.url, arr.key, arr.type, arr.loop);
+        titan.addTracks(arr.url, arr.key, arr.type, arr.volume, arr.loop);
       }
       else {
         var obj = {};
@@ -64,7 +64,7 @@
         }
         obj[index] = arr;
         titan.tracks.push(obj);
-        titan.loadAudio(arr, index, 0.5, loop);
+        titan.loadAudio(arr, index, volume, loop);
       }
     },
 
@@ -136,27 +136,32 @@
     },
 
 
-    send: function(type, data) {
-      if (data === '') {
-        console.log('Please enter a message', 1);
-        return false;
-      }
-
+    broadcast: function(type, data) {
       try {
         titan.socket.emit(type, data);
-        console.log('Sent: ' + data, 0);
       }
       catch(exception) {
         console.log(exception, 2);
       }
+
     },
 
   };
 
   var tracks = [
-    {url: 'audio/sound/connect.wav', key: 'connect', type: 'sound', loop: false},
-    {url: 'audio/sound/disconnect.wav', key: 'disconnect', type: 'sound', loop: false},
+    // UI Sounds
+    {url: 'audio/sound/connect.ogg', key: 'connect', type: 'sound', loop: false},
+    {url: 'audio/sound/disconnect.ogg', key: 'disconnect', type: 'sound', loop: false},
+
+    // Event Sounds
     {url: 'audio/sound/crowd_cheer2.ogg', key: 'critical', type: 'sound', loop: false},
+    {url: 'audio/sound/boos.ogg', key: 'criticalMiss', type: 'sound', loop: false},
+    {url: 'audio/sound/toasty.ogg', key: 'toasty', type: 'sound', volume: 1.0, loop: false},
+
+    // Environment Sounds
+
+
+    // Music
     {url: 'audio/music/music_eerie_flute1.ogg', key: 'eerieFlute1', type: 'music', loop: true},
     {url: 'audio/music/hurdy_gurdy2.ogg', key: 'hurdyGurdy2', type: 'music', loop: true},
   ];
@@ -165,7 +170,7 @@
     var div = document.createElement('div');
     div.id = 'connection';
     div.innerHTML = 'Connecting...';
-    document.body.appendChild(div);
+    document.getElementById('connection').appendChild(div);
     titan.el = div;
 
     titan.addTracks(tracks);

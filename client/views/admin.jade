@@ -1,0 +1,43 @@
+doctype html
+
+html(lang="en")
+  head
+    title Titan Audio Admin
+    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+  body
+    h1 Titan Audio Admin
+    h3(id='connection')
+
+    div(id='Sounds')
+      h3 Common Use
+      button(id='critical') Critical Hit
+      button(id='criticalMiss') Critical Miss
+      button(id='toasty') Toasty
+      h3 Music
+      button(id='eerieFlute1') Eerie Flute
+
+    script(type='text/javascript', src='/socket.io/socket.io.js')
+    script(type='text/javascript', src='js/titan.js')
+    script.
+      (function() {
+        'use strict';
+
+        var container = document.getElementById('Sounds');
+        for (var i = 0; i < container.children.length; i+=1) {
+          container.children[i].addEventListener('click', playSound, false);
+        }
+
+        function playSound(e) {
+          if (e.target.className == 'active') {
+            titan.broadcast('stop', {key: e.target.id});
+            e.target.className = '';
+          }
+          else {
+            titan.broadcast('play', {key: e.target.id});
+            e.target.className = 'active';
+          }
+
+          e.stopPropagation();
+          return false;
+        }
+      })();

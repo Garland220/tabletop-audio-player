@@ -34,7 +34,7 @@ io.on('connection', function(socket) {
   console.log('A user connected from %s', socket.handshake.address);
   clientCount += 1;
 
-  io.sockets.emit('active', JSON.stringify({active: active}));
+  socket.emit('active', JSON.stringify({active: active}));
   io.sockets.emit('users', JSON.stringify({users: clientCount}));
 
   socket.on('login', function() {
@@ -70,6 +70,17 @@ io.on('connection', function(socket) {
     }
 
     io.sockets.emit('play', JSON.stringify({key: data.key}));
+  });
+
+  socket.on('stop', function(data) {
+    console.log('Stopping Audio');
+
+    if (!data) {
+      console.error('empty data');
+      return;
+    }
+
+    io.sockets.emit('stop', JSON.stringify({key: data.key}));
   });
 
   socket.on('disconnect', function(){
