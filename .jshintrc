@@ -1,0 +1,4 @@
+{
+  "predef": ["titan", "console", "require", "io"],
+  "unused": false
+}

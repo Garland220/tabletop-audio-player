@@ -22,17 +22,11 @@ app.use(express.static('client'));
 
 app.get('/', function(req, res){
   res.render('index', {});
-  // res.sendfile('./client/views/index.html');
 });
 
 app.get('/admin', function(req, res){
   res.render('admin', {});
 });
-
-// app.get('/map', function(req, res){
-//   res.setHeader('Content-Type', 'application/json');
-//   res.send();
-// });
 
 
 var clientCount = 0;
@@ -40,7 +34,6 @@ io.on('connection', function(socket) {
   console.log('A user connected from %s', socket.handshake.address);
   clientCount += 1;
 
-  // io.sockets.emit('play', JSON.stringify({key: 'critical'}));
   io.sockets.emit('active', JSON.stringify({active: active}));
   io.sockets.emit('users', JSON.stringify({users: clientCount}));
 
@@ -65,7 +58,7 @@ io.on('connection', function(socket) {
       data = JSON.parse(data);
     }
 
-    // socket.emit('load', JSON.stringify({id: map.id, name: map.name, music: map.music, tile_data: JSON.parse(map.tile_data)}));
+    // socket.emit('load');
   });
 
   socket.on('play', function(data) {
@@ -76,7 +69,7 @@ io.on('connection', function(socket) {
       return;
     }
 
-    // io.sockets.emit('load_map', JSON.stringify({id: map.id, name: map.name, tile_data: JSON.parse(map.tile_data), music: map.music}));
+    io.sockets.emit('play', JSON.stringify({key: data.key}));
   });
 
   socket.on('disconnect', function(){
