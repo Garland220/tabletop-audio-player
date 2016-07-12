@@ -189,13 +189,55 @@
     {url: 'audio/sound/disconnect.ogg', key: 'disconnect', type: 'sound', loop: false},
 
     // Fun Sounds
-    {url: 'audio/sound/crowd_cheer2.ogg', key: 'critical', type: 'sound', loop: false},
-    {url: 'audio/sound/the-price-is-right-losing-horn.ogg', key: 'criticalMiss', type: 'sound', loop: false},
+    {url: 'audio/sound/crowd_cheer2.ogg', key: 'critical', type: 'sound', volume: 0.3, loop: false},
+    {url: 'audio/sound/the-price-is-right-losing-horn.ogg', key: 'criticalMiss', type: 'sound', volume: 0.2, loop: false},
     {url: 'audio/sound/toasty.ogg', key: 'toasty', type: 'sound', volume: 1.0, loop: false},
     {url: 'audio/sound/levelup.ogg', key: 'levelup', type: 'sound', volume: 1.0, loop: false},
 
     // Environment Sounds
+    {url: 'audio/sound/stream.ogg', key: 'stream1', type: 'sound', loop: true},
+    {url: 'audio/sound/stream1_lp.ogg', key: 'stream2', type: 'sound', loop: true},
+    {url: 'audio/sound/rain1_lp.ogg', key: 'rain1', type: 'sound', loop: true},
+    {url: 'audio/sound/rain2_lp.ogg', key: 'rain2', type: 'sound', loop: true},
+    {url: 'audio/sound/rain3_lp.ogg', key: 'rain3', type: 'sound', loop: true},
+    {url: 'audio/sound/rain_outside.ogg', key: 'rainOutside', type: 'sound', loop: true},
+    {url: 'audio/sound/rain_on_roofb.ogg', key: 'rainRoof', type: 'sound', loop: true},
+    {url: 'audio/sound/breeze.ogg', key: 'breeze', type: 'sound', loop: true},
+    {url: 'audio/sound/wind1_lp.ogg', key: 'wind1', type: 'sound', loop: true},
+    {url: 'audio/sound/wind2_lp.ogg', key: 'wind2', type: 'sound', loop: true},
+    {url: 'audio/sound/gale3a.ogg', key: 'wind3', type: 'sound', loop: true},
+    {url: 'audio/sound/wind_outside.ogg', key: 'windOutside', type: 'sound', loop: true},
+    {url: 'audio/sound/thunder1.ogg', key: 'thunder1', type: 'sound', loop: true},
+    {url: 'audio/sound/thunder2.ogg', key: 'thunder2', type: 'sound', loop: false},
 
+    // Prop sounds
+    {url: 'audio/sound/torches.ogg', key: 'torches', type: 'sound', loop: true},
+    {url: 'audio/sound/campfire1_lp.ogg', key: 'campfire', type: 'sound', loop: true},
+    {url: 'audio/sound/fireplace_loop_c.ogg', key: 'fireplace', type: 'sound', loop: true},
+    {url: 'audio/sound/flag_wind.ogg', key: 'flagWind', type: 'sound', loop: true},
+
+    // Horror Sounds
+    {url: 'audio/sound/heartbeat.ogg', key: 'heartbeat1', type: 'sound', loop: true},
+    {url: 'audio/sound/heartbeat2.ogg', key: 'heartbeat2', type: 'sound', loop: true},
+    {url: 'audio/sound/knife_sharpening.ogg', key: 'knifeSharpen', type: 'sound', loop: false},
+    {url: 'audio/sound/wolf_howl1.ogg', key: 'wolfHowl', type: 'sound', loop: false},
+    {url: 'audio/sound/hawk1.ogg', key: 'hawk', type: 'sound', loop: false},
+    {url: 'audio/sound/flies.ogg', key: 'flies', type: 'sound', loop: true},
+    {url: 'audio/sound/bats.ogg', key: 'bats', type: 'sound', loop: false},
+    {url: 'audio/sound/church_bell.ogg', key: 'churchBell', type: 'sound', loop: false},
+    {url: 'audio/sound/door_open.ogg', key: 'doorOpen', type: 'sound', loop: false},
+    {url: 'audio/sound/door_close.ogg', key: 'doorClose', type: 'sound', loop: false},
+    {url: 'audio/sound/wail.ogg', key: 'wail', type: 'sound', loop: false},
+    {url: 'audio/sound/pianohit.ogg', key: 'pianohit', type: 'sound', loop: false},
+    {url: 'audio/sound/whispers1.ogg', key: 'whispers1', type: 'sound', loop: false},
+    {url: 'audio/sound/whispers2x.ogg', key: 'whispers2', type: 'sound', loop: false},
+    {url: 'audio/sound/vortex.ogg', key: 'vortex', type: 'sound', loop: false},
+
+    // Combat Sounds
+    {url: 'audio/sound/back_stab.ogg', key: 'stab', type: 'sound', loop: false},
+    {url: 'audio/sound/bow_single_shot.ogg', key: 'bow', type: 'sound', loop: false},
+    {url: 'audio/sound/club_attack.ogg', key: 'club', type: 'sound', loop: false},
+    {url: 'audio/sound/heal_spell_1a.ogg', key: 'heal', type: 'sound', loop: false},
 
     // Music
     {url: 'audio/music/music_1.ogg', key: 'music1', type: 'music', loop: true},
