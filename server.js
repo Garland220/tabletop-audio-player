@@ -111,6 +111,7 @@ io.on('connection', function(socket) {
     console.log('User disconnected');
 
     clientCount -= 1;
+    io.sockets.emit('users', JSON.stringify({users: clientCount}));
   });
 
 });
