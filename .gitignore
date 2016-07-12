@@ -1,1 +1,4 @@
 .DS_Store
+client/audio/sound
+client/audio/music
+node_modules
