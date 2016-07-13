@@ -3,15 +3,15 @@
 
   var tracks = [
     // UI Sounds
-    {url: 'audio/sound/connect.ogg', key: 'connect', type: 'sound', loop: false},
-    {url: 'audio/sound/disconnect.ogg', key: 'disconnect', type: 'sound', loop: false},
+    {url: 'audio/sound/connect.ogg', key: 'connect', type: 'sound', preload: 'auto', loop: false},
+    {url: 'audio/sound/disconnect.ogg', key: 'disconnect', type: 'sound', preload: 'auto', loop: false},
 
 
     // Fun Sounds
-    {url: 'audio/sound/crowd_cheer2.ogg', key: 'criticalHit', type: 'sound', category: 'fun', volume: 0.3, loop: false},
-    {url: 'audio/sound/the-price-is-right-losing-horn.ogg', key: 'criticalMiss', type: 'sound', category: 'fun', volume: 0.2, loop: false},
-    {url: 'audio/sound/toasty.ogg', key: 'toasty', type: 'sound', volume: 1.0, loop: false},
-    {url: 'audio/sound/levelup.ogg', key: 'levelUp', type: 'sound', volume: 1.0, loop: false},
+    {url: 'audio/sound/crowd_cheer2.ogg', key: 'criticalHit', type: 'sound', category: 'fun', preload: 'auto', volume: 0.3, loop: false},
+    {url: 'audio/sound/the-price-is-right-losing-horn.ogg', key: 'criticalMiss', type: 'sound', category: 'fun', preload: 'auto', volume: 0.2, loop: false},
+    {url: 'audio/sound/toasty.ogg', key: 'toasty', type: 'sound', category: 'fun', volume: 1.0, loop: false},
+    {url: 'audio/sound/levelup.ogg', key: 'levelUp', type: 'sound', category: 'fun', volume: 1.0, loop: false},
 
 
     // Environment Sounds

@@ -30,7 +30,7 @@
       }
       audio.id = data.key;
       audio.src = data.url;
-      audio.preload = data.preload || 'auto';
+      audio.preload = data.preload || 'metadata';
       audio.volume = data.volume || 0.5;
       audio.type = data.type || 'sound';
       audio.category = data.category || 'misc';
