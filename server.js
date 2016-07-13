@@ -2,20 +2,17 @@
 /*jslint node: true */
 'use strict';
 
-var version = '0.0.4',
+var SETTINGS = require('./settings.json'),
   util = require('util'),
   fs = require('fs'),
   express = require('express'),
   app = express(),
   http = require('http').Server(app),
   io = require('socket.io')(http),
-  // pg = require('pg'),
-  // SETTINGS = {port: 8080},
-  SETTINGS = require('./settings.json'),
-  users,
-  active = {},
+  activeMusicVolume = 0.5,
   activeMusic = null,
-  activeMusicVolume = 0.5;
+  activeSounds = {},
+  users;
 
 app.set('views', __dirname + '/client/views');
 app.set('view engine', 'jade');
@@ -27,7 +24,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/admin', function(req, res) {
-  if (req.query.key && req.query.key === SETTINGS.adminKey) {
+  if (!SETTINGS.adminKey || req.query.key && req.query.key === SETTINGS.adminKey) {
     console.log('Admin Key Accepted');
     res.render('admin', {});
   }
@@ -43,7 +40,7 @@ io.on('connection', function(socket) {
   console.log('A user connected from %s', socket.handshake.address);
   clientCount += 1;
 
-  socket.emit('active', JSON.stringify({active: active}));
+  socket.emit('active', JSON.stringify({active: activeSounds}));
   if (activeMusic !== null) {
     socket.emit('play', JSON.stringify({key: activeMusic}));
   }
@@ -91,7 +88,7 @@ io.on('connection', function(socket) {
       activeMusic = data.key;
     }
     else {
-      active[data.key] = data;
+      activeSounds[data.key] = data;
     }
 
     io.sockets.emit('play', JSON.stringify({key: data.key}));
@@ -108,7 +105,7 @@ io.on('connection', function(socket) {
       activeMusic = null;
     }
     else {
-      delete active[data.key];
+      delete activeSounds[data.key];
     }
 
     io.sockets.emit('stop', JSON.stringify({key: data.key}));
