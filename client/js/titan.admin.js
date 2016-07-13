@@ -42,11 +42,23 @@
 
 
     start: function(buttons) {
+
+
       for (var i = 0; i < buttons.length; i+=1) {
         buttons[i].addEventListener('click', titan.admin.play, false);
       }
       // window.addEventListener('connected', function() { document.getElementById('musicVolume').value = titan.activeMusicVolume * 10; });
       document.getElementById('musicVolume').addEventListener('change', titan.admin.setMusicVolume, false);
+      window.addEventListener('connected', function() {
+        titan.socket.on('play', function(response) {
+          response = JSON.parse(response);
+          document.getElementById(response.key).className = 'active';
+        });
+        titan.socket.on('stop', function(response) {
+          response = JSON.parse(response);
+          document.getElementById(response.key).className = '';
+        });
+      });
     }
 
   };
