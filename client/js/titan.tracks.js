@@ -112,15 +112,16 @@
     {url: 'audio/music/drum_music_1c.ogg', key: 'combat3', type: 'music', loop: true},
     {url: 'audio/music/Toccata_and_Fugue_in_D_minor.ogg', key: 'tocattaFugue', type: 'music', loop: true},
     {url: 'audio/music/Harpsichord_Concerto.ogg', key: 'harpsichordConcerto', type: 'music', loop: true},
-  ];
+  ],
+  div = document.createElement('div');
+
+  div.id = 'connection';
+  div.innerHTML = 'Disconnected';
+  document.getElementById('connection').appendChild(div);
+  titan.el = div;
 
   window.onload = (function() {
-    var div = document.createElement('div');
-    div.id = 'connection';
-    div.innerHTML = 'Connecting...';
-    document.getElementById('connection').appendChild(div);
-    titan.el = div;
-
+    titan.el.innerHTML = 'Connecting...';
     titan.addTracks(tracks);
     titan.connect();
   });

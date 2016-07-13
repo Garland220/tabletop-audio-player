@@ -40,12 +40,16 @@ input[type=number] {
   color: #eee;
 }
 
-#Sounds > div {
+#connection {
+  color: #999;
+}
+
+#sounds > div {
   background: #ccc;
   padding: 5px;
   margin: 10px 0
 }
-#Sounds > div h3 {
+#sounds > div h3 {
   width: 100%;
   background: #444;
   display: block;
