@@ -53,7 +53,10 @@
           key = audio.id;
 
       if (!audio.loop) {
-
+        var button = document.querySelector('button#'+key);
+        if (button) {
+          button.className = '';
+        }
       }
     },
 
