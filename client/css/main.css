@@ -26,6 +26,10 @@ button.active {
   border: 1px solid #333;
 }
 
+h1, h3 { margin: 0px; padding: 0; }
+
+h3 { height: 25px; line-height: 20px; }
+
 h3 label {
   font-size: 12px;
   font-weight: 500;
