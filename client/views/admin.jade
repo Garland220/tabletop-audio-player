@@ -5,118 +5,135 @@ html(lang="en")
     title Titan Audio Admin
     meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
     link(rel="stylesheet", href="css/main.css", type="text/css", media="screen")
+
   body
     h1 Titan Audio Admin
     h3(id='connection')
 
     div(id='Sounds')
-      h3 Fun Sounds
-      button(id='critical', ) Critical Hit
-      button(id='criticalMiss') Critical Miss
-      button(id='toasty') Toasty
-      button(id='levelup') Level Up
+      div(id='funSounds')
+        h3 Fun Sounds
 
-      h3 Environment Sounds
-      button(id='stream1') Stream1
-      button(id='stream2') Stream2
-      button(id='breeze') Breeze
-      button(id='wind1') Wind1
-      button(id='wind2') Wind2
-      button(id='wind3') Wind3
-      button(id='rain1') Rain1
-      button(id='rain1') Rain2
-      button(id='rain3') Rain3
-      button(id='rainOutside') Rain Outside
-      button(id='rainOutside2') Rain Outside2
-      button(id='thunder1') Thunder1
-      button(id='thunder2') Thunder2
-      button(id='rumble') rumble
+        button(id='critical', ) Critical Hit
+        button(id='criticalMiss') Critical Miss
+        button(id='toasty') Toasty
+        button(id='levelup') Level Up
 
-      h3 Prop Sounds
-      button(id='torches') Torches
-      button(id='campfire') Campfire
-      button(id='fireplace') Fireplace
-      button(id='flagWind') Flag Wind
-      button(id='signWind') Sign Wind
-      button(id='ropeCreak') Rope Creak
-      button(id='repairs') Repairs
-      button(id='fountain') Fountain
-      button(id='doorOpen') doorOpen
-      button(id='doorClose') doorClose
-      button(id='gateOpen') gateOpen
-      button(id='warDrums1') War Drums
-      button(id='warHorn1') War Horn
 
-      h3 Horror Sounds
+      div(id='environmentSounds')
+        h3 Environment Sounds
 
-      button(id='heartbeat1') Heartbeat1
-      button(id='heartbeat2') Heartbeat2
-      button(id='churchBell') Church Bell
-      button(id='tone1') Tone1
-      button(id='tone2') Tone2
-      button(id='tone3') Tone3
-      button(id='tone4') Tone4
-      button(id='riser1') Riser1
-      button(id='riser2') Riser2
-      button(id='pianohit') Piano Hit
-      button(id='wolfHowl') Wolf Howling
-      button(id='snarl1') Wolf Snarl
-      button(id='roar') Bear Roar
-      button(id='owl') Owl
-      button(id='hawk') Hawk
-      button(id='bats') Bats
-      button(id='rats') Rats
-      button(id='flies') Flies
-      button(id='scrape1') Scrape
-      button(id='screams') Screams
-      button(id='spiritBreath') Spirit Breath
-      button(id='wail') Wail
-      button(id='whispers1') Whispers1
-      button(id='whispers2') Whispers2
-      button(id='vortex') Vortex
+        button(id='stream1') Stream1
+        button(id='stream2') Stream2
+        button(id='breeze') Breeze
+        button(id='wind1') Wind1
+        button(id='wind2') Wind2
+        button(id='wind3') Wind3
+        button(id='rain1') Rain1
+        button(id='rain1') Rain2
+        button(id='rain3') Rain3
+        button(id='rainOutside') Rain Outside
+        button(id='rainOutside2') Rain Outside2
+        button(id='thunder1') Thunder1
+        button(id='thunder2') Thunder2
+        button(id='rumble') rumble
 
-      h3 Combat Sounds
-      button(id='bow') Bow
-      button(id='club') Club
-      button(id='staff') Staff
-      button(id='stab') Stab
-      button(id='shieldBash') Shield Bash
-      button(id='heal') Heal
-      button(id='fireSpell') fireSpell
-      button(id='iceSpell') iceSpell
-      button(id='miscSpell') miscSpell
-      button(id='musicSpell') musicSpell
-      button(id='natureSpell') natureSpell
-      button(id='explosion1') explosion1
-      button(id='explosion2') explosion2
-      button(id='knifeSharpen') Knife Sharpening
-      button(id='trapArrow') Trap Arrow
-      button(id='trapSpike') Trap Spike
-      button(id='trapMagic') Trap Magic
-      button(id='trapPoison') Trap Poison
-      button(id='trapPit') Trap Pit
-      button(id='trapGate') Trap Gate
 
-      h3 Music
-        label Volume
-          input(type='number', id='musicVolume', min=1, max=10, value=5)
+      div(id='propSounds')
+        h3 Prop Sounds
 
-      button(id='music1') Mysterious Investigation
-      button(id='forestAction1') Mysterious Action
-      button(id='sirenSong') Siren Song
-      button(id='eerieFlute1') Eerie Flute
-      button(id='celticHarpChoir') Celtic Harp Choir
-      button(id='musicBox') Somber Music Box
-      button(id='serenade') Wanderer Serenade
-      button(id='cityWonder') City Wonder
-      button(id='tocattaFugue') Tocatta &amp; Fugue
-      button(id='harpsichordConcerto') Harpsichord Concerto
-      button(id='luteBallad') Lute Ballad
-      button(id='hurdyGurdy2') Hurdy Gurdy
-      button(id='music3') Signs of Battle
-      button(id='combat1') Combat1
-      button(id='combat2') Combat2
-      button(id='combat3') Combat3 (Drums)
+        button(id='torches') Torches
+        button(id='campfire1') Campfire1
+        button(id='campfire2') Campfire2
+        button(id='flagWind') Flag Wind
+        button(id='signWind') Sign Wind
+        button(id='ropeCreak') Rope Creak
+        button(id='repairs') Repairs
+        button(id='fountain') Fountain
+        button(id='doorOpen') doorOpen
+        button(id='doorClose') doorClose
+        button(id='gateOpen') gateOpen
+        button(id='warDrums1') War Drums
+        button(id='warHorn1') War Horn
+
+
+      div(id='horrorSounds')
+        h3 Horror Sounds
+
+        button(id='heartbeat1') Heartbeat1
+        button(id='heartbeat2') Heartbeat2
+        button(id='churchBell') Church Bell
+        button(id='tone1') Tone1
+        button(id='tone2') Tone2
+        button(id='tone3') Tone3
+        button(id='tone4') Tone4
+        button(id='riser1') Riser1
+        button(id='riser2') Riser2
+        button(id='pianohit') Piano Hit
+        button(id='wolfHowl') Wolf Howling
+        button(id='snarl1') Wolf Snarl
+        button(id='roar') Bear Roar
+        button(id='owl') Owl
+        button(id='hawk') Hawk
+        button(id='bats') Bats
+        button(id='rats') Rats
+        button(id='flies') Flies
+        button(id='scrape1') Scrape
+        button(id='screams') Screams
+        button(id='spiritBreath') Spirit Breath
+        button(id='wail') Wail
+        button(id='whispers1') Whispers1
+        button(id='whispers2') Whispers2
+        button(id='vortex') Vortex
+
+
+      div(id='combatSounds')
+        h3 Combat Sounds
+
+        button(id='bow') Bow
+        button(id='club') Club
+        button(id='staff') Staff
+        button(id='stab') Stab
+        button(id='shieldBash') Shield Bash
+        button(id='heal') Heal
+        button(id='fireSpell') fireSpell
+        button(id='iceSpell') iceSpell
+        button(id='miscSpell') miscSpell
+        button(id='musicSpell') musicSpell
+        button(id='natureSpell') natureSpell
+        button(id='explosion1') explosion1
+        button(id='explosion2') explosion2
+        button(id='knifeSharpen') Knife Sharpening
+        button(id='trapArrow') Trap Arrow
+        button(id='trapSpike') Trap Spike
+        button(id='trapMagic') Trap Magic
+        button(id='trapPoison') Trap Poison
+        button(id='trapPit') Trap Pit
+        button(id='trapGate') Trap Gate
+
+
+      div(id='music')
+        h3 Music
+          label Volume
+            input(type='number', id='musicVolume', min=1, max=10, value=5)
+
+        button(id='music1') Mysterious Investigation
+        button(id='forestAction1') Mysterious Action
+        button(id='sirenSong') Siren Song
+        button(id='eerieFlute1') Eerie Flute
+        button(id='celticHarpChoir') Celtic Harp Choir
+        button(id='musicBox') Somber Music Box
+        button(id='serenade') Wanderer Serenade
+        button(id='cityWonder') City Wonder
+        button(id='tocattaFugue') Tocatta &amp; Fugue
+        button(id='harpsichordConcerto') Harpsichord Concerto
+        button(id='luteBallad') Lute Ballad
+        button(id='hurdyGurdy2') Hurdy Gurdy
+        button(id='music3') Signs of Battle
+        button(id='combat1') Combat1
+        button(id='combat2') Combat2
+        button(id='combat3') Combat3 (Drums)
+
 
     script(type='text/javascript', src='/socket.io/socket.io.js')
     script(type='text/javascript', src='js/titan.js')

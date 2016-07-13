@@ -213,8 +213,8 @@
 
     // Prop sounds
     {url: 'audio/sound/torches.ogg', key: 'torches', type: 'sound', loop: true},
-    {url: 'audio/sound/campfire1_lp.ogg', key: 'campfire', type: 'sound', loop: true},
-    {url: 'audio/sound/fireplace_loop_c.ogg', key: 'fireplace', type: 'sound', loop: true},
+    {url: 'audio/sound/fireplace_loop_c.ogg', key: 'campfire1', type: 'sound', loop: true},
+    {url: 'audio/sound/campfire1_lp.ogg', key: 'campfire2', type: 'sound', loop: true},
     {url: 'audio/sound/flag_wind.ogg', key: 'flagWind', type: 'sound', loop: true},
     {url: 'audio/sound/tavern_sign.ogg', key: 'signWind', type: 'sound', loop: true},
     {url: 'audio/sound/war_drums_1.ogg', key: 'warDrums', type: 'sound', loop: true},
