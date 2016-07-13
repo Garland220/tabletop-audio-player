@@ -4,14 +4,16 @@ Titan Audio Engine
 Install
 ------
 ```bash
+cp settings.template.json settings.json
 npm install
 ```
 
-copy settings.template.json to settings.json
-
+Running
+------
 start server with
 ```bash
-  node server.js
+node server.js
 ```
 
-open localhost:8080 in browser
+admin opens localhost:8080/admin to control the sound
+players open localhost:8080 in their browsers to listen
