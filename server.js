@@ -10,8 +10,8 @@ var version = '0.0.4',
   http = require('http').Server(app),
   io = require('socket.io')(http),
   // pg = require('pg'),
-  SETTINGS = {port: 8080},
-  // SETTINGS = require('./settings.json'),
+  // SETTINGS = {port: 8080},
+  SETTINGS = require('./settings.json'),
   users,
   active = {},
   activeMusic = null,
@@ -22,12 +22,19 @@ app.set('view engine', 'jade');
 app.set('view options', { layout: true });
 app.use(express.static('client'));
 
-app.get('/', function(req, res){
+app.get('/', function(req, res) {
   res.render('index', {});
 });
 
-app.get('/admin', function(req, res){
-  res.render('admin', {});
+app.get('/admin', function(req, res) {
+  if (req.query.key && req.query.key === SETTINGS.adminKey) {
+    console.log('Admin Key Accepted');
+    res.render('admin', {});
+  }
+  else {
+    console.log('admin key tried: ' + req.query.key);
+    res.sendStatus(403);
+  }
 });
 
 
