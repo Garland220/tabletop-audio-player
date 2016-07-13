@@ -43,10 +43,10 @@
 
     start: function(buttons) {
       for (var i = 0; i < buttons.length; i+=1) {
-        buttons[i].addEventListener('click', titan.playSound, false);
+        buttons[i].addEventListener('click', titan.admin.play, false);
       }
       // window.addEventListener('connected', function() { document.getElementById('musicVolume').value = titan.activeMusicVolume * 10; });
-      document.getElementById('musicVolume').addEventListener('change', titan.setMusicVolume, false);
+      document.getElementById('musicVolume').addEventListener('change', titan.admin.setMusicVolume, false);
     }
 
   };
