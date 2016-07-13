@@ -36,11 +36,13 @@
 
     // Civilization Sounds
     {url: 'audio/sound/blacksmith1.ogg', key: 'blacksmith', type: 'sound', loop: true},
+    {url: 'audio/sound/boat_in_harbor2.ogg', key: 'boatHarbor', type: 'sound', loop: true},
+    {url: 'audio/sound/knife_sharpening.ogg', key: 'knifeSharpen', type: 'sound', loop: false},
     {url: 'audio/sound/repairs_b.ogg', key: 'repairs', type: 'sound', loop: true},
     {url: 'audio/sound/construction.ogg', key: 'construction', type: 'sound', loop: true},
-    {url: 'audio/sound/boat_in_harbor2.ogg', key: 'boatHarbor', type: 'sound', loop: true},
     {url: 'audio/sound/coins_on_bar.ogg', key: 'coinsCounter', type: 'sound', loop: true},
-    {url: 'audio/sound/bellpad2.ogg', key: 'bellpad', type: 'sound', loop: true},
+    {url: 'audio/sound/church_bell.ogg', key: 'churchBell', type: 'sound', loop: false},
+    // {url: 'audio/sound/bellpad2.ogg', key: 'bellpad', type: 'sound', loop: true},
 
 
     // Prop sounds
@@ -67,13 +69,12 @@
     // Horror Sounds
     {url: 'audio/sound/treble_tone1.ogg', key: 'tone1', type: 'sound', volume: 1.0, loop: true},
     {url: 'audio/sound/tone2.ogg', key: 'tone2', type: 'sound', volume: 1.0, loop: true},
-    {url: 'audio/sound/tone3.ogg', key: 'tone3', type: 'sound', volume: 1.0, loop: true},
+    // {url: 'audio/sound/tone3.ogg', key: 'tone3', type: 'sound', volume: 1.0, loop: true},
     {url: 'audio/sound/tone4.ogg', key: 'tone4', type: 'sound', volume: 1.0, loop: true},
     {url: 'audio/sound/hi_tone_1.ogg', key: 'hiTone1', type: 'sound', volume: 1.0, loop: true},
     {url: 'audio/sound/hi_tone_2.ogg', key: 'hiTone2', type: 'sound', volume: 1.0, loop: true},
     {url: 'audio/sound/heartbeat.ogg', key: 'heartbeat1', type: 'sound', loop: true},
     {url: 'audio/sound/heartbeat2.ogg', key: 'heartbeat2', type: 'sound', loop: true},
-    {url: 'audio/sound/church_bell.ogg', key: 'churchBell', type: 'sound', loop: false},
     {url: 'audio/sound/riser1.ogg', key: 'riser1', type: 'sound', loop: false},
     {url: 'audio/sound/riser2.ogg', key: 'riser2', type: 'sound', loop: false},
     {url: 'audio/sound/pianohit.ogg', key: 'pianohit', type: 'sound', loop: false},
@@ -119,7 +120,6 @@
     {url: 'audio/sound/explosion1.ogg', key: 'explosion1', type: 'sound', volume: 0.7, loop: false},
     {url: 'audio/sound/explosion_1.ogg', key: 'explosion2', type: 'sound', volume: 0.7, loop: false},
     {url: 'audio/sound/nature_spell.ogg', key: 'natureSpell', type: 'sound', volume: 0.7, loop: false},
-    {url: 'audio/sound/knife_sharpening.ogg', key: 'knifeSharpen', type: 'sound', loop: false},
     {url: 'audio/sound/trap_arrow.ogg', key: 'trapArrow', type: 'sound', loop: false},
     {url: 'audio/sound/trap_spike.ogg', key: 'trapSpike', type: 'sound', loop: false},
     {url: 'audio/sound/magic_trap.ogg', key: 'trapMagic', type: 'sound', loop: false},
