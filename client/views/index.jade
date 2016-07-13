@@ -1,13 +1,11 @@
-doctype html
+extends layout.jade
 
-html(lang="en")
-  head
-    title Titan Audio Player
-    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
-    link(rel="stylesheet", href="css/main.css", type="text/css", media="screen")
-  body
-    h1 Titan Audio Player
-    h3(id='connection')
+block title
+  title Titan Audio Engine
 
-    script(type='text/javascript', src='/socket.io/socket.io.js')
-    script(type='text/javascript', src='js/titan.js')
+block heading
+  h1 Titan Audio Engine
+
+block scripts
+  script.
+    titan.start();

@@ -1,0 +1,19 @@
+doctype html
+
+html(lang="en")
+  head
+    block title
+    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+    link(rel="stylesheet", href="css/main.css", type="text/css", media="screen")
+
+  body
+    block heading
+
+    h3(id='connection')
+
+    block content
+
+    script(type='text/javascript', src='/socket.io/socket.io.js')
+    script(type='text/javascript', src='js/titan.js')
+    script(type='text/javascript', src='js/titan.tracks.js')
+    block scripts
