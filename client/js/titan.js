@@ -21,21 +21,25 @@
     activeMusicVolume: 0.5,
 
 
-    loadAudio: function(url, key, type, volume, loop) {
-      var audio = new Audio();
-      volume = volume || 0.5;
-      loop = loop || false;
+    loadAudio: function(data) {
+      var audio = new Audio(),
+        loop = data.loop || false;
+
       if (loop) {
         audio.loop = 'loop';
       }
-      audio.id = key;
-      audio.src = url;
-      audio.type = type;
-      audio.volume = volume;
+      audio.id = data.key;
+      audio.src = data.url;
+      audio.preload = data.preload || 'auto';
+      audio.volume = data.volume || 0.5;
+      audio.type = data.type || 'sound';
+      audio.category = data.category || 'misc';
+
       audio.preload = 'auto';
+      audio.preload = 'metadata';
       audio.addEventListener('canplaythrough', titan.audioLoaded, false);
       audio.addEventListener('ended', titan.checkLoop, false);
-      titan.players[key] = audio;
+      titan.players[data.key] = audio;
     },
 
 
@@ -56,24 +60,21 @@
     },
 
 
-    addTracks: function(arr, index, type, volume, loop) {
+    addTracks: function(arr, data) {
       if (Object.prototype.toString.call(arr) === '[object Array]') {
         for (var i=0; i<arr.length; i+=1) {
           titan.addTracks(arr[i]);
         }
       }
       else if (Object.prototype.toString.call(arr) === '[object Object]') {
-        titan.addTracks(arr.url, arr.key, arr.type, arr.volume, arr.loop);
-      }
-      else {
         var obj = {};
-        if (!index) {
-          index = arr.match(/[^\\/]+$/)[0];
+        if (!arr.key) {
+          arr.key = arr.key.match(/[^\\/]+$/)[0];
         }
 
-        obj[index] = arr;
+        obj[arr.key] = arr;
         titan.tracks.push(obj);
-        titan.loadAudio(arr, index, type, volume, loop);
+        titan.loadAudio(arr);
       }
     },
 
