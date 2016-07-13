@@ -30,11 +30,6 @@ h1, h3 { margin: 0px; padding: 0; }
 
 h3 { height: 25px; line-height: 20px; }
 
-h3 label {
-  font-size: 12px;
-  font-weight: 500;
-  margin: 10px;
-}
 input[type=number] {
   width: 25px;
   margin-left: 10px;
@@ -43,6 +38,28 @@ input[type=number] {
   background: none;
   color: #eee;
 }
+
+h1 label {
+  font-size: 14px;
+  font-weight: 500;
+  margin: 10px;
+  color: #000;
+  float: right;
+}
+h1 label input[type=number] {
+  width: 25px;
+  margin-left: 5px;
+  font-weight: 600;
+  border: 0;
+  background: none;
+  color: #000;
+}
+h3 label {
+  font-size: 12px;
+  font-weight: 500;
+  margin: 10px;
+}
+
 
 #connection {
   color: #999;

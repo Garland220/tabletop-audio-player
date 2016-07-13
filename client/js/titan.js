@@ -17,6 +17,8 @@
     tracks: [],
     players: {},
 
+    masterVolume: 1.0,
+
     activeMusic: null,
     activeMusicVolume: 0.5,
 
@@ -32,6 +34,7 @@
       audio.src = data.url;
       audio.preload = data.preload || 'metadata';
       audio.volume = data.volume || 0.5;
+      audio.defaultVolume = data.volume || 0.5;
       audio.type = data.type || 'sound';
       audio.category = data.category || 'misc';
 
@@ -90,11 +93,23 @@
     },
 
 
+    setMasterVolume: function(e) {
+      console.log('test');
+      titan.masterVolume = e.target.value/10;
+      titan.setMusicVolume(titan.activeMusicVolume);
+
+      for (var player in titan.players) {
+        var audio = titan.players[player];
+        audio.volume = audio.defaultVolume * titan.masterVolume;
+      }
+    },
+
+
     setMusicVolume: function(volume) {
       titan.activeMusicVolume = volume;
 
       if (titan.activeMusic !== null) {
-        titan.activeMusic.volume = titan.activeMusicVolume;
+        titan.activeMusic.volume = titan.activeMusicVolume * titan.masterVolume;
       }
     },
 
@@ -116,7 +131,7 @@
           titan.stop(titan.activeMusic.id);
         }
         titan.activeMusic = titan.players[key];
-        titan.activeMusic.volume = titan.activeMusicVolume;
+        titan.activeMusic.volume = titan.activeMusicVolume * titan.masterVolume;
       }
       titan.players[key].play();
     },
@@ -189,7 +204,7 @@
     },
 
     start: function() {
-
+      document.getElementById('masterVolume').addEventListener('change', titan.setMasterVolume, false);
     }
 
   };
