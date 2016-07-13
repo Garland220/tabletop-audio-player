@@ -6,13 +6,17 @@
     {url: 'audio/sound/connect.ogg', key: 'connect', type: 'sound', loop: false},
     {url: 'audio/sound/disconnect.ogg', key: 'disconnect', type: 'sound', loop: false},
 
+
     // Fun Sounds
-    {url: 'audio/sound/crowd_cheer2.ogg', key: 'critical', type: 'sound', volume: 0.3, loop: false},
+    {url: 'audio/sound/crowd_cheer2.ogg', key: 'criticalHit', type: 'sound', volume: 0.3, loop: false},
     {url: 'audio/sound/the-price-is-right-losing-horn.ogg', key: 'criticalMiss', type: 'sound', volume: 0.2, loop: false},
     {url: 'audio/sound/toasty.ogg', key: 'toasty', type: 'sound', volume: 1.0, loop: false},
-    {url: 'audio/sound/levelup.ogg', key: 'levelup', type: 'sound', volume: 1.0, loop: false},
+    {url: 'audio/sound/levelup.ogg', key: 'levelUp', type: 'sound', volume: 1.0, loop: false},
+
 
     // Environment Sounds
+    {url: 'audio/sound/cicada1_lp.ogg', key: 'cicadas', type: 'sound', volume: 0.3, loop: true},
+    {url: 'audio/sound/crickets2.ogg', key: 'crickets', type: 'sound', volume: 0.2, loop: true},
     {url: 'audio/sound/stream.ogg', key: 'stream1', type: 'sound', loop: true},
     {url: 'audio/sound/stream1_lp.ogg', key: 'stream2', type: 'sound', loop: true},
     {url: 'audio/sound/rain1_lp.ogg', key: 'rain1', type: 'sound', loop: true},
@@ -29,19 +33,36 @@
     {url: 'audio/sound/thunder2.ogg', key: 'thunder2', type: 'sound', loop: false},
     {url: 'audio/sound/rumble.ogg', key: 'rumble', type: 'sound', loop: false},
 
+
+    // Civilization Sounds
+    {url: 'audio/sound/blacksmith1.ogg', key: 'blacksmith', type: 'sound', loop: true},
+    {url: 'audio/sound/repairs_b.ogg', key: 'repairs', type: 'sound', loop: true},
+    {url: 'audio/sound/construction.ogg', key: 'construction', type: 'sound', loop: true},
+    {url: 'audio/sound/boat_in_harbor2.ogg', key: 'boatHarbor', type: 'sound', loop: true},
+    {url: 'audio/sound/coins_on_bar.ogg', key: 'coinsCounter', type: 'sound', loop: true},
+    {url: 'audio/sound/bellpad2.ogg', key: 'bellpad', type: 'sound', loop: true},
+
+
     // Prop sounds
     {url: 'audio/sound/torches.ogg', key: 'torches', type: 'sound', loop: true},
     {url: 'audio/sound/fireplace_loop_c.ogg', key: 'campfire1', type: 'sound', loop: true},
     {url: 'audio/sound/campfire1_lp.ogg', key: 'campfire2', type: 'sound', loop: true},
     {url: 'audio/sound/flag_wind.ogg', key: 'flagWind', type: 'sound', loop: true},
     {url: 'audio/sound/tavern_sign.ogg', key: 'signWind', type: 'sound', loop: true},
+    {url: 'audio/sound/clock2.ogg', key: 'clock', type: 'sound', loop: true},
+    {url: 'audio/sound/distant_drums1_lp.ogg', key: 'distantDrums', type: 'sound', loop: true},
     {url: 'audio/sound/war_drums_1.ogg', key: 'warDrums', type: 'sound', loop: true},
     {url: 'audio/sound/war_horn_1.ogg', key: 'warHorn', type: 'sound', loop: true},
     {url: 'audio/sound/rope_creaks_b.ogg', key: 'ropeCreak', type: 'sound', loop: true},
-    {url: 'audio/sound/repairs_b.ogg', key: 'repairs', type: 'sound', loop: true},
-    {url: 'audio/sound/door_open.ogg', key: 'doorOpen', type: 'sound', loop: false},
-    {url: 'audio/sound/door_close.ogg', key: 'doorClose', type: 'sound', loop: false},
+    {url: 'audio/sound/door_knock.ogg', key: 'doorKnock', type: 'sound', loop: false},
+    {url: 'audio/sound/door1_open.ogg', key: 'doorOpen1', type: 'sound', loop: false},
+    {url: 'audio/sound/door1_close.ogg', key: 'doorClose1', type: 'sound', loop: false},
+    {url: 'audio/sound/door_sm_open.ogg', key: 'doorOpen2', type: 'sound', loop: false},
+    {url: 'audio/sound/door_sm_close.ogg', key: 'doorClose2', type: 'sound', loop: false},
+    {url: 'audio/sound/door_open.ogg', key: 'doorOpen3', type: 'sound', loop: false},
+    {url: 'audio/sound/door_close.ogg', key: 'doorClose3', type: 'sound', loop: false},
     {url: 'audio/sound/Gate_Open_00.ogg', key: 'gateOpen', type: 'sound', loop: false},
+
 
     // Horror Sounds
     {url: 'audio/sound/treble_tone1.ogg', key: 'tone1', type: 'sound', volume: 1.0, loop: true},
@@ -56,21 +77,32 @@
     {url: 'audio/sound/riser1.ogg', key: 'riser1', type: 'sound', loop: false},
     {url: 'audio/sound/riser2.ogg', key: 'riser2', type: 'sound', loop: false},
     {url: 'audio/sound/pianohit.ogg', key: 'pianohit', type: 'sound', loop: false},
+    {url: 'audio/sound/scrape1a.ogg', key: 'scrape1', type: 'sound', loop: false},
+    {url: 'audio/sound/screams.ogg', key: 'screams', type: 'sound', loop: false},
+    {url: 'audio/sound/spirit_breath1.ogg', key: 'spiritBreath', type: 'sound', loop: false},
+    {url: 'audio/sound/children_laugh.ogg', key: 'childrenLaugh', type: 'sound', loop: false},
+    {url: 'audio/sound/wail.ogg', key: 'wail', type: 'sound', loop: false},
+    {url: 'audio/sound/whispers1.ogg', key: 'whispers1', type: 'sound', loop: false},
+    {url: 'audio/sound/whispers2x.ogg', key: 'whispers2', type: 'sound', loop: false},
+    {url: 'audio/sound/vortex.ogg', key: 'vortex', type: 'sound', loop: false},
+
+
+    // Animal Sounds
     {url: 'audio/sound/hawk1.ogg', key: 'hawk', type: 'sound', loop: false},
     {url: 'audio/sound/owl2.ogg', key: 'owl', type: 'sound', loop: false},
     {url: 'audio/sound/bats.ogg', key: 'bats', type: 'sound', loop: false},
     {url: 'audio/sound/rats.ogg', key: 'rats', type: 'sound', loop: false},
     {url: 'audio/sound/flies.ogg', key: 'flies', type: 'sound', loop: false},
+    {url: 'audio/sound/dogs_barking2.ogg', key: 'dogsBarking1', type: 'sound', loop: false},
+    {url: 'audio/sound/dogs_barking.ogg', key: 'dogsBarking2', type: 'sound', loop: false},
     {url: 'audio/sound/wolf_howl1.ogg', key: 'wolfHowl', type: 'sound', loop: false},
-    {url: 'audio/sound/snarl1.ogg', key: 'snarl1', type: 'sound', loop: false},
+    {url: 'audio/sound/snarl1.ogg', key: 'wolfSnarl', type: 'sound', loop: false},
     {url: 'audio/sound/roar.ogg', key: 'roar', type: 'sound', loop: false},
-    {url: 'audio/sound/scrape1a.ogg', key: 'scrape1', type: 'sound', loop: false},
-    {url: 'audio/sound/screams.ogg', key: 'screams', type: 'sound', loop: false},
-    {url: 'audio/sound/spirit_breath1.ogg', key: 'spiritBreath', type: 'sound', loop: false},
-    {url: 'audio/sound/wail.ogg', key: 'wail', type: 'sound', loop: false},
-    {url: 'audio/sound/whispers1.ogg', key: 'whispers1', type: 'sound', loop: false},
-    {url: 'audio/sound/whispers2x.ogg', key: 'whispers2', type: 'sound', loop: false},
-    {url: 'audio/sound/vortex.ogg', key: 'vortex', type: 'sound', loop: false},
+    {url: 'audio/sound/creature1.ogg', key: 'creature', type: 'sound', loop: false},
+    {url: 'audio/sound/cows1a.ogg', key: 'cows', type: 'sound', loop: false},
+    {url: 'audio/sound/chickens1a.ogg', key: 'chickens', type: 'sound', loop: false},
+    {url: 'audio/sound/birdsong2.ogg', key: 'birdsong', type: 'sound', loop: false},
+
 
     // Combat Sounds
     {url: 'audio/sound/back_stab.ogg', key: 'stab', type: 'sound', volume: 0.7, loop: false},
@@ -79,6 +111,7 @@
     {url: 'audio/sound/staff_attack.ogg', key: 'staff', type: 'sound', volume: 0.7, loop: false},
     {url: 'audio/sound/shield_bash.ogg', key: 'shieldBash', type: 'sound', volume: 0.7, loop: false},
     {url: 'audio/sound/heal_spell_1a.ogg', key: 'heal', type: 'sound', volume: 0.7, loop: false},
+    {url: 'audio/sound/conjuring.ogg', key: 'conjuring', type: 'sound', volume: 0.7, loop: false},
     {url: 'audio/sound/fire_spell_2.ogg', key: 'fireSpell', type: 'sound', volume: 0.7, loop: false},
     {url: 'audio/sound/ice_spell_2.ogg', key: 'iceSpell', type: 'sound', volume: 0.7, loop: false},
     {url: 'audio/sound/spell_1.ogg', key: 'miscSpell', type: 'sound', volume: 0.7, loop: false},
