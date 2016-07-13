@@ -35,8 +35,6 @@
       audio.type = data.type || 'sound';
       audio.category = data.category || 'misc';
 
-      audio.preload = 'auto';
-      audio.preload = 'metadata';
       audio.addEventListener('canplaythrough', titan.audioLoaded, false);
       audio.addEventListener('ended', titan.checkLoop, false);
       titan.players[data.key] = audio;
