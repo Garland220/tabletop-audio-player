@@ -41,6 +41,7 @@
     {url: 'audio/sound/knife_sharpening.ogg', key: 'knifeSharpen', type: 'sound', preload: 'none', loop: false},
     {url: 'audio/sound/repairs_b.ogg', key: 'repairs', type: 'sound', preload: 'none', loop: true},
     {url: 'audio/sound/construction.ogg', key: 'construction', type: 'sound', preload: 'none', loop: true},
+    {url: 'audio/sound/tavern_loop_lite_a.ogg', key: 'tavernBG', type: 'sound', preload: 'none', volume: 0.7, loop: true},
     {url: 'audio/sound/coins_on_bar.ogg', key: 'coinsCounter', type: 'sound', preload: 'none', loop: false},
     {url: 'audio/sound/church_bell.ogg', key: 'churchBell', type: 'sound', loop: false},
     {url: 'audio/sound/bellpad2.ogg', key: 'bellpad', type: 'sound', preload: 'none', loop: true},
@@ -57,6 +58,7 @@
     {url: 'audio/sound/war_drums_1.ogg', key: 'warDrums', type: 'sound', preload: 'none', loop: true},
     {url: 'audio/sound/war_horn_1.ogg', key: 'warHorn', type: 'sound', preload: 'none', loop: true},
     {url: 'audio/sound/rope_creaks_b.ogg', key: 'ropeCreak', type: 'sound', loop: true},
+    {url: 'audio/sound/tavern_door_wind.ogg', key: 'doorWindy', type: 'sound', preload: 'none', loop: false},
     {url: 'audio/sound/door_knock.ogg', key: 'doorKnock', type: 'sound', preload: 'none', loop: false},
     {url: 'audio/sound/door1_open.ogg', key: 'doorOpen1', type: 'sound', loop: false},
     {url: 'audio/sound/door1_close.ogg', key: 'doorClose1', type: 'sound', loop: false},
@@ -155,6 +157,11 @@
     {url: 'audio/music/drum_music_1c.ogg', key: 'combat3', type: 'music', preload: 'none', loop: true},
     {url: 'audio/music/Toccata_and_Fugue_in_D_minor.ogg', key: 'tocattaFugue', type: 'music', preload: 'none', loop: true},
     {url: 'audio/music/Harpsichord_Concerto.ogg', key: 'harpsichordConcerto', type: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Dominate_loop.ogg', key: 'dominateLoop', type: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Tension_Loop.ogg', key: 'tensionLoop1', type: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Tension_Loop2.ogg', key: 'tensionLoop2', type: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Tension_Loop3.ogg', key: 'tensionLoop3', type: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Heartbeat-Drone.ogg', key: 'heartbeatDrone', type: 'music', preload: 'none', loop: true},
   ],
   div = document.createElement('div');
 
