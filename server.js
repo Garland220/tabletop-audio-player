@@ -112,7 +112,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('disconnect', function(){
-    console.log('User disconnected');
+    console.log('A user %s disconnected', socket.handshake.address);
 
     clientCount -= 1;
     io.sockets.emit('users', JSON.stringify({users: clientCount}));

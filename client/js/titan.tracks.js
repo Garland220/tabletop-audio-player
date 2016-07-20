@@ -90,6 +90,7 @@
     {url: 'audio/sound/scrape1a.ogg', key: 'scrape1', type: 'sound', volume: 0.3, loop: false},
     {url: 'audio/sound/screams.ogg', key: 'screams', type: 'sound', preload: 'none', loop: false},
     {url: 'audio/sound/spirit_breath1.ogg', key: 'spiritBreath', type: 'sound', loop: false},
+    {url: 'audio/sound/Creepy_Laugh.ogg', key: 'creepyLaugh', type: 'sound', volume: 0.3, loop: false},
     {url: 'audio/sound/children_laugh.ogg', key: 'childrenLaugh', type: 'sound', loop: false},
     {url: 'audio/sound/wail.ogg', key: 'wail', type: 'sound', loop: false},
     {url: 'audio/sound/whispers1.ogg', key: 'whispers1', type: 'sound', loop: false},
@@ -162,6 +163,7 @@
     {url: 'audio/music/Tension_Loop2.ogg', key: 'tensionLoop2', type: 'music', preload: 'none', loop: true},
     {url: 'audio/music/Tension_Loop3.ogg', key: 'tensionLoop3', type: 'music', preload: 'none', loop: true},
     {url: 'audio/music/Heartbeat-Drone.ogg', key: 'heartbeatDrone', type: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Henry_Mancini_-Gypsy_Violin_Theme_From_Darling_Lil.ogg', key: 'gypsyViolin', type: 'music', preload: 'none', loop: true},
   ],
   div = document.createElement('div');
 
