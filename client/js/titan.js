@@ -7,7 +7,7 @@
 
   window.titan = {
 
-    debug: false,
+    debug: true,
 
     connected: false,
     users: 0,
@@ -22,25 +22,56 @@
     activeMusic: null,
     activeMusicVolume: 0.5,
 
+    replayDelay: -0.30,
+
 
     loadAudio: function(data) {
-      var audio = new Audio(),
-        loop = data.loop || false;
+      var audio = new Audio();
 
-      if (loop) {
-        audio.loop = 'loop';
-      }
       audio.id = data.key;
       audio.src = data.url;
+      audio.loops = data.loop || false;
       audio.preload = data.preload || 'metadata';
       audio.volume = data.volume || 0.5;
       audio.defaultVolume = data.volume || 0.5;
       audio.type = data.type || 'sound';
       audio.category = data.category || 'misc';
+      audio.endTime = data.endTime || audio.duration;
+      audio.startTime = data.startTime || 0;
+      audio.randomDelay = data.randomDelay || 0;
+      audio.loopDelay = data.loopDelay || 0;
+
+      if (data.endTime && data.endTime < 0) {
+        audio.endTime = audio.duration + data.endTime;
+      }
+
+      if (data.doubleBuffer) {
+        audio.doubleBuffer = data.doubleBuffer;
+      }
 
       audio.addEventListener('canplaythrough', titan.audioLoaded, false);
-      audio.addEventListener('ended', titan.checkLoop, false);
-      titan.players[data.key] = audio;
+      // audio.addEventListener('loadedmetadata', titan.setMetadata, false);
+      audio.addEventListener('timeupdate', titan.checkTime, false);
+      // audio.addEventListener('load', titan.postLoad, false);
+      // audio.addEventListener('ended', titan.checkLoop, false);
+
+      if (audio.loops && !audio.doubleBuffer && audio.randomDelay === 0 && audio.loopDelay === 0) {
+        data.key = data.key + '_2';
+        data.doubleBuffer = audio;
+        audio.doubleBuffer = titan.loadAudio(data);
+      }
+
+      return audio;
+    },
+
+
+    setMetadata: function(e) {
+      var audio = e.audio,
+          key = audio.id;
+
+      if (isNaN(audio.endTime)) {
+        audio.endTime = audio.duration;
+      }
     },
 
 
@@ -56,7 +87,53 @@
           key = audio.id;
 
       if (!audio.loop) {
-        var button = document.querySelector('button#'+key);
+
+      }
+      else if (audio.loopDelay && audio.loopDelay > 0) {
+        setTimeout(function() {
+
+        }, audio.loopDelay);
+      }
+    },
+
+
+    checkTime: function(e) {
+      var audio = e.target,
+          key = audio.id;
+
+      if (titan.debug) {
+        console.log(audio.loops, audio.currentTime, audio.duration, audio.duration - audio.currentTime);
+      }
+
+      if (audio.loops && audio.currentTime >= audio.duration + titan.replayDelay) {
+        if (audio.loopDelay > 0 || audio.randomDelay > 0) {
+          var buffer = 0;
+          if (audio.loopDelay > 0) {
+            buffer += audio.loopDelay;
+          }
+          if (audio.randomDelay > 0) {
+            buffer = titan.getRandomInt(0, audio.randomDelay);
+          }
+
+          if (titan.debug) {
+            console.log('Delaying audio: ' + buffer);
+          }
+
+          setTimeout(function() {
+            if (titan.debug) {
+              console.log('Playing delayed audio: ' + audio.key);
+            }
+            audio.play();
+          }, buffer);
+        }
+        else {
+          audio.doubleBuffer.play();
+        }
+        audio.pause();
+        audio.currentTime = audio.startTime;
+      }
+      else if (!audio.loops && audio.currentTime > audio.duration) {
+        var button = document.querySelector('button#' + key);
         if (button) {
           button.className = '';
         }
@@ -78,8 +155,13 @@
 
         obj[arr.key] = arr;
         titan.tracks.push(obj);
-        titan.loadAudio(arr);
+        titan.players[arr.key] = titan.loadAudio(arr);
       }
+    },
+
+
+    getRandomInt: function(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
     },
 
 
@@ -117,6 +199,11 @@
     stop: function(key) {
       titan.players[key].pause();
       titan.players[key].currentTime = 0;
+
+      if (titan.players[key].doubleBuffer) {
+        titan.players[key].doubleBuffer.pause();
+        titan.players[key].doubleBuffer.currentTime = 0;
+      }
     },
 
 
@@ -132,6 +219,9 @@
         }
         titan.activeMusic = titan.players[key];
         titan.activeMusic.volume = titan.activeMusicVolume * titan.masterVolume;
+      }
+      if (titan.players[key].doubleBuffer) {
+        titan.players[key].doubleBuffer.load();
       }
       titan.players[key].play();
     },

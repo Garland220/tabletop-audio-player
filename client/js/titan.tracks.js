@@ -30,7 +30,7 @@
     {url: 'audio/sound/wind2_lp.ogg', key: 'wind2', type: 'sound', loop: true},
     {url: 'audio/sound/gale3a.ogg', key: 'wind3', type: 'sound', loop: true},
     {url: 'audio/sound/wind_outside.ogg', key: 'windOutside', type: 'sound', loop: true},
-    {url: 'audio/sound/thunder1.ogg', key: 'thunder1', type: 'sound', loop: true},
+    {url: 'audio/sound/thunder1.ogg', key: 'thunder1', type: 'sound', loopDelay: 1000, randomDelay: 9000, loop: true},
     {url: 'audio/sound/thunder2.ogg', key: 'thunder2', type: 'sound', loop: false},
     {url: 'audio/sound/rumble.ogg', key: 'rumble', type: 'sound', preload: 'none', loop: false},
 
@@ -45,6 +45,7 @@
     {url: 'audio/sound/coins_on_bar.ogg', key: 'coinsCounter', type: 'sound', preload: 'none', loop: false},
     {url: 'audio/sound/church_bell.ogg', key: 'churchBell', type: 'sound', loop: false},
     {url: 'audio/sound/bellpad2.ogg', key: 'bellpad', type: 'sound', preload: 'none', loop: true},
+    {url: 'audio/sound/fountain2.ogg', key: 'fountain', type: 'sound', preload: 'none', loop: true},
 
 
     // Prop sounds
@@ -153,6 +154,7 @@
     {url: 'audio/music/city_wonder_cue_a.ogg', key: 'cityWonder', type: 'music', preload: 'none', loop: true},
     {url: 'audio/music/hurdy_gurdy2.ogg', key: 'hurdyGurdy2', type: 'music', preload: 'none', loop: true},
     {url: 'audio/music/lute_ballad.ogg', key: 'luteBallad', type: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Henry_Mancini_-Gypsy_Violin_Theme_From_Darling_Lil.ogg', key: 'gypsyViolin', type: 'music', preload: 'none', loop: true},
     {url: 'audio/music/combat1.ogg', key: 'combat1', type: 'music', preload: 'none', loop: true},
     {url: 'audio/music/music_forest_combat1.ogg', key: 'combat2', type: 'music', preload: 'none', loop: true},
     {url: 'audio/music/drum_music_1c.ogg', key: 'combat3', type: 'music', preload: 'none', loop: true},
@@ -163,7 +165,13 @@
     {url: 'audio/music/Tension_Loop2.ogg', key: 'tensionLoop2', type: 'music', preload: 'none', loop: true},
     {url: 'audio/music/Tension_Loop3.ogg', key: 'tensionLoop3', type: 'music', preload: 'none', loop: true},
     {url: 'audio/music/Heartbeat-Drone.ogg', key: 'heartbeatDrone', type: 'music', preload: 'none', loop: true},
-    {url: 'audio/music/Henry_Mancini_-Gypsy_Violin_Theme_From_Darling_Lil.ogg', key: 'gypsyViolin', type: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Grave.ogg', key: 'grave', type: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Descent_Done.ogg', key: 'descentDone', type: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Forgoten_tombs.ogg', key: 'forgotenTombs', type: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Underwater.ogg', key: 'underwater', type: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/caravan.ogg', key: 'caravan', type: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/lost_village.ogg', key: 'lostVillage', type: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/sorrow.ogg', key: 'sorrow', type: 'music', preload: 'none', loop: true},
   ],
   div = document.createElement('div');
 
