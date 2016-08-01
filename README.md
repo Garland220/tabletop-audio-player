@@ -1,4 +1,4 @@
-Titan Audio Engine
+Tabletop Audio Player
 ======
 
 Install

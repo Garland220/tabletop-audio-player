@@ -24,15 +24,19 @@
     {url: 'audio/sound/rain3_lp.ogg', key: 'rain3', type: 'sound', loop: true},
     {url: 'audio/sound/rain_outside.ogg', key: 'rainOutside', type: 'sound', loop: true},
     {url: 'audio/sound/rain_on_roofb.ogg', key: 'rainOutside2', type: 'sound', loop: true},
+    {url: 'audio/sound/rain_on_shelter.ogg', key: 'rainOutside3', type: 'sound', loop: true},
     {url: 'audio/sound/drips1_lp.ogg', key: 'drips', type: 'sound', loop: true},
     {url: 'audio/sound/breeze.ogg', key: 'breeze', type: 'sound', loop: true},
     {url: 'audio/sound/wind1_lp.ogg', key: 'wind1', type: 'sound', loop: true},
     {url: 'audio/sound/wind2_lp.ogg', key: 'wind2', type: 'sound', loop: true},
     {url: 'audio/sound/gale3a.ogg', key: 'wind3', type: 'sound', loop: true},
+    {url: 'audio/sound/wind_howl1.ogg', key: 'wind4', type: 'sound', loop: true},
+    {url: 'audio/sound/wind_desolate1.ogg', key: 'wind5', type: 'sound', loop: true},
     {url: 'audio/sound/wind_outside.ogg', key: 'windOutside', type: 'sound', loop: true},
     {url: 'audio/sound/thunder1.ogg', key: 'thunder1', type: 'sound', loopDelay: 1000, randomDelay: 9000, loop: true},
     {url: 'audio/sound/thunder2.ogg', key: 'thunder2', type: 'sound', loop: false},
     {url: 'audio/sound/rumble.ogg', key: 'rumble', type: 'sound', preload: 'none', loop: false},
+    {url: 'audio/sound/debris_rubble.ogg', key: 'rumble2', type: 'sound', preload: 'none', loop: false},
 
 
     // Civilization Sounds
@@ -46,12 +50,16 @@
     {url: 'audio/sound/church_bell.ogg', key: 'churchBell', type: 'sound', loop: false},
     {url: 'audio/sound/bellpad2.ogg', key: 'bellpad', type: 'sound', preload: 'none', loop: true},
     {url: 'audio/sound/fountain2.ogg', key: 'fountain', type: 'sound', preload: 'none', loop: true},
+    {url: 'audio/sound/footsteps_lp1.ogg', key: 'footsteps1', type: 'sound', preload: 'none', loop: true},
+    {url: 'audio/sound/footsteps2.ogg', key: 'footsteps2', type: 'sound', preload: 'none', loop: true},
+    {url: 'audio/sound/wood_chimes1a.ogg', key: 'woodChimes', type: 'sound', preload: 'none', loop: true},
 
 
     // Prop sounds
     {url: 'audio/sound/torches.ogg', key: 'torches', type: 'sound', loop: true},
     {url: 'audio/sound/fireplace_loop_c.ogg', key: 'campfire1', type: 'sound', loop: true},
     {url: 'audio/sound/campfire1_lp.ogg', key: 'campfire2', type: 'sound', loop: true},
+    {url: 'audio/sound/burning_building3.ogg', key: 'campfire3', type: 'sound', loop: true},
     {url: 'audio/sound/flag_wind.ogg', key: 'flagWind', type: 'sound', loop: true},
     {url: 'audio/sound/tavern_sign.ogg', key: 'signWind', type: 'sound', loop: true},
     {url: 'audio/sound/clock2.ogg', key: 'clock', type: 'sound', preload: 'none', nativeLoop: true},
@@ -68,6 +76,8 @@
     {url: 'audio/sound/door_open.ogg', key: 'doorOpen3', type: 'sound', loop: false},
     {url: 'audio/sound/door_close.ogg', key: 'doorClose3', type: 'sound', loop: false},
     {url: 'audio/sound/Gate_Open_00.ogg', key: 'gateOpen', type: 'sound', loop: false},
+    {url: 'audio/sound/metal_door_open.ogg', key: 'metalDoorOpen', type: 'sound', loop: false},
+    {url: 'audio/sound/metal_squeaks1.ogg', key: 'metalSqueak', type: 'sound', loop: false},
 
 
     // Horror Sounds
@@ -77,10 +87,13 @@
     {url: 'audio/sound/tone4.ogg', key: 'tone4', type: 'sound', volume: 1.0, loop: true},
     {url: 'audio/sound/hi_tone_1.ogg', key: 'hiTone1', type: 'sound', volume: 1.0, loop: true},
     {url: 'audio/sound/hi_tone_2.ogg', key: 'hiTone2', type: 'sound', volume: 1.0, loop: true},
+    {url: 'audio/sound/long_pulse_tone1.ogg', key: 'longPulse', type: 'sound', volume: 1.0, loop: true},
     {url: 'audio/sound/ethereal1_lp.ogg', key: 'ethereal1', type: 'sound', loop: true},
     {url: 'audio/sound/ethereal2_lp.ogg', key: 'ethereal2', type: 'sound', loop: true},
     {url: 'audio/sound/ethereal3_lp.ogg', key: 'ethereal3', type: 'sound', loop: true},
     {url: 'audio/sound/ethereal_dark1_lp.ogg', key: 'ethereal4', type: 'sound', loop: true},
+    {url: 'audio/sound/low_drone1.ogg', key: 'lowDrone1', type: 'sound', loop: true},
+    {url: 'audio/sound/low_drone2.ogg', key: 'lowDrone2', type: 'sound', loop: true},
     {url: 'audio/sound/dungeon_bg1.ogg', key: 'dungeonBG', type: 'sound', loop: true},
     {url: 'audio/sound/heartbeat.ogg', key: 'heartbeat1', type: 'sound', loop: true},
     {url: 'audio/sound/heartbeat2.ogg', key: 'heartbeat2', type: 'sound', nativeLoop: true},
@@ -100,6 +113,8 @@
 
 
     // Animal Sounds
+    {url: 'audio/sound/birds_flap1.ogg', key: 'birdsScared', type: 'sound', loop: false},
+    {url: 'audio/sound/vultures.ogg', key: 'vulture', type: 'sound', loop: false},
     {url: 'audio/sound/hawk1.ogg', key: 'hawk', type: 'sound', loop: false},
     {url: 'audio/sound/owl2.ogg', key: 'owl', type: 'sound', loop: false},
     {url: 'audio/sound/bats.ogg', key: 'bats', type: 'sound', loop: false},
@@ -109,6 +124,7 @@
     {url: 'audio/sound/dogs_barking2.ogg', key: 'dogsBarking1', type: 'sound', preload: 'none', loop: false},
     {url: 'audio/sound/dogs_barking.ogg', key: 'dogsBarking2', type: 'sound', preload: 'none', loop: false},
     {url: 'audio/sound/wolf_howl1.ogg', key: 'wolfHowl', type: 'sound', preload: 'none', loop: false},
+    {url: 'audio/sound/wolf_distant.ogg', key: 'wolfHowl2', type: 'sound', preload: 'none', loop: false},
     {url: 'audio/sound/snarl1.ogg', key: 'wolfSnarl', type: 'sound', preload: 'none', loop: false},
     {url: 'audio/sound/roar.ogg', key: 'roar', type: 'sound', preload: 'none', loop: false},
     {url: 'audio/sound/creature1.ogg', key: 'creature', type: 'sound', loop: false},
