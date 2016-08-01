@@ -22,7 +22,7 @@
     activeMusic: null,
     activeMusicVolume: 0.5,
 
-    replayDelay: -0.30,
+    replayDelay: -0.25,
 
 
     loadAudio: function(data) {
@@ -40,33 +40,38 @@
       audio.startTime = data.startTime || 0;
       audio.randomDelay = data.randomDelay || 0;
       audio.loopDelay = data.loopDelay || 0;
+      audio.nativeLoop = data.nativeLoop || false;
 
       if (data.endTime && data.endTime < 0) {
         audio.endTime = audio.duration + data.endTime;
       }
 
-      if (data.doubleBuffer) {
-        audio.doubleBuffer = data.doubleBuffer;
+      if (audio.nativeLoop) {
+        audio.loop = 'loop';
+      }
+      else {
+        if (data.doubleBuffer) {
+          audio.doubleBuffer = data.doubleBuffer;
+        }
+
+        if (audio.loops && !audio.doubleBuffer && audio.randomDelay === 0 && audio.loopDelay === 0) {
+          data.key = data.key + '_2';
+          data.doubleBuffer = audio;
+          audio.doubleBuffer = titan.loadAudio(data);
+        }
       }
 
-      audio.addEventListener('canplaythrough', titan.audioLoaded, false);
-      // audio.addEventListener('loadedmetadata', titan.setMetadata, false);
+      // audio.addEventListener('load', titan.loadedFile, false);
+      audio.addEventListener('canplaythrough', titan.loadedAudio, false);
+      audio.addEventListener('loadedmetadata', titan.loadedMetadata, false);
       audio.addEventListener('timeupdate', titan.checkTime, false);
-      // audio.addEventListener('load', titan.postLoad, false);
-      // audio.addEventListener('ended', titan.checkLoop, false);
-
-      if (audio.loops && !audio.doubleBuffer && audio.randomDelay === 0 && audio.loopDelay === 0) {
-        data.key = data.key + '_2';
-        data.doubleBuffer = audio;
-        audio.doubleBuffer = titan.loadAudio(data);
-      }
 
       return audio;
     },
 
 
-    setMetadata: function(e) {
-      var audio = e.audio,
+    loadedMetadata: function(e) {
+      var audio = e.target,
           key = audio.id;
 
       if (isNaN(audio.endTime)) {
@@ -75,24 +80,9 @@
     },
 
 
-    audioLoaded: function(e) {
+    loadedAudio: function(e) {
       if (titan.debug) {
         console.log(e);
-      }
-    },
-
-
-    checkLoop: function(e) {
-      var audio = e.target,
-          key = audio.id;
-
-      if (!audio.loop) {
-
-      }
-      else if (audio.loopDelay && audio.loopDelay > 0) {
-        setTimeout(function() {
-
-        }, audio.loopDelay);
       }
     },
 
@@ -103,6 +93,10 @@
 
       if (titan.debug) {
         console.log(audio.loops, audio.currentTime, audio.duration, audio.duration - audio.currentTime);
+      }
+
+      if (audio.nativeLoop) {
+        return;
       }
 
       if (audio.loops && audio.currentTime >= audio.duration + titan.replayDelay) {
@@ -132,7 +126,7 @@
         audio.pause();
         audio.currentTime = audio.startTime;
       }
-      else if (!audio.loops && audio.currentTime > audio.duration) {
+      else if (!audio.loops && audio.currentTime >= audio.duration + titan.replayDelay) {
         var button = document.querySelector('button#' + key);
         if (button) {
           button.className = '';
