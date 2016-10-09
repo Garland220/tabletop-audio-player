@@ -46,6 +46,8 @@
         buttons[i].addEventListener('click', titan.admin.play, false);
       }
 
+      document.getElementById('musicVolume').addEventListener('change', titan.admin.setMusicVolume, false);
+
       window.addEventListener('connected', function() {
         titan.socket.on('play', function(response) {
           response = JSON.parse(response);
