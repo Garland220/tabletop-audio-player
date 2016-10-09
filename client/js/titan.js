@@ -17,12 +17,14 @@
     tracks: [],
     players: {},
 
-    masterVolume: 1.0,
+    masterVolume: 0.7,
 
     activeMusic: null,
     activeMusicVolume: 0.5,
 
     replayDelay: -0.25,
+
+    id: '13012730129741209840127410',
 
 
     loadAudio: function(data) {
@@ -67,6 +69,11 @@
       audio.addEventListener('timeupdate', titan.checkTime, false);
 
       return audio;
+    },
+
+
+    getSeed: function() {
+      // charCodeAt
     },
 
 
@@ -135,7 +142,8 @@
     },
 
 
-    addTracks: function(arr, data) {
+    addTracks: function(arr, data, callback) {
+      console.log('TEST!!', callback);
       if (Object.prototype.toString.call(arr) === '[object Array]') {
         for (var i=0; i<arr.length; i+=1) {
           titan.addTracks(arr[i]);
@@ -151,6 +159,10 @@
         titan.tracks.push(obj);
         titan.players[arr.key] = titan.loadAudio(arr);
       }
+
+      if (callback) {
+        callback();
+      }
     },
 
 
@@ -159,25 +171,69 @@
     },
 
 
+    setCookie: function(name, value, maxAge) {
+      maxAge = maxAge || 30 * 60 * 60 * 24;
+
+      document.cookie = name + '=' + value + '; max-age=' + maxAge + '; path=/';
+      console.log(name, value, maxAge, document.cookie);
+    },
+
+
+    getCookie: function(name) {
+      var nameEQ = name + '=';
+      var ca = document.cookie.split(';');
+
+      for (var i=0;i < ca.length;i++) {
+        var c = ca[i];
+
+        while (c.charAt(0) == ' ') {
+          c = c.substring(1, c.length);
+        }
+
+        if (c.indexOf(nameEQ) === 0) {
+          return c.substring(nameEQ.length,c.length);
+        }
+      }
+
+      return null;
+    },
+
+
+    deleteCookie: function(name) {
+      titan.createCookie(name, '', -1);
+    },
+
+
     setLoop: function(key, loop) {
       titan.players[key].loop = loop;
     },
 
 
-    setVoume: function(key, volume) {
+    setVolume: function(key, volume) {
       titan.players[key].volume = volume;
     },
 
 
-    setMasterVolume: function(e) {
-      console.log('test');
+    changeVolume: function(e) {
       titan.masterVolume = e.target.value/10;
-      titan.setMusicVolume(titan.activeMusicVolume);
 
+      titan.setCookie('volume', e.target.value);
+
+      titan.updateMasterVolume();
+    },
+
+
+    updateMasterVolume: function() {
       for (var player in titan.players) {
         var audio = titan.players[player];
+
+        if (audio.doubleBuffer) {
+          audio.doubleBuffer.volume = audio.defaultVolume * titan.masterVolume;
+        }
         audio.volume = audio.defaultVolume * titan.masterVolume;
       }
+
+      titan.setMusicVolume(titan.activeMusicVolume);
     },
 
 
@@ -288,7 +344,14 @@
     },
 
     start: function() {
-      document.getElementById('masterVolume').addEventListener('change', titan.setMasterVolume, false);
+      var volume = titan.getCookie('volume');
+
+      if (volume && Number(volume) > 0) {
+        titan.masterVolume = Number(volume) / 10;
+        titan.updateMasterVolume();
+      }
+      document.getElementById('masterVolume').value = titan.masterVolume * 10;
+      document.getElementById('masterVolume').addEventListener('change', titan.changeVolume, false);
     }
 
   };

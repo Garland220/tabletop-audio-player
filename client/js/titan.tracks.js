@@ -189,17 +189,20 @@
     {url: 'audio/music/lost_village.ogg', key: 'lostVillage', type: 'music', preload: 'none', loop: true},
     {url: 'audio/music/sorrow.ogg', key: 'sorrow', type: 'music', preload: 'none', loop: true},
   ],
-  div = document.createElement('div');
 
+  div = document.createElement('div');
   div.id = 'connection';
   div.innerHTML = 'Disconnected';
   document.getElementById('connection').appendChild(div);
   titan.el = div;
 
   window.onload = (function() {
-    titan.el.innerHTML = 'Connecting...';
-    titan.addTracks(tracks);
-    titan.connect();
+    titan.el.innerHTML = 'Loading...';
+    titan.addTracks(tracks, null, function() {
+      titan.el.innerHTML = 'Connecting to server...';
+      titan.connect();
+      titan.start();
+    });
   });
 
 })();
