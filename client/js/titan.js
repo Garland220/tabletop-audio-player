@@ -343,6 +343,9 @@
       }
     },
 
+    onStarted: function() {
+    },
+
     start: function() {
       var volume = titan.getCookie('volume');
 
@@ -352,6 +355,8 @@
       }
       document.getElementById('masterVolume').value = titan.masterVolume * 10;
       document.getElementById('masterVolume').addEventListener('change', titan.changeVolume, false);
+
+      titan.onStarted();
     }
 
   };

@@ -6,7 +6,9 @@ block title
 block heading
   h1 Tabletop Audio Admin
     label Volume
+      <i class="fa fa-volume-down"></i>
       input(type='range', id='masterVolume', min=1, max=10, value=10)
+      <i class="fa fa-volume-up"></i>
 
 block content
   div(id='sounds')
@@ -157,7 +159,10 @@ block content
     div(id='music')
       h3 Music
         label Volume
-          input(type='number', id='musicVolume', min=1, max=10, value=5)
+          <i class="fa fa-volume-down"></i>
+          input(type='range', id='musicVolume', min=1, max=10, value=5)
+          <i class="fa fa-volume-up"></i>
+
 
       //- Horror Music
       button(id='grave') Grave
@@ -200,4 +205,6 @@ block content
 block scripts
   script(type='text/javascript', src='js/titan.admin.js')
   script.
-    titan.admin.start(document.querySelectorAll('#sounds button'));
+    titan.onStarted = function() {
+      titan.admin.start(document.querySelectorAll('#sounds button'));
+    }
