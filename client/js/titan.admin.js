@@ -48,7 +48,7 @@
 
       document.getElementById('musicVolume').addEventListener('change', titan.admin.setMusicVolume, false);
 
-      window.addEventListener('connected', function() {
+      window.addEventListener('connected', function(e) {
         titan.socket.on('play', function(response) {
           response = JSON.parse(response);
           document.getElementById(response.key).className = 'active';
@@ -57,6 +57,22 @@
           response = JSON.parse(response);
           document.getElementById(response.key).className = '';
         });
+      });
+
+      window.addEventListener('stop', function(e) {
+        var key = e.data.key;
+        document.getElementById(key).className = '';
+      });
+      window.addEventListener('play', function(e) {
+        var key = e.data.key;
+
+        if (titan.players[key].type == 'music') {
+          var els = document.querySelectorAll('#music .active');
+          for (var i=0; i<els.length; i+=1) {
+            els[i].className = '';
+          }
+        }
+        document.getElementById(key).className = 'active';
       });
     }
 
