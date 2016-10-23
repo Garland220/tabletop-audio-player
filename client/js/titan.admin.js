@@ -41,6 +41,26 @@
     },
 
 
+    playHandler: function(e) {
+      var key = e.data.key;
+
+      if (titan.players[key].type == 'music') {
+        var els = document.querySelectorAll('#music .active');
+        for (var i=0; i<els.length; i+=1) {
+          els[i].className = '';
+        }
+      }
+
+      document.getElementById(key).className = 'active';
+    },
+
+
+    stopHandler: function(e) {
+      var key = e.data.key;
+      document.getElementById(key).className = '';
+    },
+
+
     start: function(buttons) {
       for (var i = 0; i < buttons.length; i+=1) {
         buttons[i].addEventListener('click', titan.admin.play, false);
@@ -48,32 +68,9 @@
 
       document.getElementById('musicVolume').addEventListener('change', titan.admin.setMusicVolume, false);
 
-      window.addEventListener('connected', function(e) {
-        titan.socket.on('play', function(response) {
-          response = JSON.parse(response);
-          document.getElementById(response.key).className = 'active';
-        });
-        titan.socket.on('stop', function(response) {
-          response = JSON.parse(response);
-          document.getElementById(response.key).className = '';
-        });
-      });
-
-      window.addEventListener('stop', function(e) {
-        var key = e.data.key;
-        document.getElementById(key).className = '';
-      });
-      window.addEventListener('play', function(e) {
-        var key = e.data.key;
-
-        if (titan.players[key].type == 'music') {
-          var els = document.querySelectorAll('#music .active');
-          for (var i=0; i<els.length; i+=1) {
-            els[i].className = '';
-          }
-        }
-        document.getElementById(key).className = 'active';
-      });
+      window.addEventListener('connected', titan.admin.connectedHandler, false);
+      window.addEventListener('stop', titan.admin.stopHandler, false);
+      window.addEventListener('play', titan.admin.playHandler, false);
     }
 
   };
