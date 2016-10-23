@@ -60,11 +60,11 @@
 
 
     // Civilization Sounds
-    {url: 'audio/sound/blacksmith1.ogg', key: 'blacksmith', type: 'sound', category: 'civilization', preload: 'none', loop: true},
+    {url: 'audio/sound/blacksmith1.ogg', key: 'blacksmith', type: 'sound', category: 'civilization', preload: 'none', loopDelay: 500, randomDelay: 4000, loop: true},
     {url: 'audio/sound/boat_in_harbor2.ogg', key: 'boatHarbor', type: 'sound', category: 'civilization', preload: 'none', loop: true},
     {url: 'audio/sound/knife_sharpening.ogg', key: 'knifeSharpen', type: 'sound', category: 'civilization', preload: 'none', randomDelay: 2000, loop: false},
-    {url: 'audio/sound/repairs_b.ogg', key: 'repairs', type: 'sound', category: 'civilization', preload: 'none', loop: true},
-    {url: 'audio/sound/construction.ogg', key: 'construction', type: 'sound', category: 'civilization', preload: 'none', loop: true},
+    {url: 'audio/sound/repairs_b.ogg', key: 'repairs', type: 'sound', category: 'civilization', preload: 'none', loopDelay: 500, randomDelay: 4000, loop: true},
+    {url: 'audio/sound/construction.ogg', key: 'construction', type: 'sound', category: 'civilization', preload: 'none', loopDelay: 500, randomDelay: 4000, loop: true},
     {url: 'audio/sound/background_walla1b.ogg', key: 'backgroundChatter', type: 'sound', category: 'civilization', preload: 'none', volume: 0.7, loop: true},
     {url: 'audio/sound/tavern_loop_lite_a.ogg', key: 'tavernBG', type: 'sound', category: 'civilization', preload: 'none', volume: 0.7, loop: true},
     {url: 'audio/sound/pour_drink.ogg', key: 'pourDrink', type: 'sound', category: 'civilization', preload: 'none', volume: 0.7, loop: true},

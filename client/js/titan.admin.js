@@ -23,7 +23,7 @@
       var audio = titan.players[e.target.id],
         type = audio.type,
         volume = audio.volume,
-        loop = audio.loop,
+        loop = audio.loops,
         key = audio.id,
         data = {key: key, type: type, volume: volume, loop: loop};
 
