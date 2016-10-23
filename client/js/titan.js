@@ -143,7 +143,6 @@
 
 
     addTracks: function(arr, data, callback) {
-      console.log('TEST!!', callback);
       if (Object.prototype.toString.call(arr) === '[object Array]') {
         for (var i=0; i<arr.length; i+=1) {
           titan.addTracks(arr[i]);
@@ -163,6 +162,8 @@
       if (callback) {
         callback();
       }
+
+      window.dispatchEvent(new window.titanEvent('addTracks'));
     },
 
 
@@ -243,6 +244,8 @@
       if (titan.activeMusic !== null) {
         titan.activeMusic.volume = titan.activeMusicVolume * titan.masterVolume;
       }
+
+      window.dispatchEvent(new window.titanEvent('volumeChange'));
     },
 
 
@@ -254,11 +257,15 @@
         titan.players[key].doubleBuffer.pause();
         titan.players[key].doubleBuffer.currentTime = 0;
       }
+
+      window.dispatchEvent(new window.titanEvent('stop', {key: key}));
     },
 
 
     pause: function(key) {
       titan.players[key].pause();
+
+      window.dispatchEvent(new window.titanEvent('pause', {key: key}));
     },
 
 
@@ -274,6 +281,8 @@
         titan.players[key].doubleBuffer.load();
       }
       titan.players[key].play();
+
+      window.dispatchEvent(new window.titanEvent('play', {key: key}));
     },
 
 
@@ -285,7 +294,7 @@
         console.log('Connected');
         titan.el.innerHTML = 'Connected';
         titan.players.connect.play();
-        window.dispatchEvent(new Event('connected'));
+        window.dispatchEvent(new window.titanEvent('connected'));
       });
       titan.socket.on('disconnect', function() {
         titan.disconnect(true);
@@ -318,7 +327,6 @@
         response = JSON.parse(response);
         titan.play(response.key);
       });
-
     },
 
 
@@ -359,6 +367,13 @@
       titan.onStarted();
     }
 
+  };
+
+  window.titanEvent = function(type, data) {
+    var e = document.createEvent("Event");
+    e.initEvent(type, true, true);
+    e.data = data;
+    return e;
   };
 
 })();
