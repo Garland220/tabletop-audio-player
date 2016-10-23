@@ -97,7 +97,7 @@ io.on('connection', function(socket) {
     if (data.type == 'music') {
       activeMusic = data.key;
     }
-    else {
+    else if (data.loop === true) {
       activeSounds[data.key] = data;
     }
 
