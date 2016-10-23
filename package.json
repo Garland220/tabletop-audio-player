@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "dependencies": {
+    "bunyan": "^1.8.3",
     "express": "^4.13.4",
     "jade": "^1.11.0",
     "orm": "^2.1.30",

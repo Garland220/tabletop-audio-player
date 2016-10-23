@@ -9,10 +9,17 @@ var SETTINGS = require('./settings.json'),
   app = express(),
   http = require('http').Server(app),
   io = require('socket.io')(http),
+  Logger = require('./server/logger.js'),
+  log = new Logger(SETTINGS).log,
+
+  sessions = {},
+
   activeMusicVolume = 0.5,
   activeMusic = null,
   activeSounds = {},
-  users;
+
+  clientCount = 0,
+  users = [];
 
 app.set('views', __dirname + '/client/views');
 app.set('view engine', 'jade');
@@ -25,26 +32,29 @@ app.get('/', function(req, res) {
 
 app.get('/admin', function(req, res) {
   if (!SETTINGS.adminKey || req.query.key && req.query.key === SETTINGS.adminKey) {
-    console.log('Admin Key Accepted');
+    log.info('Admin Key Accepted');
     res.render('admin', {});
   }
   else {
-    console.log('admin key tried: ' + req.query.key);
+    log.error('admin key tried: ' + req.query.key);
     res.sendStatus(403);
   }
 });
 
 
-var clientCount = 0;
 io.on('connection', function(socket) {
-  console.log('A user connected from %s', socket.handshake.address);
+  log.info('A user connected from %s', socket.handshake.address);
   clientCount += 1;
 
   socket.emit('active', JSON.stringify({active: activeSounds}));
+  socket.emit('setMusicVolume', JSON.stringify({volume: activeMusicVolume}));
   if (activeMusic !== null) {
     socket.emit('play', JSON.stringify({key: activeMusic}));
   }
-  socket.emit('setMusicVolume', JSON.stringify({volume: activeMusicVolume}));
+  Object.keys(activeSounds).forEach(function(key) {
+    io.sockets.emit('play', JSON.stringify({key: key}));
+  });
+
   io.sockets.emit('users', JSON.stringify({users: clientCount}));
 
   socket.on('load', function(data) {
@@ -52,7 +62,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('setVolume', function(data) {
-    console.log('Adjusting Audio Volume');
+    log.info('Adjusting Audio Volume');
 
     if (!data) {
       console.error('empty data');
@@ -63,10 +73,10 @@ io.on('connection', function(socket) {
   });
 
   socket.on('setMusicVolume', function(data) {
-    console.log('Adjusting Music Volume');
+    log.info('Adjusting Music Volume');
 
     if (!data) {
-      console.error('empty data');
+      log.error('empty data');
       return;
     }
 
@@ -76,11 +86,11 @@ io.on('connection', function(socket) {
   });
 
   socket.on('play', function(data) {
-    console.log('Playing Audio');
-    console.log(data);
+    log.info('Playing Audio');
+    log.debug(data);
 
     if (!data) {
-      console.error('empty data');
+      log.error('empty data');
       return;
     }
 
@@ -95,10 +105,10 @@ io.on('connection', function(socket) {
   });
 
   socket.on('stop', function(data) {
-    console.log('Stopping Audio');
+    log.info('Stopping Audio');
 
     if (!data) {
-      console.error('empty data');
+      log.error('empty data');
       return;
     }
     if (data.type == 'music') {
@@ -112,7 +122,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('disconnect', function(){
-    console.log('A user %s disconnected', socket.handshake.address);
+    log.info('A user %s disconnected', socket.handshake.address);
 
     clientCount -= 1;
     io.sockets.emit('users', JSON.stringify({users: clientCount}));
@@ -121,6 +131,6 @@ io.on('connection', function(socket) {
 });
 
 
-http.listen(SETTINGS.port, function(){
-  console.log('listening on *:'+SETTINGS.port);
+http.listen(SETTINGS.port, function() {
+  log.info('listening on *:'+SETTINGS.port);
 });

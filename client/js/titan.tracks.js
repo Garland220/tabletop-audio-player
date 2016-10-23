@@ -29,6 +29,8 @@
     {url: 'audio/sound/timAllenGrunt.ogg', key: 'timAllenGrunt', type: 'sound', category: 'fun', volume: 1.0, loop: false},
     {url: 'audio/sound/dungeonMaster.ogg', key: 'dungeonMaster', type: 'sound', category: 'fun', volume: 1.0, loop: false},
     {url: 'audio/sound/bringOutYourDead.ogg', key: 'bringOutYourDead', type: 'sound', category: 'fun', volume: 1.0, loop: false},
+    {url: 'audio/sound/inception.ogg', key: 'inception', type: 'sound', category: 'fun', volume: 1.0, loop: false},
+    {url: 'audio/sound/dramaticChipmunk.ogg', key: 'dramaticChipmunk', type: 'sound', category: 'fun', volume: 1.0, loop: false},
 
 
     // Environment Sounds
@@ -54,6 +56,7 @@
     {url: 'audio/sound/thunder2.ogg', key: 'thunder2', type: 'sound', category: 'environment', loop: false},
     {url: 'audio/sound/rumble.ogg', key: 'rumble', type: 'sound', category: 'environment', preload: 'none', loop: false},
     {url: 'audio/sound/debris_rubble.ogg', key: 'rumble2', type: 'sound', category: 'environment', preload: 'none', loop: false},
+    {url: 'audio/sound/trees_fall1.ogg', key: 'treeFall', type: 'sound', category: 'environment', preload: 'none', loop: false},
 
 
     // Civilization Sounds
@@ -62,14 +65,25 @@
     {url: 'audio/sound/knife_sharpening.ogg', key: 'knifeSharpen', type: 'sound', category: 'civilization', preload: 'none', randomDelay: 2000, loop: false},
     {url: 'audio/sound/repairs_b.ogg', key: 'repairs', type: 'sound', category: 'civilization', preload: 'none', loop: true},
     {url: 'audio/sound/construction.ogg', key: 'construction', type: 'sound', category: 'civilization', preload: 'none', loop: true},
+    {url: 'audio/sound/background_walla1b.ogg', key: 'backgroundChatter', type: 'sound', category: 'civilization', preload: 'none', volume: 0.7, loop: true},
     {url: 'audio/sound/tavern_loop_lite_a.ogg', key: 'tavernBG', type: 'sound', category: 'civilization', preload: 'none', volume: 0.7, loop: true},
+    {url: 'audio/sound/pour_drink.ogg', key: 'pourDrink', type: 'sound', category: 'civilization', preload: 'none', volume: 0.7, loop: true},
+    {url: 'audio/sound/serving_stew.ogg', key: 'serveStew', type: 'sound', category: 'civilization', preload: 'none', volume: 0.7, loop: true},
+    {url: 'audio/sound/coinsFall.ogg', key: 'coinsFall', type: 'sound', category: 'civilization', preload: 'none', loop: false},
     {url: 'audio/sound/coins_on_bar.ogg', key: 'coinsCounter', type: 'sound', category: 'civilization', preload: 'none', loop: false},
-    {url: 'audio/sound/church_bell.ogg', key: 'churchBell', type: 'sound', category: 'civilization', loop: false},
+
     {url: 'audio/sound/bellpad2.ogg', key: 'bellpad', type: 'sound', category: 'civilization', preload: 'none', loop: true},
     {url: 'audio/sound/fountain2.ogg', key: 'fountain', type: 'sound', category: 'civilization', preload: 'none', loop: true},
     {url: 'audio/sound/footsteps_lp1.ogg', key: 'footsteps1', type: 'sound', category: 'civilization', preload: 'none', loop: true},
     {url: 'audio/sound/footsteps2.ogg', key: 'footsteps2', type: 'sound', category: 'civilization', preload: 'none', loop: true},
+    {url: 'audio/sound/foot_traffic.ogg', key: 'footsteps3', type: 'sound', category: 'civilization', preload: 'none', loop: true},
+    {url: 'audio/sound/horse_traffic2.ogg', key: 'horse footsteps', type: 'sound', category: 'civilization', preload: 'none', loop: true},
+    {url: 'audio/sound/floor-creak-01.ogg', key: 'floorCreak', type: 'sound', category: 'civilization', volume: 0.2, loop: false},
+    {url: 'audio/sound/chains.ogg', key: 'chains', type: 'sound', category: 'civilization', volume: 0.2, loop: false},
     {url: 'audio/sound/wood_chimes1a.ogg', key: 'woodChimes', type: 'sound', category: 'civilization', preload: 'none', loop: true},
+    {url: 'audio/sound/snoring.ogg', key: 'snoring', type: 'sound', category: 'civilization', preload: 'none', loop: true},
+    {url: 'audio/sound/writing.ogg', key: 'writing', type: 'sound', category: 'civilization', preload: 'none', loop: true},
+    {url: 'audio/sound/bodyFall.ogg', key: 'bodyFall', type: 'sound', category: 'civilization', preload: 'none', loop: true},
 
 
     // Prop sounds
@@ -77,9 +91,13 @@
     {url: 'audio/sound/fireplace_loop_c.ogg', key: 'campfire1', type: 'sound', category: 'prop', loop: true},
     {url: 'audio/sound/campfire1_lp.ogg', key: 'campfire2', type: 'sound', category: 'prop', loop: true},
     {url: 'audio/sound/burning_building3.ogg', key: 'campfire3', type: 'sound', category: 'prop', loop: true},
+    {url: 'audio/sound/campfire.ogg', key: 'campfire4', type: 'sound', category: 'prop', loop: true},
     {url: 'audio/sound/flag_wind.ogg', key: 'flagWind', type: 'sound', category: 'prop', loop: true},
     {url: 'audio/sound/tavern_sign.ogg', key: 'signWind', type: 'sound', category: 'prop', loop: true},
+    {url: 'audio/sound/church_bell.ogg', key: 'churchBell', type: 'sound', category: 'civilization', loop: false},
     {url: 'audio/sound/clock2.ogg', key: 'clock', type: 'sound', category: 'prop', preload: 'none', nativeLoop: true},
+    {url: 'audio/sound/clockchime.ogg', key: 'clockchime', type: 'sound', category: 'civilization', loop: false},
+    {url: 'audio/sound/music_box.ogg', key: 'musicBox', type: 'sound', category: 'civilization', loop: false},
     {url: 'audio/sound/distant_drums1_lp.ogg', key: 'distantDrums', type: 'sound', category: 'prop', preload: 'none', loop: true},
     {url: 'audio/sound/war_drums_1.ogg', key: 'warDrums', type: 'sound', category: 'prop', preload: 'none', loop: true},
     {url: 'audio/sound/war_horn_1.ogg', key: 'warHorn', type: 'sound', category: 'prop', preload: 'none', loop: true},
@@ -95,6 +113,7 @@
     {url: 'audio/sound/Gate_Open_00.ogg', key: 'gateOpen', type: 'sound', category: 'prop', loop: false},
     {url: 'audio/sound/metal_door_open.ogg', key: 'metalDoorOpen', type: 'sound', category: 'prop', loop: false},
     {url: 'audio/sound/metal_squeaks1.ogg', key: 'metalSqueak', type: 'sound', category: 'prop', loop: false},
+    {url: 'audio/sound/bubbles.ogg', key: 'boiling', type: 'sound', category: 'prop', loop: false},
 
 
     // Horror Sounds
@@ -120,7 +139,6 @@
     {url: 'audio/sound/riser1.ogg', key: 'riser1', type: 'sound', category: 'horror', loop: false},
     {url: 'audio/sound/riser2.ogg', key: 'riser2', type: 'sound', category: 'horror', loop: false},
     {url: 'audio/sound/pianohit.ogg', key: 'pianohit', type: 'sound', category: 'horror', loop: false},
-    {url: 'audio/sound/floor-creak-01.ogg', key: 'floorCreak', type: 'sound', category: 'horror', volume: 0.2, loop: false},
     {url: 'audio/sound/scrape1a.ogg', key: 'scrape1', type: 'sound', category: 'horror', volume: 0.3, loop: false},
     {url: 'audio/sound/screams.ogg', key: 'screams', type: 'sound', category: 'horror', preload: 'none', loop: false},
     {url: 'audio/sound/spirit_breath1.ogg', key: 'spiritBreath', type: 'sound', category: 'horror', loop: false},
@@ -148,6 +166,7 @@
     {url: 'audio/sound/snarl1.ogg', key: 'wolfSnarl', type: 'sound', category: 'animal', preload: 'none', loop: false},
     {url: 'audio/sound/roar.ogg', key: 'roar', type: 'sound', category: 'animal', preload: 'none', loop: false},
     {url: 'audio/sound/creature1.ogg', key: 'creature', type: 'sound', category: 'animal', loop: false},
+    {url: 'audio/sound/ooze.ogg', key: 'slime', type: 'sound', category: 'animal', loop: false},
     {url: 'audio/sound/cows1a.ogg', key: 'cows', type: 'sound', category: 'animal', loop: false},
     {url: 'audio/sound/chickens1a.ogg', key: 'chickens', type: 'sound', category: 'animal', loop: false},
     {url: 'audio/sound/birdsong2.ogg', key: 'birdsong', type: 'sound', category: 'animal', loop: false},
