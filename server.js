@@ -113,7 +113,7 @@ io.on('connection', function(socket) {
       log.error('empty data');
       return;
     }
-    if (data.type == 'music') {
+    if (data.type == 'music' && data.key == activeMusic) {
       activeMusic = null;
     }
     else {
