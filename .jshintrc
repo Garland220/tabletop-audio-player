@@ -1,4 +1,5 @@
 {
   "predef": ["titan", "console", "require", "io"],
-  "unused": false
+  "unused": false,
+  "node": true
 }

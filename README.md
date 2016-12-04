@@ -1,12 +1,14 @@
 Tabletop Audio Player
 ======
 
+
 Install
 ------
 ```bash
 cp settings.template.json settings.json
 npm install
 ```
+
 
 Play
 ------
@@ -26,7 +28,7 @@ Options
 You can add an 'adminKey' value to the settings file. This options then becomes required to access the admin url
 
 ```
-admin?key=[your key here]
+/admin?key=[your key here]
 ```
 
 
@@ -43,8 +45,9 @@ Roadmap
 8. Soundcloud integration
 9. Fantasy Grounds integration
 
+
 Requirements
 ------
-Express
-Bunyan
-Socket.io
+*Express
+*Bunyan
+*Socket.io

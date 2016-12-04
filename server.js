@@ -1,14 +1,19 @@
-/*global require, module, __dirname */
-/*jslint node: true */
 'use strict';
 
 var SETTINGS = require('./settings.json'),
-  util = require('util'),
+
+  // System
   fs = require('fs'),
+  util = require('util'),
+  crypto = require('crypto'),
+
+  // HTTP
   express = require('express'),
   app = express(),
   http = require('http').Server(app),
   io = require('socket.io')(http),
+
+  // Logging
   Logger = require('./server/logger.js'),
   log = new Logger(SETTINGS).log,
 
@@ -20,6 +25,12 @@ var SETTINGS = require('./settings.json'),
 
   clientCount = 0,
   users = [];
+
+function randomHash() {
+  var current_date = (new Date()).valueOf().toString();
+  var random = Math.random().toString();
+  return crypto.createHash('sha1').update(current_date + random).digest('hex');
+}
 
 app.set('views', __dirname + '/client/views');
 app.set('view engine', 'jade');

@@ -1,4 +1,5 @@
 {
   "port": 8080,
-  "log": "titan"
+  "log": "titan",
+  "logLevel": "info"
 }
