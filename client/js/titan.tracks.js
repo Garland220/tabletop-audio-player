@@ -243,6 +243,7 @@
     {url: 'audio/music/caravan.ogg', key: 'caravan', type: 'music', category: 'music', preload: 'none', loop: true},
     {url: 'audio/music/lost_village.ogg', key: 'lostVillage', type: 'music', category: 'music', preload: 'none', loop: true},
     {url: 'audio/music/sorrow.ogg', key: 'sorrow', type: 'music', category: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Unseen_Horrors.ogg', key: 'unseenHorrors', type: 'music', category: 'music', preload: 'none', loop: true},
   ],
 
   div = document.createElement('div');
