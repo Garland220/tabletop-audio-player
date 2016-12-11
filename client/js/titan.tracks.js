@@ -245,6 +245,17 @@
     {url: 'audio/music/sorrow.ogg', key: 'sorrow', type: 'music', category: 'music', preload: 'none', loop: true},
     {url: 'audio/music/Unseen_Horrors.ogg', key: 'unseenHorrors', type: 'music', category: 'music', preload: 'none', loop: true},
     {url: 'audio/music/Trio_for_Piano_Cello_and_Clarinet.ogg', key: 'pianoCelloClarinet', type: 'music', category: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Supernatural.ogg', key: 'supernatural', type: 'music', category: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Lightless_Dawn.ogg', key: 'lightlessDawn', type: 'music', category: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Bram Stokers Dracula movie soundtrack Vampire Hunt - Dracula movie soundtrack Vampire Huntes.ogg', key: 'vampireHunters', type: 'music', category: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Dark_Wizards.ogg', key: 'darkWizards', type: 'music', category: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Bloodborne OST - Ludwig the Holy Blade - Extended.ogg', key: 'ludwigHolyBlade', type: 'music', category: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Past the Edge.ogg', key: 'pastTheEdge', type: 'music', category: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Dark Walk.ogg', key: 'darkWalk', type: 'music', category: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/The Chamber.ogg', key: 'theChamber', type: 'music', category: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Temple of the Manes.ogg', key: 'templeOfTheManes', type: 'music', category: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Oppressive Gloom.ogg', key: 'oppressiveGloom', type: 'music', category: 'music', preload: 'none', loop: true},
+    {url: 'audio/music/Comfortable Mystery.ogg', key: 'comfortableMystery', type: 'music', category: 'music', preload: 'none', loop: true},
   ],
 
   div = document.createElement('div');
