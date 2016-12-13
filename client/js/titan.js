@@ -7,7 +7,7 @@
 
   window.titan = {
 
-    debug: true,
+    debug: false,
 
     connected: false,
     users: 0,
@@ -24,7 +24,7 @@
 
     replayDelay: -0.25,
 
-    id: '13012730129741209840127410',
+    id: null,
 
 
     loadAudio: function(data) {
@@ -286,42 +286,60 @@
     },
 
 
-    connect: function() {
-      console.log('Connecting...');
+    connect: function(id) {
+      console.log('Connecting to server...');
+      titan.el.innerHTML = 'Connecting to server...';
 
-      titan.socket = io();
+      if (!id) {
+        console.error('ID not provided');
+      }
+
+      titan.id = id;
+
+      titan.socket = io({query: 'channel='+id});
+
       titan.socket.on('connect', function() {
         console.log('Connected');
         titan.el.innerHTML = 'Connected';
         titan.players.connect.play();
         window.dispatchEvent(new window.titanEvent('connected'));
       });
+
       titan.socket.on('disconnect', function() {
         titan.disconnect(true);
       });
+
       titan.socket.on('load', function(response) {
         console.log('Loaded');
+        console.log(response);
         response = JSON.parse(response);
+
+        titan.addTracks(response, null);
       });
+
       titan.socket.on('users', function(response) {
         response = JSON.parse(response);
         titan.users = response.users;
         titan.el.innerHTML = 'Connected - ' + titan.users + ' active user(s)';
       });
+
       titan.socket.on('setVolume', function(response) {
         response = JSON.parse(response);
         titan.setVolume(response.key, response.volume);
       });
+
       titan.socket.on('setMusicVolume', function(response) {
         console.log('Adjusting Music Volume');
         response = JSON.parse(response);
         titan.setMusicVolume(response.volume);
       });
+
       titan.socket.on('stop', function(response) {
         console.log('Stopping audio');
         response = JSON.parse(response);
         titan.stop(response.key);
       });
+
       titan.socket.on('play', function(response) {
         console.log('Playing audio');
         response = JSON.parse(response);

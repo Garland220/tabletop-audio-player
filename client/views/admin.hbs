@@ -17,10 +17,24 @@
 <div id="sounds">
 
   {{#if sounds}}
-    {{#each sounds as sound}}
-      <button id="{{sound.id}}" title="{{sound.description}}" onclick="">{{sound.name}}</button>
+    {{#each sounds as |sound|}}
+      <button id="{{sound.key}}" title="{{sound.description}}" onclick="">{{sound.key}}</button>
     {{/each}}
   {{/if}}
+
+
+<div id="music">
+  <h3>
+    Music
+
+    <label>
+      Volume
+      <i class="fa fa-volume-down"></i>
+      <input type="range" id="musicVolume" min=1 max=10 value=5 />
+      <i class="fa fa-volume-up"></i>
+    </label>
+  </h3>
+</div>
 <!--
     div(id="funSounds")
       h3 Fun Sounds
@@ -269,9 +283,26 @@
  -->
 </div>
 
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="/js/titan.js"></script>
+<script type="text/javascript" src="/js/titan.admin.js"></script>
+<script>
+  titan.el = document.getElementById('connection');
+  titan.el.innerHTML = 'Loading...';
 
-<script type="text/javascript" src="js/titan.admin.js">
-  titan.onStarted = function() {
-    titan.admin.start(document.querySelectorAll("#sounds button"));
-  };
+  window.onload = (function() {
+    tracks = [
+      {url: '/audio/sound/connect.ogg', key: 'connect', type: 'sound', category: 'ui', preload: 'auto', loop: false},
+      {url: '/audio/sound/disconnect.ogg', key: 'disconnect', type: 'sound', category: 'ui', preload: 'auto', loop: false}
+    ];
+
+    titan.onStarted = function() {
+      titan.admin.start(document.querySelectorAll("#sounds button"));
+    };
+
+    titan.addTracks(tracks, null, function() {
+      titan.connect({{channel.id}});
+      titan.start();
+    });
+  });
 </script>

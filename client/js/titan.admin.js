@@ -3,15 +3,26 @@
 
   titan.admin = {
 
+    token: null,
+
     setVolume: function(e) {
       titan.setVolume(e.target.id, e.target.value/10);
-      titan.broadcast('setVolume', {key: e.target.id, volume: e.target.value/10});
+      titan.broadcast('setVolume', {
+        channel: titan.id,
+        token: titan.admin.token,
+        key: e.target.id,
+        volume: e.target.value/10
+      });
     },
 
 
     setMusicVolume: function(e) {
       titan.setMusicVolume(e.target.value/10);
-      titan.broadcast('setMusicVolume', {volume: e.target.value/10});
+      titan.broadcast('setMusicVolume', {
+        channel: titan.id,
+        token: titan.admin.token,
+        volume: e.target.value/10
+      });
     },
 
 
@@ -25,7 +36,14 @@
         volume = audio.volume,
         loop = audio.loops,
         key = audio.id,
-        data = {key: key, type: type, volume: volume, loop: loop};
+        data = {
+          channel: titan.id,
+          token: titan.admin.token,
+          key: key,
+          type: type,
+          volume: volume,
+          loop: loop
+        };
 
       if (e.target.className == 'active') {
         titan.broadcast('stop', data);

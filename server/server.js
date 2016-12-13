@@ -45,6 +45,7 @@ const server = {
   sounds: {},
   channels: {},
 
+
   routes: function() {
     server.log.debug('Server.routes');
 
@@ -56,12 +57,36 @@ const server = {
       server.models.channel.create({}, function(err, result) {
         if (err) {
           server.log.error(err);
-         return res.sendStatus(500);
+          return res.status(500).render('500');
         }
 
         server.channels[result.id] = result;
 
         res.redirect('/channel' + result.id);
+      });
+    });
+
+    server.app.get('/channel/:id/admin', function(req, res) {
+      let id = req.param('id');
+
+      server.models.channel.findOne({id: id}, function(err, result) {
+        if (err) {
+          server.log.error(err);
+          return res.status(500).render('500');
+        }
+
+        if (!result) {
+          return res.status(404).render('404');
+        }
+
+        if (req.query.key && req.query.key == result.adminKey) {
+          server.log.info('Admin Key Accepted for channel ' + id);
+          res.render('admin', {channel: result, sounds: result.audioLibrary});
+        }
+        else {
+          server.log.error('Wrong admin key ' + req.query.key + ' tried for channel ' + id);
+          return res.status(403).render('403');
+        }
       });
     });
 
@@ -75,58 +100,60 @@ const server = {
         }
 
         if (!result) {
-          return res.status(404).render('500');
+          return res.status(404).render('404');
         }
+
+        // result.picture = '/images/ravenloft_crest.png';
+        // result.name = 'The Curse of Strahd';
+        // result.description = 'Under raging storm clouds, a lone figure stands silhouetted against the ancient walls of Castle Ravenloft. The vampire Count Strahd von Zarovich stares down a sheer cliff at the village below. A cold, bitter wind spins dead leaves about him, billowing his cape in the darkness.';
+        result.adminKey = '1';
+        result.save();
 
         res.render('channel', {channel: result});
       });
     });
-
-    server.app.get('/admin', function(req, res) {
-      if (!server.settings.adminKey || req.query.key && req.query.key === server.settings.adminKey) {
-        server.log.info('Admin Key Accepted');
-        res.render('admin');
-      }
-      else {
-        server.log.error('admin key tried: ' + req.query.key);
-        res.sendStatus(403);
-      }
-    });
   },
+
 
   addClient: function(socket) {
     server.log.debug('Server.addClient');
 
-    server.log.info('A user connected from %s', socket.handshake.address);
-    server.clientCount += 1;
+    let channel = server.channels[socket.request._query.channel];
+
+    socket.channel = channel.id;
+    channel.clientCount += 1;
+
+    server.log.info('A user connected to channel ' + channel +  ' from %s', socket.handshake.address);
+
+    socket.join(channel.token);
 
     socket.emit('active', JSON.stringify({active: server.activeSounds}));
     socket.emit('setMusicVolume', JSON.stringify({volume: server.activeMusicVolume}));
+
+    socket.emit('load', JSON.stringify(channel.audioLibrary));
 
     if (server.activeMusic !== null) {
       socket.emit('play', JSON.stringify({key: server.activeMusic}));
     }
     Object.keys(server.activeSounds).forEach(function(key) {
-      server.io.sockets.emit('play', JSON.stringify({key: key}));
+      socket.emit('play', JSON.stringify({key: key}));
     });
 
-    server.io.sockets.emit('users', JSON.stringify({users: server.clientCount}));
+    server.io.sockets.to(channel.token).emit('users', JSON.stringify({users: channel.clientCount}));
   },
 
   removeClient: function(socket) {
     server.log.debug('Server.removeClient');
 
+    let channel = server.channels[socket.channel];
+
+    socket.leave(channel.token);
+
     server.log.info('A user %s disconnected', socket.handshake.address);
-    server.clientCount -= 1;
 
-    server.io.sockets.emit('users', JSON.stringify({users: server.clientCount}));
-  },
+    channel.clientCount -= 1;
 
-  loadClient: function(data) {
-    server.log.debug('Server.loadClient');
-    server.log.debug(data);
-
-    // socket.emit('load');
+    server.io.sockets.to(channel.token).emit('users', JSON.stringify({users: channel.clientCount}));
   },
 
   joinChannel: function(data) {
@@ -143,9 +170,11 @@ const server = {
       return;
     }
 
-    server.log.info('Adjusting Audio Volume of ' + data.key + ' to: ' + data.volume);
+    let channel = server.channels[data.channel];
 
-    server.io.sockets.emit('setVolume', JSON.stringify({key: data.key, volume: data.volume}));
+    server.log.info('Adjusting Audio Volume in channel ' + channel.id + ' of ' + data.key + ' to: ' + data.volume);
+
+    server.io.sockets.to(channel.token).emit('setVolume', JSON.stringify({key: data.key, volume: data.volume}));
   },
 
   setMusicVolume: function(data) {
@@ -157,11 +186,13 @@ const server = {
       return;
     }
 
-    server.log.info('Adjusting Music Volume to: ' + data.volume);
+    let channel = server.channels[data.channel];
 
-    server.activeMusicVolume = data.volume;
+    server.log.info('Adjusting Music Volume in channel ' + channel.id + ' to: ' + data.volume);
 
-    server.io.sockets.emit('setMusicVolume', JSON.stringify({volume: data.volume}));
+    channel.activeMusicVolume = data.volume;
+
+    server.io.sockets.to(channel.token).emit('setMusicVolume', JSON.stringify({volume: data.volume}));
   },
 
   play: function(data) {
@@ -173,16 +204,18 @@ const server = {
       return;
     }
 
-    server.log.info('Playing Audio: ' + data.key);
+    let channel = server.channels[data.channel];
+
+    server.log.info('Playing Audio: ' + data.key + ' in channel ' + channel.id);
 
     if (data.type == 'music') {
-      server.activeMusic = data.key;
+      channel.activeMusic = data.key;
     }
     else if (data.loop === true) {
-      server.activeSounds[data.key] = data;
+      channel.activeSounds[data.key] = data;
     }
 
-    server.io.sockets.emit('play', JSON.stringify({key: data.key}));
+    server.io.sockets.to(channel.token).emit('play', JSON.stringify({key: data.key}));
   },
 
   stop: function(data) {
@@ -194,16 +227,18 @@ const server = {
       return;
     }
 
-    server.log.info('Stopping Audio: ' + data.key);
+    let channel = server.channels[data.channel];
 
-    if (data.type == 'music' && data.key == server.activeMusic) {
-      server.activeMusic = null;
+    server.log.info('Stopping Audio: ' + data.key + ' in channel ' + channel.id);
+
+    if (data.type == 'music' && data.key == channel.activeMusic) {
+      channel.activeMusic = null;
     }
-    else {
-      delete server.activeSounds[data.key];
+    else if (channel.activeSounds[data.key]) {
+      delete channel.activeSounds[data.key];
     }
 
-    server.io.sockets.emit('stop', JSON.stringify({key: data.key}));
+    server.io.sockets.to(channel.token).emit('stop', JSON.stringify({key: data.key}));
   },
 
   connection: function(socket) {
@@ -211,7 +246,9 @@ const server = {
 
     server.addClient(socket);
 
-    socket.on('load', server.loadClient);
+    socket.on('load', function() {
+      server.loadClient(socket);
+    });
 
     socket.on('join', server.joinChannel);
 
@@ -244,10 +281,10 @@ const server = {
       }
 
       if (results) {
-        this.users = {};
+        server.users = {};
         for (var i=0; i<results.length; i+=1) {
           var user = results[i];
-          this.users[user.id] = user;
+          server.users[user.id] = user;
         }
       }
 
@@ -263,10 +300,10 @@ const server = {
       }
 
       if (results) {
-        this.sounds = {};
+        server.sounds = {};
         for (var i=0; i<results.length; i+=1) {
           var sound = results[i];
-          this.sounds[sound.id] = sound;
+          server.sounds[sound.id] = sound;
         }
       }
 
@@ -282,10 +319,12 @@ const server = {
       }
 
       if (results) {
-        this.channels = {};
+        server.channels = {};
         for (var i=0; i<results.length; i+=1) {
           var channel = results[i];
-          this.channels[channel.id] = channel;
+          channel.clientCount = 0;
+          channel.token = 'channel' + channel.id;
+          server.channels[channel.id] = channel;
         }
       }
 

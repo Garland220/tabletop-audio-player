@@ -1,28 +1,53 @@
 
 <div class="channel">
-  {{channel.id}}
-  <h3 id="connection"></h3>
 
   <h1>
-    <span class="name">{{channel.name}}</span>
-
-    <label>
-      Volume
+    <label class="volume">
+      <span>Volume</span>
 
       <i class="fa fa-volume-down"></i>
       <input type="range" id="masterVolume" min=1 max=10 value=10 />
       <i class="fa fa-volume-up"></i>
+
+      <h3 id="connection">Disonnected</h3>
     </label>
+
+    <div class="name">{{channel.name}}</div>
   </h1>
 
-  <div class="description">
-    {{channel.description}}
-  </div>
+  {{#if channel.description}}
+    <div class="description">
+      {{channel.description}}
+    </div>
+  {{/if}}
 
 </div>
 
-<!-- <script type="text/javascript" src="https://use.fontawesome.com/90cf358061.js"></script> -->
+
+<style>
+  {{#if channel.picture }}
+    html { background-image: url({{channel.picture}}); }
+  {{/if}}
+</style>
+
+
 <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.0/seedrandom.min.js"></script> -->
-<script type="text/javascript" src="js/titan.js"></script>
-<script type="text/javascript" src="js/titan.tracks.js"></script>
+<script type="text/javascript" src="/js/titan.js"></script>
+{{!-- <script type="text/javascript" src="/js/titan.tracks.js"></script> --}}
+<script>
+  titan.el = document.getElementById('connection');
+  titan.el.innerHTML = 'Loading...';
+
+  window.onload = (function() {
+    tracks = [
+      {url: '/audio/sound/connect.ogg', key: 'connect', type: 'sound', category: 'ui', preload: 'auto', loop: false},
+      {url: '/audio/sound/disconnect.ogg', key: 'disconnect', type: 'sound', category: 'ui', preload: 'auto', loop: false}
+    ];
+
+    titan.addTracks(tracks, null, function() {
+      titan.connect({{channel.id}});
+      titan.start();
+    });
+  });
+</script>
