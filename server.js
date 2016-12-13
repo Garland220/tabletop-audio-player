@@ -1,6 +1,6 @@
 'use strict';
 
-const SETTINGS = require('./settings.json'),
+const _ = require('lodash'),
 
 // System
 fs = require('fs'),
@@ -9,14 +9,23 @@ crypto = require('crypto'),
 
 // HTTP
 express = require('express'),
-app = express(),
-http = require('http').Server(app),
-io = require('socket.io')(http),
 
 // Logging
 Logger = require('./server/logger.js'),
 
-sqlite3 = require('sqlite3').verbose();
+// DB
+sqlite3 = require('sqlite3').verbose(),
+
+// ORM
+Waterline = require('waterline'),
+WaterlineSQLite = require('waterline-sqlite3'),
+
+User = Waterline.Collection.extend(require('./models/User.js')),
+Sound = Waterline.Collection.extend(require('./models/Sound.js')),
+Channel = Waterline.Collection.extend(require('./models/Channel.js')),
+
+// Settings
+SETTINGS = require('./settings.json');
 
 
 /**
@@ -24,39 +33,40 @@ sqlite3 = require('sqlite3').verbose();
  */
 const server = {
 
-  db: new sqlite3.Database(SETTINGS.db.name),
-  log: new Logger(SETTINGS).log,
+  settings: null,
+
+  db: null,
+  log: null,
+
+  app: null,
+  http: null,
+  io: null,
 
   sessions: {},
 
   activeMusicVolume: 0.5,
   activeMusic: null,
+
   activeSounds: {},
+
+  channels: {},
 
   clientCount: 0,
   users: [],
 
-  randomHash: function() {
-    server.log.debug('Server.randomHash');
-
-    let current_date = (new Date()).valueOf().toString();
-    let random = Math.random().toString();
-    return crypto.createHash('sha1').update(current_date + random).digest('hex');
-  },
-
   routes: function() {
     server.log.debug('Server.routes');
 
-    app.set('views', __dirname + '/client/views');
-    app.set('view engine', 'jade');
-    app.set('view options', { layout: true });
-    app.use(express.static('client'));
+    server.app.set('views', __dirname + '/client/views');
+    server.app.set('view engine', 'jade');
+    server.app.set('view options', { layout: true });
+    server.app.use(express.static('client'));
 
-    app.get('/', function(req, res) {
+    server.app.get('/', function(req, res) {
       res.render('index', {});
     });
 
-    app.get('/admin', function(req, res) {
+    server.app.get('/admin', function(req, res) {
       if (!SETTINGS.adminKey || req.query.key && req.query.key === SETTINGS.adminKey) {
         server.log.info('Admin Key Accepted');
         res.render('admin', {});
@@ -81,10 +91,10 @@ const server = {
       socket.emit('play', JSON.stringify({key: server.activeMusic}));
     }
     Object.keys(server.activeSounds).forEach(function(key) {
-      io.sockets.emit('play', JSON.stringify({key: key}));
+      server.io.sockets.emit('play', JSON.stringify({key: key}));
     });
 
-    io.sockets.emit('users', JSON.stringify({users: server.clientCount}));
+    server.io.sockets.emit('users', JSON.stringify({users: server.clientCount}));
   },
 
   removeClient: function(socket) {
@@ -93,7 +103,7 @@ const server = {
     server.log.info('A user %s disconnected', socket.handshake.address);
     server.clientCount -= 1;
 
-    io.sockets.emit('users', JSON.stringify({users: server.clientCount}));
+    server.io.sockets.emit('users', JSON.stringify({users: server.clientCount}));
   },
 
   loadClient: function(data) {
@@ -114,7 +124,7 @@ const server = {
 
     server.log.info('Adjusting Audio Volume of ' + data.key + ' to: ' + data.volume);
 
-    io.sockets.emit('setVolume', JSON.stringify({key: data.key, volume: data.volume}));
+    server.io.sockets.emit('setVolume', JSON.stringify({key: data.key, volume: data.volume}));
   },
 
   setMusicVolume: function(data) {
@@ -130,7 +140,7 @@ const server = {
 
     server.activeMusicVolume = data.volume;
 
-    io.sockets.emit('setMusicVolume', JSON.stringify({volume: data.volume}));
+    server.io.sockets.emit('setMusicVolume', JSON.stringify({volume: data.volume}));
   },
 
   play: function(data) {
@@ -151,7 +161,7 @@ const server = {
       server.activeSounds[data.key] = data;
     }
 
-    io.sockets.emit('play', JSON.stringify({key: data.key}));
+    server.io.sockets.emit('play', JSON.stringify({key: data.key}));
   },
 
   stop: function(data) {
@@ -172,7 +182,7 @@ const server = {
       delete server.activeSounds[data.key];
     }
 
-    io.sockets.emit('stop', JSON.stringify({key: data.key}));
+    server.io.sockets.emit('stop', JSON.stringify({key: data.key}));
   },
 
   connection: function(socket) {
@@ -193,14 +203,36 @@ const server = {
     socket.on('disconnect', server.removeClient);
   },
 
-  start: function() {
+  randomHash: function() {
+    server.log.debug('Server.randomHash');
+
+    let current_date = (new Date()).valueOf().toString();
+    let random = Math.random().toString();
+    return crypto.createHash('sha1').update(current_date + random).digest('hex');
+  },
+
+  start: function(settings) {
+    server.settings = settings;
+
+    server.db = new sqlite3.Database(settings.db.name);
+    server.orm = new Waterline();
+    server.log = new Logger(settings).log;
+
+    server.orm.loadCollection(User);
+    server.orm.loadCollection(Sound);
+    server.orm.loadCollection(Channel);
+
+    server.app = express();
+    server.http = require('http').Server(server.app);
+    server.io = require('socket.io')(server.http);
+
     server.log.debug('Server.start');
 
     server.routes();
 
-    io.on('connection', server.connection);
+    server.io.on('connection', server.connection);
 
-    http.listen(SETTINGS.port, function() {
+    server.http.listen(SETTINGS.port, function() {
       server.log.info('listening on *:'+SETTINGS.port);
     });
   },
@@ -214,4 +246,4 @@ const server = {
   }
 };
 
-server.start();
+server.start(SETTINGS);
