@@ -1,5 +1,8 @@
 .DS_Store
 node_modules
 *.ogg
+*.mp3
 *.log
+*.db
 settings.json
+
