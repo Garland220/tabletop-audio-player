@@ -63,7 +63,7 @@
       var key = e.data.key;
 
       if (titan.players[key].type == 'music') {
-        var els = document.querySelectorAll('#music .active');
+        var els = document.querySelectorAll('.music .active');
         for (var i=0; i<els.length; i+=1) {
           els[i].className = '';
         }

@@ -7,6 +7,7 @@ fs = require('fs'),
 util = require('util'),
 crypto = require('crypto'),
 path = require('path'),
+format = require('string-format'),
 
 // HTTP
 express = require('express'),
@@ -18,6 +19,8 @@ Logger = require('./libs/logger.js'),
 
 // ORM
 Waterline = require('waterline');
+
+format.extend(String.prototype);
 
 /**
  * Audio Server
@@ -33,13 +36,6 @@ const server = {
   io: null,
 
   sessions: {},
-
-  activeMusicVolume: 0.5,
-  activeMusic: null,
-
-  activeSounds: {},
-
-  clientCount: 0,
 
   users: {},
   sounds: {},
@@ -67,7 +63,12 @@ const server = {
     });
 
     server.app.get('/channel/:id/admin', function(req, res) {
-      let id = req.param('id');
+      let id = req.params.id;
+
+      if (!id) {
+        server.log.error('Requested page without ID');
+        return res.status(500).render('500');
+      }
 
       server.models.channel.findOne({id: id}, function(err, result) {
         if (err) {
@@ -80,18 +81,23 @@ const server = {
         }
 
         if (req.query.key && req.query.key == result.adminKey) {
-          server.log.info('Admin Key Accepted for channel ' + id);
+          server.log.info('Admin Key Accepted for channel {0}'.format(id));
           res.render('admin', {channel: result, sounds: result.audioLibrary});
         }
         else {
-          server.log.error('Wrong admin key ' + req.query.key + ' tried for channel ' + id);
+          server.log.error('Wrong admin key {0} tried for channel {1}.'.format(req.query.key, id));
           return res.status(403).render('403');
         }
       });
     });
 
     server.app.get('/channel/:id', function(req, res) {
-      let id = req.param('id');
+      let id = req.params.id;
+
+      if (!id) {
+        server.log.error('Requested page without ID');
+        return res.status(500).render('500');
+      }
 
       server.models.channel.findOne({id: id}, function(err, result) {
         if (err) {
@@ -123,21 +129,14 @@ const server = {
     socket.channel = channel.id;
     channel.clientCount += 1;
 
-    server.log.info('A user connected to channel ' + channel +  ' from %s', socket.handshake.address);
+    server.log.info('A user({0}) connected to channel {1}'.format(socket.handshake.address, channel.id));
 
     socket.join(channel.token);
 
-    socket.emit('active', JSON.stringify({active: server.activeSounds}));
+    socket.emit('active', JSON.stringify({active: channel.activeAudio}));
     socket.emit('setMusicVolume', JSON.stringify({volume: server.activeMusicVolume}));
 
     socket.emit('load', JSON.stringify(channel.audioLibrary));
-
-    if (server.activeMusic !== null) {
-      socket.emit('play', JSON.stringify({key: server.activeMusic}));
-    }
-    Object.keys(server.activeSounds).forEach(function(key) {
-      socket.emit('play', JSON.stringify({key: key}));
-    });
 
     server.io.sockets.to(channel.token).emit('users', JSON.stringify({users: channel.clientCount}));
   },
@@ -149,7 +148,7 @@ const server = {
 
     socket.leave(channel.token);
 
-    server.log.info('A user %s disconnected', socket.handshake.address);
+    server.log.info('A user({0}) disconnected from channel {1}'.format(socket.handshake.address, channel.id));
 
     channel.clientCount -= 1;
 
@@ -172,7 +171,7 @@ const server = {
 
     let channel = server.channels[data.channel];
 
-    server.log.info('Adjusting Audio Volume in channel ' + channel.id + ' of ' + data.key + ' to: ' + data.volume);
+    server.log.info('Adjusting Audio Volume in channel {0} of {1} to: {2}.'.format(channel.id, data.key, data.volume));
 
     server.io.sockets.to(channel.token).emit('setVolume', JSON.stringify({key: data.key, volume: data.volume}));
   },
@@ -188,7 +187,7 @@ const server = {
 
     let channel = server.channels[data.channel];
 
-    server.log.info('Adjusting Music Volume in channel ' + channel.id + ' to: ' + data.volume);
+    server.log.info('Adjusting Music Volume in channel {0} to: {1}'.format(channel.id, data.volume));
 
     channel.activeMusicVolume = data.volume;
 
@@ -206,14 +205,16 @@ const server = {
 
     let channel = server.channels[data.channel];
 
-    server.log.info('Playing Audio: ' + data.key + ' in channel ' + channel.id);
+    server.log.info('Playing Audio: {0} in channel {1}.'.format(data.key, channel.id));
 
     if (data.type == 'music') {
       channel.activeMusic = data.key;
     }
     else if (data.loop === true) {
-      channel.activeSounds[data.key] = data;
+      channel.activeAudio[data.key] = data;
     }
+
+    channel.save();
 
     server.io.sockets.to(channel.token).emit('play', JSON.stringify({key: data.key}));
   },
@@ -229,13 +230,13 @@ const server = {
 
     let channel = server.channels[data.channel];
 
-    server.log.info('Stopping Audio: ' + data.key + ' in channel ' + channel.id);
+    server.log.info('Stopping Audio: {0} in channel {1}.'.format(data.key, channel.id));
 
     if (data.type == 'music' && data.key == channel.activeMusic) {
       channel.activeMusic = null;
     }
-    else if (channel.activeSounds[data.key]) {
-      delete channel.activeSounds[data.key];
+    else if (channel.activeAudio && channel.activeAudio[data.key]) {
+      delete channel.activeAudio[data.key];
     }
 
     server.io.sockets.to(channel.token).emit('stop', JSON.stringify({key: data.key}));
@@ -247,7 +248,14 @@ const server = {
     server.addClient(socket);
 
     socket.on('load', function() {
-      server.loadClient(socket);
+      let channel = server.channels[socket.channel];
+
+      if (server.activeMusic !== null) {
+        socket.emit('play', JSON.stringify({key: server.activeMusic}));
+      }
+      Object.keys(channel.activeAudio).forEach(function(key) {
+        socket.emit('play', JSON.stringify({key: key}));
+      });
     });
 
     socket.on('join', server.joinChannel);
@@ -324,6 +332,9 @@ const server = {
           var channel = results[i];
           channel.clientCount = 0;
           channel.token = 'channel' + channel.id;
+          if (!channel.activeAudio) {
+            channel.activeAudio = {};
+          }
           server.channels[channel.id] = channel;
         }
       }
@@ -428,12 +439,12 @@ const server = {
   },
 
   start: function() {
-    server.log.info('Starting websocket handler');
+    server.log.info('Starting websocket handler.');
     server.io.on('connection', server.connection);
 
-    server.log.info('Starting web server');
+    server.log.info('Starting web server.');
     server.http.listen(server.settings.port, function() {
-      server.log.info('listening on *: ' + server.settings.port);
+      server.log.info('listening on *:{0}'.format(server.settings.port));
     });
   },
 

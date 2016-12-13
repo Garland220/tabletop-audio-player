@@ -324,12 +324,35 @@ h3 {
   .description {
     padding: 10px;
     width: 80%;
-    background: rgba(255,255,255, 0.3);
+    background: rgba(255,255,255, 0.7);
     margin: auto;
     text-align: center;
     font-weight: 500;
     font-style: italic;
     font-size: 1.3rem;
+  }
+
+  .sounds {
+    padding: 10px;
+    text-align: center;
+    background: rgba(255,255,255, 0.7);
+
+    & > div {
+      background: #ccc;
+      padding: 5px;
+      margin: 10px 0;
+
+      h3 {
+        width: 100%;
+        background: #444;
+        display: block;
+        margin: 0;
+        margin-bottom: 5px;
+        color: #fff;
+        padding: 2px 10px;
+        box-sizing: border-box;
+      }
+    }
   }
 
   .volume {
@@ -346,26 +369,6 @@ h3 {
 #connection {
   color: #999;
   text-align: right;
-}
-
-
-#sounds {
-  & > div {
-    background: #ccc;
-    padding: 5px;
-    margin: 10px 0;
-
-    h3 {
-      width: 100%;
-      background: #444;
-      display: block;
-      margin: 0;
-      margin-bottom: 5px;
-      color: #fff;
-      padding: 2px 10px;
-      box-sizing: border-box;
-    }
-  }
 }
 
 

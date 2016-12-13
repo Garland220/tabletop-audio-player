@@ -147,6 +147,13 @@
         for (var i=0; i<arr.length; i+=1) {
           titan.addTracks(arr[i]);
         }
+
+        if (callback) {
+          console.log(titan.players);
+          callback();
+        }
+
+        window.dispatchEvent(new window.titanEvent('addTracks'));
       }
       else if (Object.prototype.toString.call(arr) === '[object Object]') {
         var obj = {};
@@ -158,12 +165,6 @@
         titan.tracks.push(obj);
         titan.players[arr.key] = titan.loadAudio(arr);
       }
-
-      if (callback) {
-        callback();
-      }
-
-      window.dispatchEvent(new window.titanEvent('addTracks'));
     },
 
 
@@ -270,6 +271,11 @@
 
 
     play: function(key) {
+      if (!key) {
+        console.error('Tried to play without key');
+        return;
+      }
+
       if (titan.players[key].type == 'music') {
         if (titan.activeMusic !== null) {
           titan.stop(titan.activeMusic.id);
@@ -314,7 +320,9 @@
         console.log(response);
         response = JSON.parse(response);
 
-        titan.addTracks(response, null);
+        titan.addTracks(response, null, function() {
+          titan.broadcast('load');
+        });
       });
 
       titan.socket.on('users', function(response) {

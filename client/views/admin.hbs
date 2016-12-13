@@ -1,40 +1,48 @@
 
-<h3 id="connection"></h3>
 
-<h1>
-  Tabletop Audio Admin
+<div class="channel">
 
-  <label>
-    Volume
-    <i class="fa fa-volume-down"></i>
-    <input type="range" id="masterVolume" min=1 max=10 value=10 />
-    <i class="fa fa-volume-up"></i>
-  </label>
+  <h1>
+    <label class="volume">
+      <span>Volume</span>
 
-</h1>
-
-
-<div id="sounds">
-
-  {{#if sounds}}
-    {{#each sounds as |sound|}}
-      <button id="{{sound.key}}" title="{{sound.description}}" onclick="">{{sound.key}}</button>
-    {{/each}}
-  {{/if}}
-
-
-<div id="music">
-  <h3>
-    Music
-
-    <label>
-      Volume
       <i class="fa fa-volume-down"></i>
-      <input type="range" id="musicVolume" min=1 max=10 value=5 />
+      <input type="range" id="masterVolume" min=1 max=10 value=10 />
       <i class="fa fa-volume-up"></i>
+
+      <h3 id="connection">Disonnected</h3>
     </label>
-  </h3>
-</div>
+
+    <div class="name">{{channel.name}} :: Admin</div>
+  </h1>
+
+  <style>
+    {{#if channel.picture }}
+      html { background-image: url({{channel.picture}}); }
+    {{/if}}
+  </style>
+
+  <div class="sounds">
+
+    {{#if sounds}}
+      {{#each sounds as |sound|}}
+        <button id="{{sound.key}}" title="{{sound.description}}" onclick="">{{sound.key}}</button>
+      {{/each}}
+    {{/if}}
+
+
+    <div class="music">
+      <h3>
+        Music
+
+        <label>
+          Volume
+          <i class="fa fa-volume-down"></i>
+          <input type="range" id="musicVolume" min=1 max=10 value=5 />
+          <i class="fa fa-volume-up"></i>
+        </label>
+      </h3>
+    </div>
 <!--
     div(id="funSounds")
       h3 Fun Sounds
@@ -281,6 +289,7 @@
       button(id="darkWizards") Dark Wizards
       button(id="ludwigHolyBlade") Ludwig the Holy Blade
  -->
+  </div>
 </div>
 
 <script type="text/javascript" src="/socket.io/socket.io.js"></script>
@@ -297,7 +306,7 @@
     ];
 
     titan.onStarted = function() {
-      titan.admin.start(document.querySelectorAll("#sounds button"));
+      titan.admin.start(document.querySelectorAll(".sounds button"));
     };
 
     titan.addTracks(tracks, null, function() {
