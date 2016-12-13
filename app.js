@@ -1,8 +1,8 @@
 'use strict';
 
-const fs = require('fs'),
+const _ = require('lodash'),
 
-merge = require('deepmerge'),
+fs = require('fs'),
 
 server = require('./server/server');
 
@@ -14,7 +14,7 @@ let SETTINGS = require('./server/config/settings');
  */
 fs.exists(__dirname + '/server/config/local.js', function(exists) {
   if (exists) {
-    SETTINGS = merge(SETTINGS, require('./server/config/local.js'));
+    SETTINGS = _.merge(SETTINGS, require('./server/config/local.js'));
   }
 
   server.setup(SETTINGS);

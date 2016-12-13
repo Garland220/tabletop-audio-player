@@ -1,13 +1,16 @@
 'use strict';
 
 // System
-const fs = require('fs'),
+const _ = require('lodash'),
+
+fs = require('fs'),
 util = require('util'),
 crypto = require('crypto'),
-merge = require('deepmerge'),
+path = require('path'),
 
 // HTTP
 express = require('express'),
+hbs = require('express-hbs'),
 
 // Logging
 Logger = require('./libs/logger.js'),
@@ -46,13 +49,43 @@ const server = {
     server.log.debug('Server.routes');
 
     server.app.get('/', function(req, res) {
-      res.render('index', {});
+      res.render('index');
+    });
+
+    server.app.get('/new', function(req, res) {
+      server.models.channel.create({}, function(err, result) {
+        if (err) {
+          server.log.error(err);
+         return res.sendStatus(500);
+        }
+
+        server.channels[result.id] = result;
+
+        res.redirect('/channel' + result.id);
+      });
+    });
+
+    server.app.get('/channel/:id', function(req, res) {
+      let id = req.param('id');
+
+      server.models.channel.findOne({id: id}, function(err, result) {
+        if (err) {
+          server.log.error(err);
+          return res.status(500).render('500');
+        }
+
+        if (!result) {
+          return res.status(404).render('500');
+        }
+
+        res.render('channel', {channel: result});
+      });
     });
 
     server.app.get('/admin', function(req, res) {
       if (!server.settings.adminKey || req.query.key && req.query.key === server.settings.adminKey) {
         server.log.info('Admin Key Accepted');
-        res.render('admin', {});
+        res.render('admin');
       }
       else {
         server.log.error('admin key tried: ' + req.query.key);
@@ -190,7 +223,9 @@ const server = {
 
     socket.on('stop', server.stop);
 
-    socket.on('disconnect', server.removeClient);
+    socket.on('disconnect', function() {
+      server.removeClient(socket);
+    });
   },
 
   randomHash: function() {
@@ -204,6 +239,7 @@ const server = {
   loadUsers: function() {
     server.models.user.find().exec(function(err, results) {
       if (err) {
+        server.log.error(err);
         throw err;
       }
 
@@ -222,6 +258,7 @@ const server = {
   loadSounds: function() {
     server.models.sound.find().exec(function(err, results) {
       if (err) {
+        server.log.error(err);
         throw err;
       }
 
@@ -240,6 +277,7 @@ const server = {
   loadChannels: function() {
     server.models.channel.find().exec(function(err, results) {
       if (err) {
+        server.log.error(err);
         throw err;
       }
 
@@ -274,7 +312,7 @@ const server = {
    *  then executes callback.
    */
   ready: function(callback) {
-    // server.log.debug('Server.ready');
+    server.log.debug('Server.ready');
 
     if (server.dataLoaded()) {
       server.log.info('Server data loaded');
@@ -290,20 +328,22 @@ const server = {
   },
 
   setup: function(settings) {
+    let views;
+
     server.settings = settings;
 
     server.orm = new Waterline();
     server.log = new Logger(settings).log;
 
-    server.orm.loadCollection(Waterline.Collection.extend(merge(
+    server.orm.loadCollection(Waterline.Collection.extend(_.merge(
       {connection: settings.waterline.defaults.connection},
       require('./models/User.js')
     )));
-    server.orm.loadCollection(Waterline.Collection.extend(merge(
+    server.orm.loadCollection(Waterline.Collection.extend(_.merge(
       {connection: settings.waterline.defaults.connection},
       require('./models/Sound.js')
     )));
-    server.orm.loadCollection(Waterline.Collection.extend(merge(
+    server.orm.loadCollection(Waterline.Collection.extend(_.merge(
       {connection: settings.waterline.defaults.connection},
       require('./models/Channel.js')
     )));
@@ -314,11 +354,19 @@ const server = {
 
     server.log.debug('Server.start');
 
-    server.app.set('views', __dirname + '/client/views');
-    server.app.set('view options', { layout: true });
-    server.app.set('view engine', 'handlebars');
+    views = path.join(__dirname, '../', settings.view.location);
 
-    server.app.use(express.static('client'));
+    server.app.set('views', views);
+    server.app.set('view options', settings.view.options);
+    server.app.set('view engine', settings.view.engine);
+
+    server.app.engine('hbs', hbs.express4({
+      defaultLayout: views + '/layouts/default.hbs',
+      partialsDir: views + '/partials',
+      layoutsDir: views + '/layouts'
+    }));
+
+    server.app.use(express.static(path.join(__dirname + '/../client')));
 
     server.routes();
 
@@ -340,13 +388,13 @@ const server = {
     }));
   },
 
-  start: function(settings) {
+  start: function() {
     server.log.info('Starting websocket handler');
     server.io.on('connection', server.connection);
 
     server.log.info('Starting web server');
-    server.http.listen(settings.port, function() {
-      server.log.info('listening on *: ' + settings.port);
+    server.http.listen(server.settings.port, function() {
+      server.log.info('listening on *: ' + server.settings.port);
     });
   },
 

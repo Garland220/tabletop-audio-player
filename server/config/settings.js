@@ -5,8 +5,13 @@
  * You can override these by making a local.js file in this folder.
  */
 module.exports = {
+  // Webserver listening port
   port: 8080,
 
+  // Environment setting
+  environment: process.env.NODE_ENV || 'development',
+
+  // Log configuration
   log: {
     name: 'server',
 
@@ -26,7 +31,16 @@ module.exports = {
     ]
   },
 
+  // Template configuration
+  view: {
+    engine: 'hbs',
+    location: 'client/views',
+    options: {
+      layout: true
+    }
+  },
 
+  // Database configuration
   waterline: {
     adapters: {
       sqlite3: require('waterline-sqlite3')
@@ -51,9 +65,7 @@ module.exports = {
 
     defaults: {
       connection: 'sqlite',
-      migrate: 'safe'
+      migrate: 'alter'
     }
-  },
-
-  environment: process.env.NODE_ENV || 'development',
+  }
 };

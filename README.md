@@ -53,4 +53,4 @@ Requirements
 * Waterline
 * SQLite3
 * Handlebars
-* Deepmerge
+* Lodash
