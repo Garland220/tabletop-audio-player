@@ -26,7 +26,13 @@
 
     {{#if sounds}}
       {{#each sounds as |sound|}}
-        <button id="{{sound.key}}" title="{{sound.description}}" onclick="">{{sound.key}}</button>
+        <button id="{{sound.key}}" title="{{sound.description}}" onclick="">
+        {{#if sound.name}}
+          {{sound.name}}
+        {{else}}
+          {{sound.key}}
+        {{/if}}
+        </button>
       {{/each}}
     {{/if}}
 

@@ -328,7 +328,7 @@
       titan.socket.on('users', function(response) {
         response = JSON.parse(response);
         titan.users = response.users;
-        titan.el.innerHTML = 'Connected - ' + titan.users + ' active user(s)';
+        titan.el.innerHTML = 'Connected (' + titan.users + ')';
       });
 
       titan.socket.on('setVolume', function(response) {

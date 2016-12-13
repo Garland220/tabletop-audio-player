@@ -7,11 +7,13 @@ fs = require('fs'),
 util = require('util'),
 crypto = require('crypto'),
 path = require('path'),
+
 format = require('string-format'),
 
 // HTTP
 express = require('express'),
 hbs = require('express-hbs'),
+bodyParser = require("body-parser"),
 
 // Logging
 Logger = require('./libs/logger.js'),
@@ -91,6 +93,58 @@ const server = {
       });
     });
 
+    server.app.get('/channel/:id/edit', function(req, res) {
+      let id = req.params.id,
+        audioLibrary = req.params.audioLibrary;
+
+      if (!id) {
+        server.log.error('Requested page without ID');
+        return res.status(500).render('500');
+      }
+
+      server.models.channel.findOne({id: id}, function(err, result) {
+        if (err) {
+          server.log.error(err);
+          return res.status(500).render('500');
+        }
+
+        if (!result) {
+          return res.status(404).render('404');
+        }
+
+        result.audioLibrary = JSON.stringify(result.audioLibrary);
+
+        res.render('edit', {channel: result});
+      });
+    });
+
+    server.app.post('/channel/:id/edit', function(req, res) {
+      let id = req.params.id,
+        audioLibrary = req.body.audioLibrary;
+
+      console.log(id, audioLibrary.length);
+
+      // audioLibrary = JSON.parse(req.params.audioLibrary);
+
+      if (!id) {
+        server.log.error('Requested page without ID');
+        return res.status(500).render('500');
+      }
+
+      server.models.channel.update({id: id},{audioLibrary: audioLibrary}).exec(function(err, result) {
+        if (err) {
+          server.log.error(err);
+          return res.status(500).render('500');
+        }
+
+        if (!result) {
+          return res.status(404).render('404');
+        }
+
+        res.redirect('/channel/'+id);
+      });
+    });
+
     server.app.get('/channel/:id', function(req, res) {
       let id = req.params.id;
 
@@ -112,8 +166,8 @@ const server = {
         // result.picture = '/images/ravenloft_crest.png';
         // result.name = 'The Curse of Strahd';
         // result.description = 'Under raging storm clouds, a lone figure stands silhouetted against the ancient walls of Castle Ravenloft. The vampire Count Strahd von Zarovich stares down a sheer cliff at the village below. A cold, bitter wind spins dead leaves about him, billowing his cape in the darkness.';
-        result.adminKey = '1';
-        result.save();
+        // result.adminKey = '1';
+        // result.save();
 
         res.render('channel', {channel: result});
       });
@@ -209,12 +263,12 @@ const server = {
 
     if (data.type == 'music') {
       channel.activeMusic = data.key;
+      channel.save();
     }
     else if (data.loop === true) {
       channel.activeAudio[data.key] = data;
+      channel.save();
     }
-
-    channel.save();
 
     server.io.sockets.to(channel.token).emit('play', JSON.stringify({key: data.key}));
   },
@@ -234,9 +288,11 @@ const server = {
 
     if (data.type == 'music' && data.key == channel.activeMusic) {
       channel.activeMusic = null;
+      channel.save();
     }
     else if (channel.activeAudio && channel.activeAudio[data.key]) {
       delete channel.activeAudio[data.key];
+      channel.save();
     }
 
     server.io.sockets.to(channel.token).emit('stop', JSON.stringify({key: data.key}));
@@ -415,6 +471,9 @@ const server = {
       partialsDir: views + '/partials',
       layoutsDir: views + '/layouts'
     }));
+
+    server.app.use(bodyParser.urlencoded({extended: false}));
+    server.app.use(bodyParser.json());
 
     server.app.use(express.static(path.join(__dirname + '/../client')));
 
