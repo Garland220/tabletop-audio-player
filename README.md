@@ -5,7 +5,6 @@ Tabletop Audio Player
 Install
 ------
 ```bash
-cp settings.template.json settings.json
 npm install
 ```
 
@@ -14,7 +13,7 @@ Play
 ------
 start server with
 ```bash
-node server.js
+node app.js
 ```
 
 admin opens localhost:8080/admin to control the sound
@@ -48,6 +47,9 @@ Roadmap
 
 Requirements
 ------
-*Express
-*Bunyan
-*Socket.io
+* Express
+* Bunyan
+* Socket.io
+* Waterline
+* Handlebars
+* Deepmerge
