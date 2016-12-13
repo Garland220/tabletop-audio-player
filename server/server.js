@@ -1,9 +1,7 @@
 'use strict';
 
-const _ = require('lodash'),
-
 // System
-fs = require('fs'),
+const fs = require('fs'),
 util = require('util'),
 crypto = require('crypto'),
 
@@ -11,22 +9,15 @@ crypto = require('crypto'),
 express = require('express'),
 
 // Logging
-Logger = require('./server/logger.js'),
-
-// DB
-sqlite3 = require('sqlite3').verbose(),
+Logger = require('./libs/logger.js'),
+// MongoLogger = require('./server/libs/mongoLogger.js'),
 
 // ORM
 Waterline = require('waterline'),
-WaterlineSQLite = require('waterline-sqlite3'),
 
 User = Waterline.Collection.extend(require('./models/User.js')),
 Sound = Waterline.Collection.extend(require('./models/Sound.js')),
-Channel = Waterline.Collection.extend(require('./models/Channel.js')),
-
-// Settings
-SETTINGS = require('./settings.json');
-
+Channel = Waterline.Collection.extend(require('./models/Channel.js'));
 
 /**
  * Audio Server
@@ -35,7 +26,6 @@ const server = {
 
   settings: null,
 
-  db: null,
   log: null,
 
   app: null,
@@ -49,25 +39,21 @@ const server = {
 
   activeSounds: {},
 
-  channels: {},
-
   clientCount: 0,
-  users: [],
+
+  users: {},
+  sounds: {},
+  channels: {},
 
   routes: function() {
     server.log.debug('Server.routes');
-
-    server.app.set('views', __dirname + '/client/views');
-    server.app.set('view engine', 'jade');
-    server.app.set('view options', { layout: true });
-    server.app.use(express.static('client'));
 
     server.app.get('/', function(req, res) {
       res.render('index', {});
     });
 
     server.app.get('/admin', function(req, res) {
-      if (!SETTINGS.adminKey || req.query.key && req.query.key === SETTINGS.adminKey) {
+      if (!server.settings.adminKey || req.query.key && req.query.key === server.settings.adminKey) {
         server.log.info('Admin Key Accepted');
         res.render('admin', {});
       }
@@ -111,6 +97,11 @@ const server = {
     server.log.debug(data);
 
     // socket.emit('load');
+  },
+
+  joinChannel: function(data) {
+    server.log.debug('Server.joinChannel');
+    server.log.debug(data);
   },
 
   setVolume: function(data) {
@@ -192,6 +183,8 @@ const server = {
 
     socket.on('load', server.loadClient);
 
+    socket.on('join', server.joinChannel);
+
     socket.on('setVolume', server.setVolume);
 
     socket.on('setMusicVolume', server.setMusicVolume);
@@ -211,10 +204,97 @@ const server = {
     return crypto.createHash('sha1').update(current_date + random).digest('hex');
   },
 
-  start: function(settings) {
+  loadUsers: function() {
+    server.models.user.find().exec(function(err, results) {
+      if (err) {
+        throw err;
+      }
+
+      if (results) {
+        this.users = {};
+        for (var i=0; i<results.length; i+=1) {
+          var user = results[i];
+          this.users[user.id] = user;
+        }
+
+        server.UsersLoaded = true;
+      }
+    });
+  },
+
+  loadSounds: function() {
+    server.models.sound.find().exec(function(err, results) {
+      if (err) {
+        throw err;
+      }
+
+      if (results) {
+        this.sounds = {};
+        for (var i=0; i<results.length; i+=1) {
+          var sound = results[i];
+          this.sounds[sound.id] = sound;
+        }
+
+        server.SoundsLoaded = true;
+      }
+    });
+  },
+
+  loadChannels: function() {
+    server.models.channel.find().exec(function(err, results) {
+      if (err) {
+        throw err;
+      }
+
+      if (results) {
+        this.channels = {};
+        for (var i=0; i<results.length; i+=1) {
+          var channel = results[i];
+          this.channels[channel.id] = channel;
+        }
+
+        server.ChannelsLoaded = true;
+      }
+    });
+  },
+
+  dataLoaded: function() {
+    if (!server.UsersLoaded) {
+      return false;
+    }
+    else if (!server.SoundsLoaded) {
+      return false;
+    }
+    else if (!server.ChannelsLoaded) {
+      return false;
+    }
+
+    return true;
+  },
+
+  /**
+   * Waits until all models are loaded,
+   *  then executes callback.
+   */
+  ready: function(callback) {
+    server.log.debug('Server.ready');
+
+    if (server.dataLoaded()) {
+      server.log.info('Server data loaded');
+
+      clearTimeout(server.readyTimer);
+      callback();
+    }
+    else {
+      server.readyTimer = setTimeout(function() {
+        server.ready(callback);
+      }, 100);
+    }
+  },
+
+  setup: function(settings) {
     server.settings = settings;
 
-    server.db = new sqlite3.Database(settings.db.name);
     server.orm = new Waterline();
     server.log = new Logger(settings).log;
 
@@ -228,22 +308,47 @@ const server = {
 
     server.log.debug('Server.start');
 
+    server.app.set('views', __dirname + '/client/views');
+    server.app.set('view options', { layout: true });
+    server.app.set('view engine', 'handlebars');
+
+    server.app.use(express.static('client'));
+
     server.routes();
 
+    server.orm.initialize(settings.waterline, (function(err, models) {
+      if (err) {
+        throw err;
+      }
+
+      server.models = models.collections;
+      server.connections = models.connections;
+
+      server.loadUsers();
+      server.loadSounds();
+      server.loadChannels();
+
+      server.ready(function() {
+        server.start();
+      });
+    }));
+  },
+
+  start: function(settings) {
+    server.log.info('Starting websocket handler');
     server.io.on('connection', server.connection);
 
-    server.http.listen(SETTINGS.port, function() {
-      server.log.info('listening on *:'+SETTINGS.port);
+    server.log.info('Starting web server');
+    server.http.listen(settings.port, function() {
+      server.log.info('listening on *: ' + settings.port);
     });
   },
 
   quit: function() {
     server.log.debug('Server.quit');
 
-    server.db.close();
-
     process.exit(0);
   }
 };
 
-server.start(SETTINGS);
+module.exports = server;

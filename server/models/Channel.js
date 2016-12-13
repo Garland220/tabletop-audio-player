@@ -24,6 +24,11 @@ module.exports = {
       defaultsTo: ''
     },
 
+    customUrl: {
+      type: 'string',
+      defaultsTo: ''
+    },
+
     deleted: {
       type: 'boolean',
       defaultsTo: true
@@ -71,17 +76,6 @@ module.exports = {
     },
 
     /**
-     * Automatic field. Date time created.
-     */
-    created: {
-      type: 'datetime',
-      defaultsTo: function () {
-        return new Date();
-      }
-    },
-
-
-    /**
      * Timestamp for when this entity was last active.
      *  Used for pruning.
      */
@@ -90,18 +84,14 @@ module.exports = {
       defaultsTo: function () {
         return new Date();
       }
-    },
+    }
+  },
 
+  beforeCreate: function(values, next) {
+    next();
+  },
 
-    /**
-     * Automatic field, updates when row is touched.
-     *  Used to debugging issues.
-     */
-    ts: {
-      type: 'datetime',
-      defaultsTo: function () {
-        return new Date();
-      }
-    },
+  beforeUpdate: function(values, next) {
+    next();
   }
 };
