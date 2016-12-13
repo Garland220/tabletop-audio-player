@@ -1,7 +1,26 @@
 {
   "name": "titan-server",
-  "version": "0.0.1",
-  "description": "",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Play audio files for multiple clients at once.",
+  "keywords": [],
+  "scripts": {
+    "start": "node app.js | bunyan"
+  },
+  "main": "app.js",
+  "homepage": "https://github.com/Garland220/tabletop-audio-player",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Garland220/tabletop-audio-player.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Garland220/tabletop-audio-player/issues"
+  },
+  "author": "Garland",
+  "license": "",
+  "devDependencies": {
+
+  },
   "dependencies": {
     "bunyan": "^1.8.3",
     "deepmerge": "^1.3.1",

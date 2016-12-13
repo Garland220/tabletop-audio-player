@@ -13,7 +13,7 @@ Play
 ------
 start server with
 ```bash
-node app.js
+npm start
 ```
 
 admin opens localhost:8080/admin to control the sound
@@ -51,5 +51,6 @@ Requirements
 * Bunyan
 * Socket.io
 * Waterline
+* SQLite3
 * Handlebars
 * Deepmerge

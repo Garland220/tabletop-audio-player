@@ -4,6 +4,7 @@
 const fs = require('fs'),
 util = require('util'),
 crypto = require('crypto'),
+merge = require('deepmerge'),
 
 // HTTP
 express = require('express'),
@@ -13,11 +14,7 @@ Logger = require('./libs/logger.js'),
 // MongoLogger = require('./server/libs/mongoLogger.js'),
 
 // ORM
-Waterline = require('waterline'),
-
-User = Waterline.Collection.extend(require('./models/User.js')),
-Sound = Waterline.Collection.extend(require('./models/Sound.js')),
-Channel = Waterline.Collection.extend(require('./models/Channel.js'));
+Waterline = require('waterline');
 
 /**
  * Audio Server
@@ -216,9 +213,9 @@ const server = {
           var user = results[i];
           this.users[user.id] = user;
         }
-
-        server.UsersLoaded = true;
       }
+
+      server.UsersLoaded = true;
     });
   },
 
@@ -234,9 +231,9 @@ const server = {
           var sound = results[i];
           this.sounds[sound.id] = sound;
         }
-
-        server.SoundsLoaded = true;
       }
+
+      server.SoundsLoaded = true;
     });
   },
 
@@ -252,9 +249,9 @@ const server = {
           var channel = results[i];
           this.channels[channel.id] = channel;
         }
-
-        server.ChannelsLoaded = true;
       }
+
+      server.ChannelsLoaded = true;
     });
   },
 
@@ -277,7 +274,7 @@ const server = {
    *  then executes callback.
    */
   ready: function(callback) {
-    server.log.debug('Server.ready');
+    // server.log.debug('Server.ready');
 
     if (server.dataLoaded()) {
       server.log.info('Server data loaded');
@@ -298,9 +295,18 @@ const server = {
     server.orm = new Waterline();
     server.log = new Logger(settings).log;
 
-    server.orm.loadCollection(User);
-    server.orm.loadCollection(Sound);
-    server.orm.loadCollection(Channel);
+    server.orm.loadCollection(Waterline.Collection.extend(merge(
+      {connection: settings.waterline.defaults.connection},
+      require('./models/User.js')
+    )));
+    server.orm.loadCollection(Waterline.Collection.extend(merge(
+      {connection: settings.waterline.defaults.connection},
+      require('./models/Sound.js')
+    )));
+    server.orm.loadCollection(Waterline.Collection.extend(merge(
+      {connection: settings.waterline.defaults.connection},
+      require('./models/Channel.js')
+    )));
 
     server.app = express();
     server.http = require('http').Server(server.app);

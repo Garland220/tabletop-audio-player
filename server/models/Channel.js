@@ -6,7 +6,9 @@
 module.exports = {
   identity: 'channel',
 
-  // connection: 'postgresdb'
+  associations: [{
+    alias: ['User']
+  }],
 
   attributes: {
 

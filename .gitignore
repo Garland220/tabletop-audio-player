@@ -4,6 +4,7 @@ node_modules
 *.mp3
 *.log
 *.db
-logs/*
+logs
+.tmp
 server/config/local.js
 

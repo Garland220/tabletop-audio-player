@@ -6,6 +6,10 @@
 module.exports = {
   identity: 'sound',
 
+  associations: [{
+    alias: ['User']
+  }],
+
   attributes: {
     /**
      * The name of the sound

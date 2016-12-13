@@ -9,11 +9,11 @@ module.exports = {
 
   log: {
     name: 'server',
-    level: 'info',
-    steams: [
+
+    streams: [
       {
+        level: 'debug',
         stream: process.stdout,
-        level: 'info'
       },
       {
         level: 'error',
@@ -26,10 +26,9 @@ module.exports = {
     ]
   },
 
-  waterline: {
 
+  waterline: {
     adapters: {
-      'default': 'sqlite3',
       sqlite3: require('waterline-sqlite3')
     },
 
@@ -51,6 +50,7 @@ module.exports = {
     },
 
     defaults: {
+      connection: 'sqlite',
       migrate: 'safe'
     }
   },
