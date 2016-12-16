@@ -1,9 +1,34 @@
-<form action="/channel/{{channel.id}}/edit" method="post">
-  <textarea name="audioLibrary" width="100%" height="400">{{channel.audioLibrary}}</textarea><br />
+<div style="padding: 20px">
+  <form action="/channel/{{channel.id}}/edit" method="post">
+    <p>
+      <label>Name
+      <input type="text" name="name" placeholder="Name" value="{{channel.name}}" />
+      </label>
+    </p>
+    <p>
+      <label>Description
+      <input type="text" name="description" placeholder="Description" value="{{channel.description}}" />
+      </label>
+    </p>
+    <p>
+      <label>Picture URL
+      <input type="text" name="picture" placeholder="Picture URL" value="{{channel.picture}}" />
+      </label>
+    </p>
 
-  <input type="submit" />
-</form>
+    <p>
+      <label>Audio Library JSON
+      <textarea name="audioLibrary" width="100%" height="400" placeholder="Audio Library JSON">{{channel.audioLibrary}}</textarea>
+      </label>
+    </p>
+
+    <div style="text-align: right">
+      <input type="submit" value="Save" />
+    </div>
+  </form>
+</div>
 
 <style>
-textarea { width: 100%; height: 500px; }
+  textarea { width: 100%; height: 200px; }
+  input[type="text"] { width: 100%; }
 </style>

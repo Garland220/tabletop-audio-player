@@ -13,7 +13,7 @@ format = require('string-format'),
 // HTTP
 express = require('express'),
 hbs = require('express-hbs'),
-bodyParser = require("body-parser"),
+bodyParser = require('body-parser'),
 
 // Logging
 Logger = require('./libs/logger.js'),
@@ -47,131 +47,23 @@ const server = {
   routes: function() {
     server.log.debug('Server.routes');
 
+    let ChannelController = require('./controllers/ChannelController');
+
     server.app.get('/', function(req, res) {
       res.render('index');
     });
 
-    server.app.get('/new', function(req, res) {
-      server.models.channel.create({}, function(err, result) {
-        if (err) {
-          server.log.error(err);
-          return res.status(500).render('500');
-        }
-
-        server.channels[result.id] = result;
-
-        res.redirect('/channel' + result.id);
+    server.app.get('/library', function(req, res) {
+      server.models.sound.find().exec(function(err, results) {
+        res.status(200).render('library', {sounds: results});
       });
     });
 
-    server.app.get('/channel/:id/admin', function(req, res) {
-      let id = req.params.id;
-
-      if (!id) {
-        server.log.error('Requested page without ID');
-        return res.status(500).render('500');
-      }
-
-      server.models.channel.findOne({id: id}, function(err, result) {
-        if (err) {
-          server.log.error(err);
-          return res.status(500).render('500');
-        }
-
-        if (!result) {
-          return res.status(404).render('404');
-        }
-
-        if (req.query.key && req.query.key == result.adminKey) {
-          server.log.info('Admin Key Accepted for channel {0}'.format(id));
-          res.render('admin', {channel: result, sounds: result.audioLibrary});
-        }
-        else {
-          server.log.error('Wrong admin key {0} tried for channel {1}.'.format(req.query.key, id));
-          return res.status(403).render('403');
-        }
-      });
-    });
-
-    server.app.get('/channel/:id/edit', function(req, res) {
-      let id = req.params.id,
-        audioLibrary = req.params.audioLibrary;
-
-      if (!id) {
-        server.log.error('Requested page without ID');
-        return res.status(500).render('500');
-      }
-
-      server.models.channel.findOne({id: id}, function(err, result) {
-        if (err) {
-          server.log.error(err);
-          return res.status(500).render('500');
-        }
-
-        if (!result) {
-          return res.status(404).render('404');
-        }
-
-        result.audioLibrary = JSON.stringify(result.audioLibrary);
-
-        res.render('edit', {channel: result});
-      });
-    });
-
-    server.app.post('/channel/:id/edit', function(req, res) {
-      let id = req.params.id,
-        audioLibrary = req.body.audioLibrary;
-
-      console.log(id, audioLibrary.length);
-
-      // audioLibrary = JSON.parse(req.params.audioLibrary);
-
-      if (!id) {
-        server.log.error('Requested page without ID');
-        return res.status(500).render('500');
-      }
-
-      server.models.channel.update({id: id},{audioLibrary: audioLibrary}).exec(function(err, result) {
-        if (err) {
-          server.log.error(err);
-          return res.status(500).render('500');
-        }
-
-        if (!result) {
-          return res.status(404).render('404');
-        }
-
-        res.redirect('/channel/'+id);
-      });
-    });
-
-    server.app.get('/channel/:id', function(req, res) {
-      let id = req.params.id;
-
-      if (!id) {
-        server.log.error('Requested page without ID');
-        return res.status(500).render('500');
-      }
-
-      server.models.channel.findOne({id: id}, function(err, result) {
-        if (err) {
-          server.log.error(err);
-          return res.status(500).render('500');
-        }
-
-        if (!result) {
-          return res.status(404).render('404');
-        }
-
-        // result.picture = '/images/ravenloft_crest.png';
-        // result.name = 'The Curse of Strahd';
-        // result.description = 'Under raging storm clouds, a lone figure stands silhouetted against the ancient walls of Castle Ravenloft. The vampire Count Strahd von Zarovich stares down a sheer cliff at the village below. A cold, bitter wind spins dead leaves about him, billowing his cape in the darkness.';
-        // result.adminKey = '1';
-        // result.save();
-
-        res.render('channel', {channel: result});
-      });
-    });
+    server.app.get('/channel/new', ChannelController.new);
+    server.app.get('/channel/:id/admin', ChannelController.admin);
+    server.app.get('/channel/:id/edit', ChannelController.edit);
+    server.app.post('/channel/:id/edit', ChannelController.save);
+    server.app.get('/channel/:id', ChannelController.view);
   },
 
 
@@ -179,6 +71,11 @@ const server = {
     server.log.debug('Server.addClient');
 
     let channel = server.channels[socket.request._query.channel];
+
+    if (!channel) {
+      server.log.error('Use tried to join unknown channel {0}'.format(socket.request._query.channel));
+      return;
+    }
 
     socket.channel = channel.id;
     channel.clientCount += 1;
@@ -199,6 +96,11 @@ const server = {
     server.log.debug('Server.removeClient');
 
     let channel = server.channels[socket.channel];
+
+    if (!channel) {
+      server.log.error('Use left unknown channel {0}'.format(socket.channel));
+      return;
+    }
 
     socket.leave(channel.token);
 
@@ -513,5 +415,7 @@ const server = {
     process.exit(0);
   }
 };
+
+global.server = server;
 
 module.exports = server;
