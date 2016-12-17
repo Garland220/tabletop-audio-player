@@ -5,7 +5,6 @@ const _ = require('lodash'),
 
 fs = require('fs'),
 util = require('util'),
-crypto = require('crypto'),
 path = require('path'),
 
 format = require('string-format'),
@@ -14,6 +13,8 @@ format = require('string-format'),
 express = require('express'),
 hbs = require('express-hbs'),
 bodyParser = require('body-parser'),
+
+AWS = require('aws-sdk'),
 
 // Logging
 Logger = require('./libs/logger.js'),
@@ -33,6 +34,8 @@ const server = {
 
   log: null,
 
+  aws: null,
+
   app: null,
   http: null,
   io: null,
@@ -46,8 +49,6 @@ const server = {
 
   routes: function() {
     server.log.debug('Server.routes');
-
-    let ChannelController = require('./controllers/ChannelController');
 
     server.app.get('/', function(req, res) {
       res.render('index');
@@ -231,13 +232,7 @@ const server = {
     });
   },
 
-  randomHash: function() {
-    server.log.debug('Server.randomHash');
 
-    let current_date = (new Date()).valueOf().toString();
-    let random = Math.random().toString();
-    return crypto.createHash('sha1').update(current_date + random).digest('hex');
-  },
 
   loadUsers: function() {
     server.models.user.find().exec(function(err, results) {
@@ -335,35 +330,51 @@ const server = {
     }
   },
 
+  registerModel: function(data, name) {
+    let model = server.orm.loadCollection(Waterline.Collection.extend(_.merge(
+      {connection: server.settings.waterline.defaults.connection},
+      data
+    )));
+
+    if (name) {
+      global[name] = model;
+    }
+
+    return model;
+  },
+
+  registerController: function(data, name) {
+    let controller = data;
+
+    if (name) {
+      global[name] = controller;
+    }
+
+    return controller;
+  },
+
   setup: function(settings) {
     let views;
 
     server.settings = settings;
 
+    // Server modules
     server.orm = new Waterline();
     server.log = new Logger(settings).log;
-
-    server.orm.loadCollection(Waterline.Collection.extend(_.merge(
-      {connection: settings.waterline.defaults.connection},
-      require('./models/User.js')
-    )));
-    server.orm.loadCollection(Waterline.Collection.extend(_.merge(
-      {connection: settings.waterline.defaults.connection},
-      require('./models/Sound.js')
-    )));
-    server.orm.loadCollection(Waterline.Collection.extend(_.merge(
-      {connection: settings.waterline.defaults.connection},
-      require('./models/Channel.js')
-    )));
-
     server.app = express();
     server.http = require('http').Server(server.app);
     server.io = require('socket.io')(server.http);
+    server.aws = AWS;
 
+
+    // Controllers
+    server.registerController(require('./controllers/ChannelController'), 'ChannelController');
+
+
+    // Express setup
     server.log.debug('Server.start');
 
     views = path.join(__dirname, '../', settings.view.location);
-
     server.app.set('views', views);
     server.app.set('view options', settings.view.options);
     server.app.set('view engine', settings.view.engine);
@@ -376,10 +387,15 @@ const server = {
 
     server.app.use(bodyParser.urlencoded({extended: false}));
     server.app.use(bodyParser.json());
-
     server.app.use(express.static(path.join(__dirname + '/../client')));
 
     server.routes();
+
+
+    // Waterline setup
+    server.registerModel(require('./models/User.js'), 'User');
+    server.registerModel(require('./models/Sound.js'), 'Sound');
+    server.registerModel(require('./models/Channel.js'), 'Channel');
 
     server.orm.initialize(settings.waterline, (function(err, models) {
       if (err) {
@@ -399,6 +415,9 @@ const server = {
     }));
   },
 
+  /**
+   * Starts websocket and http listerners
+   */
   start: function() {
     server.log.info('Starting websocket handler.');
     server.io.on('connection', server.connection);
@@ -409,6 +428,9 @@ const server = {
     });
   },
 
+  /**
+   * Cleans up and kills the server process
+   */
   quit: function() {
     server.log.debug('Server.quit');
 
