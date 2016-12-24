@@ -187,7 +187,7 @@ const server = {
 
     let channel = server.channels[data.channel];
 
-    server.log.info('Stopping Audio: {0} in channel {1}.'.format(data.key, channel.id));
+    server.log.info('Stopping Audio: `{0}` in channel {1}.'.format(data.key, channel.id));
 
     if (data.type == 'music' && data.key == channel.activeMusic) {
       channel.activeMusic = null;
@@ -232,13 +232,22 @@ const server = {
     });
   },
 
+  loadModels: function(callback) {
+    server.log.debug('Server.loadUsers');
 
+    callback = callback || function() {};
 
-  loadUsers: function() {
-    server.models.user.find().exec(function(err, results) {
+  },
+
+  loadUsers: function(callback) {
+    server.log.debug('Server.loadUsers');
+
+    callback = callback || function() {};
+
+    User.find().exec(function(err, results) {
       if (err) {
         server.log.error(err);
-        throw err;
+        return callback(err);
       }
 
       if (results) {
@@ -250,14 +259,20 @@ const server = {
       }
 
       server.UsersLoaded = true;
+
+      return callback();
     });
   },
 
-  loadSounds: function() {
-    server.models.sound.find().exec(function(err, results) {
+  loadSounds: function(callback) {
+    server.log.debug('Server.loadSounds');
+
+    callback = callback || function() {};
+
+    Sound.find().exec(function(err, results) {
       if (err) {
         server.log.error(err);
-        throw err;
+        return callback(err);
       }
 
       if (results) {
@@ -269,14 +284,20 @@ const server = {
       }
 
       server.SoundsLoaded = true;
+
+      return callback();
     });
   },
 
-  loadChannels: function() {
-    server.models.channel.find().exec(function(err, results) {
+  loadChannels: function(callback) {
+    server.log.debug('Server.loadChannels');
+
+    callback = callback || function() {};
+
+    Channel.find().exec(function(err, results) {
       if (err) {
         server.log.error(err);
-        throw err;
+        return callback(err);
       }
 
       if (results) {
@@ -293,10 +314,14 @@ const server = {
       }
 
       server.ChannelsLoaded = true;
+
+      return callback();
     });
   },
 
   dataLoaded: function() {
+    server.log.debug('Server.dataLoaded');
+
     if (!server.UsersLoaded) {
       return false;
     }
@@ -330,25 +355,58 @@ const server = {
     }
   },
 
+  registerModels: function() {
+    server.log.debug('Server.registerModels');
+
+    var models = server.settings.models;
+
+    for (var i=0; i< models.length; i+=1) {
+      var model = models[i];
+
+      server.registerModel(require('./models/' + model.path), model.name);
+    }
+  },
+
   registerModel: function(data, name) {
+    server.log.debug('Server.registerModel');
+
+    if (!data) {
+      server.log.error('Model data was undefined. Maybe you gave an invalid path?');
+      return false;
+    }
+
+    if (!name) {
+      server.log.error('Tried to register a model without giving it a name.');
+      return false;
+    }
+
+    server.log.info('Registering model `{0}`.'.format(name));
+
     let model = server.orm.loadCollection(Waterline.Collection.extend(_.merge(
+      {globalId: name},
       {connection: server.settings.waterline.defaults.connection},
       data
     )));
-
-    if (name) {
-      global[name] = model;
-    }
 
     return model;
   },
 
   registerController: function(data, name) {
+    server.log.debug('Server.registerController');
+
+    if (!data) {
+      server.log.error('Controller data was undefined. Maybe you gave an invalid path?');
+      return false;
+    }
+
+    if (!name) {
+      server.log.error('Tried to register a controller without giving it a name.');
+      return false;
+    }
+
     let controller = data;
 
-    if (name) {
-      global[name] = controller;
-    }
+    global[name] = controller;
 
     return controller;
   },
@@ -365,7 +423,6 @@ const server = {
     server.http = require('http').Server(server.app);
     server.io = require('socket.io')(server.http);
     server.aws = AWS;
-
 
     // Controllers
     server.registerController(require('./controllers/ChannelController'), 'ChannelController');
@@ -391,12 +448,8 @@ const server = {
 
     server.routes();
 
-
     // Waterline setup
-    server.registerModel(require('./models/User.js'), 'User');
-    server.registerModel(require('./models/Sound.js'), 'Sound');
-    server.registerModel(require('./models/Channel.js'), 'Channel');
-
+    server.registerModels();
     server.orm.initialize(settings.waterline, (function(err, models) {
       if (err) {
         throw err;
@@ -404,6 +457,11 @@ const server = {
 
       server.models = models.collections;
       server.connections = models.connections;
+
+      Object.keys(server.models).forEach(function(key) {
+        var model = server.models[key];
+        global[model.globalId] = model;
+      });
 
       server.loadUsers();
       server.loadSounds();

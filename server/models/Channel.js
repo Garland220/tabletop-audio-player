@@ -57,24 +57,28 @@ module.exports = {
     },
 
     style: {
-      type: 'json'
+      type: 'json',
+      defaultsTo: {}
     },
 
     audioLibrary: {
-      type: 'json'
+      type: 'json',
+      defaultsTo: {}
     },
 
     activeAudio: {
-      type: 'json'
+      type: 'json',
+      defaultsTo: {}
     },
 
     activeMusic: {
-      type: 'json'
+      type: 'json',
+      defaultsTo: {}
     },
 
     masterVolume: {
-      type: 'decimal',
-      defaultsTo: 0.7
+      type: 'float',
+      defaultsTo: 0.75
     },
 
     /**

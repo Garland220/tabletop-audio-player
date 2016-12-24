@@ -5,7 +5,7 @@ module.exports = {
   new: function(req, res) {
     let debug = req.query.debug;
 
-    server.models.channel.create({}, function(err, result) {
+    Channel.create({}, function(err, result) {
       if (err) {
         server.log.error(err);
         return res.status(500).render('500');
@@ -26,6 +26,16 @@ module.exports = {
   },
 
 
+  addSound: function(req, res) {
+
+  },
+
+
+  removeSound: function(req, res) {
+
+  },
+
+
   admin: function(req, res) {
     let id = req.params.id;
 
@@ -34,7 +44,7 @@ module.exports = {
       return res.status(500).render('500');
     }
 
-    server.models.channel.findOne({id: id}, function(err, result) {
+    Channel.findOne({id: id}, function(err, result) {
       if (err) {
         server.log.error(err);
         return res.status(500).render('500');
@@ -65,7 +75,7 @@ module.exports = {
       return res.status(500).render('500');
     }
 
-    server.models.channel.findOne({id: id}, function(err, result) {
+    Channel.findOne({id: id}, function(err, result) {
       if (err) {
         server.log.error(err);
         return res.status(500).render('500');
@@ -101,7 +111,7 @@ module.exports = {
       return res.status(500).render('500');
     }
 
-    server.models.channel.update({id: id},{name: name, description: description, picture: picture, audioLibrary: audioLibrary}).exec(function(err, result) {
+    Channel.update({id: id},{name: name, description: description, picture: picture, audioLibrary: audioLibrary}).exec(function(err, result) {
       if (err) {
         server.log.error(err);
         return res.status(500).render('500');
@@ -124,7 +134,7 @@ module.exports = {
       return res.status(500).render('500');
     }
 
-    server.models.channel.findOne({id: id}, function(err, result) {
+    Channel.findOne({id: id}, function(err, result) {
       if (err) {
         server.log.error(err);
         return res.status(500).render('500');

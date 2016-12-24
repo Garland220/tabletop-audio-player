@@ -17,7 +17,7 @@ module.exports = {
 
     streams: [
       {
-        level: 'debug',
+        level: 'info',
         stream: process.stdout,
       },
       {
@@ -39,6 +39,21 @@ module.exports = {
       layout: true
     }
   },
+
+  models: [
+    {
+      name: 'User',
+      path: 'User.js'
+    },
+    {
+      name: 'Sound',
+      path: 'Sound.js'
+    },
+    {
+      name: 'Channel',
+      path: 'Channel.js'
+    }
+  ],
 
   // Database configuration
   waterline: {
