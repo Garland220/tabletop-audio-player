@@ -26,6 +26,8 @@
 
     id: null,
 
+    context: null,
+
 
     loadAudio: function(data) {
       var audio = new Audio();
@@ -251,13 +253,7 @@
 
 
     stop: function(key) {
-      titan.players[key].pause();
-      titan.players[key].currentTime = 0;
-
-      if (titan.players[key].doubleBuffer) {
-        titan.players[key].doubleBuffer.pause();
-        titan.players[key].doubleBuffer.currentTime = 0;
-      }
+      titan.players[key].stop();
 
       window.dispatchEvent(new window.titanEvent('stop', {key: key}));
     },
@@ -305,14 +301,11 @@
       titan.socket = io({query: 'channel='+id});
 
       titan.socket.on('connect', function() {
-        console.log('Connected');
-        titan.el.innerHTML = 'Connected';
-        titan.players.connect.play();
-        window.dispatchEvent(new window.titanEvent('connected'));
+        titan.onConnected();
       });
 
       titan.socket.on('disconnect', function() {
-        titan.disconnect(true);
+        titan.onDisconnected(true);
       });
 
       titan.socket.on('load', function(response) {
@@ -328,12 +321,14 @@
       titan.socket.on('users', function(response) {
         response = JSON.parse(response);
         titan.users = response.users;
+        window.dispatchEvent(new window.titanEvent('users'));
         titan.el.innerHTML = 'Connected (' + titan.users + ')';
       });
 
       titan.socket.on('setVolume', function(response) {
         response = JSON.parse(response);
         titan.setVolume(response.key, response.volume);
+        window.dispatchEvent(new window.titanEvent('setVolume'));
       });
 
       titan.socket.on('setMusicVolume', function(response) {
@@ -356,10 +351,22 @@
     },
 
 
-    disconnect: function(reconnect) {
+    onConnected: function() {
+      titan.connected = true;
+
+      titan.el.innerHTML = 'Connected';
+      titan.players.connect.play();
+      console.log('Connected');
+      window.dispatchEvent(new window.titanEvent('connected'));
+    },
+
+
+    onDisconnected: function(reconnect) {
       if (!reconnect) {
         titan.socket.close();
       }
+
+      titan.connected = false;
 
       titan.el.innerHTML = 'Disconnected';
       titan.players.disconnect.play();
@@ -373,15 +380,27 @@
         titan.socket.emit(type, data);
       }
       catch(exception) {
-        console.log(exception, 2);
+        console.error(exception);
       }
     },
+
 
     onStarted: function() {
     },
 
+
     start: function() {
-      var volume = titan.getCookie('volume');
+      var AudioContext = window.AudioContext || window.webkitAudioContext,
+          volume = titan.getCookie('volume');
+
+      try {
+        titan.context = new AudioContext();
+      }
+      catch(exception) {
+        console.error(exception);
+        window.alert(exception.message);
+        return false;
+      }
 
       if (volume && Number(volume) > 0) {
         titan.masterVolume = Number(volume) / 10;
@@ -396,10 +415,10 @@
   };
 
   window.titanEvent = function(type, data) {
-    var e = document.createEvent("Event");
-    e.initEvent(type, true, true);
-    e.data = data;
-    return e;
+    var event = document.createEvent('Event');
+    event.initEvent(type, true, true);
+    event.data = data;
+    return event;
   };
 
 })();

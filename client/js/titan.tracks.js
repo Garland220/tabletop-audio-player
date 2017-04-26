@@ -15,8 +15,8 @@
 
   window.tracks = [
     // UI Sounds
-    {url: '/audio/sound/connect.ogg', key: 'connect', type: 'sound', category: 'ui', preload: 'auto', loop: false},
-    {url: '/audio/sound/disconnect.ogg', key: 'disconnect', type: 'sound', category: 'ui', preload: 'auto', loop: false},
+    {url: 'https://s3-us-west-2.amazonaws.com/tabletopaudio/audio/sound/ui/connect.ogg', key: 'connect', type: 'sound', category: 'ui', preload: 'auto', loop: false},
+    {url: 'https://s3-us-west-2.amazonaws.com/tabletopaudio/audio/sound/ui/disconnect.ogg', key: 'disconnect', type: 'sound', category: 'ui', preload: 'auto', loop: false},
 
 
     // Fun Sounds

@@ -17,10 +17,10 @@ module.exports = {
           }
         });
 
-        server.log.info(response2);
+        server.log.debug(response2);
       }
 
-      server.log(response);
+      server.log.debug(response);
 
       s3.completeMultipartUpload({}, function(err, response) {
         if (err) {
@@ -35,7 +35,7 @@ module.exports = {
   },
 
   edit: function(req, res) {
-
+    res.render('sound/edit');
   },
 
   save: function(req, res) {
@@ -46,10 +46,23 @@ module.exports = {
 
   },
 
+  import: function(req, res) {
+    const payload = req.params.json;
+
+    for (var i=0; i<payload.length; i+=1) {
+      var sound = payload[i];
+
+      var obj = server._({}, {name: payload.name, description: payload.description});
+
+      Sound.create().exec(function(err, result) {
+
+      });
+    }
+  },
+
   list: function(req, res) {
     Sound.find().exec(function(err, results) {
 
     });
   }
-
 };

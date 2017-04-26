@@ -65,6 +65,9 @@ module.exports = {
       defaultsTo: 'sound'
     },
 
+    /**
+     * Search tags
+     */
     tags: {
       type: 'json'
     },
@@ -104,7 +107,9 @@ module.exports = {
     },
 
     /**
-     * Base level for sound volume.
+     * Default level for sound volume.
+     *
+     * Useful if some sounds are too loud -- lower default volume
      */
     volume: {
       type: 'decimal',
@@ -112,9 +117,25 @@ module.exports = {
     },
 
     /**
-     * URL of sound icon
+     * URL of sound image (Album cover, related content, etc.)
      */
     picture: {
+      type: 'string',
+      defaultsTo: ''
+    },
+
+    /**
+     * URL of sound icon
+     */
+    icon: {
+      type: 'string',
+      defaultsTo: ''
+    },
+
+    /**
+     * Sound credits
+     */
+    attribution: {
       type: 'string',
       defaultsTo: ''
     },

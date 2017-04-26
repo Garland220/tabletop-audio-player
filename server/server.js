@@ -29,6 +29,7 @@ format.extend(String.prototype);
  * Audio Server
  */
 const server = {
+  _: _,
 
   settings: null,
 
@@ -61,10 +62,17 @@ const server = {
     });
 
     server.app.get('/channel/new', ChannelController.new);
-    server.app.get('/channel/:id/admin', ChannelController.admin);
     server.app.get('/channel/:id/edit', ChannelController.edit);
     server.app.post('/channel/:id/edit', ChannelController.save);
+    server.app.get('/channel/:id/admin', ChannelController.admin);
     server.app.get('/channel/:id', ChannelController.view);
+
+    server.app.get('/sound/new', SoundController.new);
+    server.app.get('/sound/list', SoundController.list);
+    server.app.post('/sound/import', SoundController.import);
+    server.app.get('/sound/:id/edit', SoundController.edit);
+    server.app.post('/sound/:id/edit', SoundController.save);
+    server.app.post('/sound/:id', SoundController.view);
   },
 
 
@@ -382,10 +390,11 @@ const server = {
 
     server.log.info('Registering model `{0}`.'.format(name));
 
-    let model = server.orm.loadCollection(Waterline.Collection.extend(_.merge(
-      {globalId: name},
-      {connection: server.settings.waterline.defaults.connection},
-      data
+    let model = server.orm.loadCollection(Waterline.Collection.extend(_.merge({
+        globalId: name,
+        identity: name.toLowerCase(),
+        connection: server.settings.waterline.defaults.connection
+      }, data
     )));
 
     return model;
@@ -426,6 +435,7 @@ const server = {
 
     // Controllers
     server.registerController(require('./controllers/ChannelController'), 'ChannelController');
+    server.registerController(require('./controllers/SoundController'), 'SoundController');
 
 
     // Express setup
