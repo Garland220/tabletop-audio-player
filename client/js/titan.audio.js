@@ -48,6 +48,8 @@ function TitanSound() {
   this.playing = false;
   this.source = null;
   this.sound = null;
+  this.gain = null;
+  this.oscillator = null;
 
 
   this.play = function() {
@@ -66,12 +68,26 @@ function TitanSound() {
     this.source.loop = false;
   };
 
+  this.fadeIn = function(length) {
+    this.gain.gain.linearRampToValueAtTime(this.volume, titan.context.currentTime);
+  };
+
+  this.fadeOut = function(length) {
+
+  };
+
   this.load = function() {
     var request = new XMLHttpRequest();
 
     request.onload = function() {
       this.sound = titan.context.createBuffer(request.response, false);
       this.source = titan.context.createBufferSource();
+      this.oscillator = titan.context.createOscillator();
+      this.gain = titan.context.createGain();
+      this.oscillator.connect(this.gain);
+
+      this.gain.gain.setValueAtTime(this.volume, titan.context.currentTime);
+
       this.source.buffer = this.sound;
       this.source.loop = this.loop;
 

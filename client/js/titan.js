@@ -28,6 +28,17 @@
 
     context: null,
 
+    filterType: {
+      'lowpass': 0,
+      'highpass': 1,
+      'bandpass': 2,
+      'lowshelf': 3,
+      'highshelf': 4,
+      'peaking': 5,
+      'notch': 6,
+      'allpass': 7
+    },
+
 
     loadAudio: function(data) {
       var audio = new Audio();
