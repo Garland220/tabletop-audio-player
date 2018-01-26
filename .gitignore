@@ -7,3 +7,4 @@ node_modules
 logs
 .tmp
 server/config/local.js
+server/build/*
