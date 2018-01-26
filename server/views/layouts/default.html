@@ -1,0 +1,24 @@
+<doctype html />
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    {% block css %}
+    <link rel="stylesheet" href="/css/main.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/libs/Font-Awesome/css/font-awesome.min.css" type="text/css" media="screen" />
+    {% endblock %}
+
+    {% block header %}
+    <title>{{title}}</title>
+    {% endblock %}
+  </head>
+
+  <body>
+    {% block content %}
+    {% endblock %}
+
+    {% block scripts %}
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    {% endblock %}
+  </body>
+</html>
