@@ -1,7 +1,7 @@
 import { Tag } from '../Tags';
 import { User } from '../Users';
 
-import { Entity, Column, ManyToOne, ManyToMany, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, OneToMany, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 
 @Entity()
@@ -24,9 +24,9 @@ export class Sound {
     @Column()
     private iconURL: string | null;
 
-    @ManyToMany(type => Tag, tag => tag, {})
-    @JoinColumn()
-    private tags: Tag[] = [];
+    // @OneToMany(type => Tag, tag => tag, {})
+    // @JoinColumn()
+    // private tags: Tag[] = [];
 
     @Column('double')
     private volume: number = 1.0;
@@ -71,9 +71,9 @@ export class Sound {
         return this.iconURL;
     }
 
-    public get Tags(): Tag[] {
-        return this.tags;
-    }
+    // public get Tags(): Tag[] {
+    //     return this.tags;
+    // }
 
     public get Loop(): boolean {
         return this.loop;

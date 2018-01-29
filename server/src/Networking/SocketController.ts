@@ -1,7 +1,7 @@
 import * as SocketIO from 'socket.io';
 import { Server as HttpServer } from 'http';
 
-import { Server, Configuration } from '../';
+import { Configuration } from '../';
 import { Client, ClientController } from '../Clients';
 import { User, UserController } from '../Users';
 
@@ -9,6 +9,7 @@ import { User, UserController } from '../Users';
 export class SocketController {
     private io: SocketIO.Server;
     private http: HttpServer;
+    private server: any;
 
     private config: Configuration;
 
@@ -16,14 +17,15 @@ export class SocketController {
         return this.io;
     }
 
-    constructor(config: Configuration, http: HttpServer) {
-        this.http = http;
+    constructor(server: any, config: Configuration) {
+        this.http = server.HTTP.App;
         this.config = config;
+        this.server = server;
     }
 
     public Open(): Promise<any> {
         return new Promise(() => {
-            Server.Log('Starting socket server...');
+            this.server.Log('Starting socket server...');
 
             this.io = SocketIO(this.http);
 
@@ -43,9 +45,9 @@ export class SocketController {
                 client.OnDisconnect();
             });
 
-            Server.Log(`Socket server listening on *:${this.config.SocketPort}`);
+            this.server.Log(`Socket server listening on *:${this.config.SocketPort}`);
         }).catch((error) => {
-            Server.Log(`Socket startup error: ${error}`);
+            this.server.Log(`Socket startup error: ${error}`);
         });
     }
 
@@ -54,13 +56,13 @@ export class SocketController {
             return;
         }
 
-        Server.Log('Stopping socket server...');
+        this.server.Log('Stopping socket server...');
 
         this.io.close();
         this.io = undefined;
         this.http = undefined;
         this.config = undefined;
 
-        Server.Log('Socket server closed.');
+        this.server.Log('Socket server closed.');
     }
 }

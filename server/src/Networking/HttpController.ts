@@ -2,18 +2,17 @@ import * as path from 'path';
 
 import { Server as HttpServer } from 'http';
 import * as express from 'express';
-import 'reflect-metadata';
-import 'pg';
 
-import { Server, Routes, Configuration } from '../';
+import { Routes, Configuration } from '../';
 
-const nunjuk = require('express-nunjucks');
+const nunjuck = require('express-nunjucks');
 
 
 export class HttpController {
     private http: HttpServer;
     private express: express.Application;
     private config: Configuration;
+    private server: any;
 
     public get Express(): express.Application {
         return this.express;
@@ -23,29 +22,35 @@ export class HttpController {
         return this.http;
     }
 
-    constructor(config: Configuration) {
+    constructor(server: any, config: Configuration) {
         this.config = config;
+        this.server = server;
     }
 
     public Open(): Promise<any> {
-        return new Promise(() => {
-            Server.Log('Starting Web server...');
+        return new Promise((resolve) => {
+            this.server.Log('Starting Web server...');
             this.express = express();
             this.http = new HttpServer(<any>this.express);
 
-            this.express.set('views', path.join(__dirname, '../views'));
-            nunjuk(this.express, {});
+            this.express.set('views', path.join(__dirname, '../../views'));
+
+            nunjuck(this.express, {
+                autoescape: true,
+                throwOnUndefined: this.config.Environment === 'development',
+                watch: this.config.Environment !== 'development',
+                noCache: this.config.Environment !== 'development'
+            });
 
             Routes.MakeRoutes(this.express);
 
-            this.http.listen(Server.Configuration.WebPort, () => {
-                Server.Log(`Web server listening on *:${this.config.WebPort}`);
-                return this.http;
+            this.http.listen(this.config.WebPort, () => {
+                this.server.Log(`Web server listening on *:${this.config.WebPort}`);
+                return resolve(this.http);
             });
         }).catch((error) => {
-            Server.Log(`Web startup error: ${error}`);
+            this.server.Log(`Web startup error: ${error}`);
         });
-
     }
 
     public Close(): void {
@@ -53,13 +58,13 @@ export class HttpController {
             return;
         }
 
-        Server.Log('Stopping web server...');
+        this.server.Log('Stopping web server...');
 
         this.http.close();
         this.http = undefined;
         this.express = undefined;
         this.config = undefined;
 
-        Server.Log('Web server closed.');
+        this.server.Log('Web server closed.');
     }
 }

@@ -1,0 +1,68 @@
+<style>
+  label {
+    display: block;
+    margin: auto;
+    text-align: center;
+  }
+</style>
+
+<form>
+
+  <label>
+    Name
+    <input type="text" name="name" placeholder="Name" />
+  </label>
+
+  <label>
+    Category
+    <input type="text" name="category" placeholder="Category" />
+  </label>
+
+  <label>
+    Description
+    <textarea name="description" placeholder="Description"></textarea>
+  </label>
+
+  <label>
+    Attribution
+    <textarea name="attribution" placeholder="Attribution"></textarea>
+  </label>
+
+  <label>
+    Audio File
+    <input type="file" name="audio" accept="audio/*" />
+  </label>
+
+  <label>
+    Icon
+    <input type="file" name="icon" accept="image/*" />
+  </label>
+
+  <label>
+    Cover Image
+    <input type="file" name="image" accept="image/*" />
+  </label>
+
+  <label>
+    Type
+    <select>
+      <option value="sound">Sound</option>
+      <option value="music">Music</option>
+    </select>
+  </label>
+
+  <label>
+    Loop
+    <input type="checkbox" name="loop" />
+  </label>
+
+  <label>
+    Base Volume
+    <input type="number" name="volume" />
+  </label>
+
+  <label>
+  <input type="submit" value="Save" />
+  </label>
+
+</form>

@@ -18,7 +18,6 @@ export class Server {
     private static http: HttpController;
     private static sockets: SocketController;
 
-
     public static Configuration: Configuration;
 
     public static get ActiveUsers(): number {
@@ -53,26 +52,31 @@ export class Server {
         }
     }
 
-    public static Config(config: Configuration): void {
-        Server.Configuration = new Configuration(config);
-    }
-
-    public static Start(config:Configuration): void {
+    public static Start(config: any): void {
         Server.Log('Server is starting up...');
-        Server.Config(config);
+        Server.Configuration = new Configuration(config);
+        Server.database = new DatabaseController(this, Server.Configuration);
 
-        const startup = new Promise(() => {
-            Server.database = new DatabaseController(config);
-            return Server.database.Open();
-        }).then((connection) => {
-            Server.http = new HttpController(config);
+        Server.database.Open().then((connection) => {
+            Server.http = new HttpController(this, Server.Configuration);
             return Server.http.Open();
         }).then((http) => {
-            Server.sockets = new SocketController(config, Server.http.App);
+            Server.sockets = new SocketController(this, Server.Configuration);
             return Server.sockets.Open();
         }).catch((error) => {
             Server.Log(`Startup failed with error: ${error}`);
         });
+    }
+
+    public static CleanUp(): void {
+        Server.Log('Doing pre-exit cleanup.');
+
+        Server.DB.Close();
+        Server.HTTP.Close();
+        Server.Sockets.Close();
+        Server.database = undefined;
+        Server.sockets = undefined;
+        Server.http = undefined;
     }
 
     public static Stop(restart: boolean = false): void {
@@ -83,21 +87,20 @@ export class Server {
         Server.Broadcast(restart ? 'Server is restarting.' : 'Server is shutting down.');
 
         Server.Log('Stopping server...');
-
         Server.closing = true;
-        Server.DB.Close();
-        Server.HTTP.Close();
-        Server.Sockets.Close();
-        Server.database = undefined;
-        Server.sockets = undefined;
-        Server.http = undefined;
+
+        Server.CleanUp();
 
         if (restart) {
             Server.Log('Server will restart.');
             // This is where my restart code would go... IF I HAD ANY!
         }
 
-        Server.Log('done');
+        Server.Log('Exiting...');
         process.exit(0); // kill process
     }
 }
+
+process.on('SIGINT', (signal) => {
+    Server.Stop();
+});

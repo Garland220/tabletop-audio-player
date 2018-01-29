@@ -46,6 +46,8 @@ export class Room {
     @JoinColumn()
     private owner: User;
 
+    private fullAccess: User[]; // Other users allowed to control this room
+
     @Column()
     private deleted: boolean = false;
 
@@ -100,11 +102,12 @@ export class Room {
     }
 
     public Kick(client: Client): void {
-        if (!(client instanceof Client)) {
+        if (!client || !(client instanceof Client)) {
             Server.Log(`Attempted to kick invalid client from '${this.name} (${this.id})'`);
             return;
         }
 
+        client.Message(`You have been kicked.`);
         Server.Log(`${client.Name} has been kicked.`);
         this.Leave(client);
     }
@@ -126,7 +129,7 @@ export class Room {
     }
 
     public Join(client: Client, password: string): void {
-        if (!(client instanceof Client)) {
+        if (!client || !(client instanceof Client)) {
             Server.Log(`Invalid client attempted to join room '${this.name} (${this.id})'`);
             return;
         }
@@ -140,12 +143,13 @@ export class Room {
             Server.Log(`${client.Name} joined room '${this.name} (${this.id})'`);
 
         } else {
+            client.Message(`Failed to join room.`);
             Server.Log(`${client.Name} failed to join room '${this.name} (${this.id})'`);
         }
     }
 
     public Leave(client: Client): void {
-        if (!(client instanceof Client)) {
+        if (!client || !(client instanceof Client)) {
             Server.Log(`Invalid client attempted to leave room '${this.name} (${this.id})'`);
             return;
         }

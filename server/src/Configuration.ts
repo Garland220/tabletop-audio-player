@@ -4,23 +4,29 @@ export class Configuration {
     // Web Listener Port
     private port: number = 8080;
 
-    // Encironment name
+    // Socket Listener Port
+    private socketPort: number = 8081;
+
+    // Environment name
     private environment: string = 'development';
 
     // Connection settings
     private maxConnections: number = -1; // -1 is unlimited
+    private inactivityTime: number = -1; // -1 is unlimited
 
     private connection = {
-        type: 'postgres',
+        type: 'sqlite',
         host: 'localhost',
-        port: '3306',
+        port: '',
         username: '',
         password: '',
-        database: ''
+        database: '',
+        synchronize: true,
+        logging: false
     }
 
     public get SocketPort(): number {
-        return this.port;
+        return this.socketPort;
     }
 
     public get WebPort(): number {
@@ -35,12 +41,40 @@ export class Configuration {
         return this.connection;
     }
 
-
     constructor(data: any) {
         if (data) {
-            this.port = data.port;
-            this.environment = data.environment;
-            this.maxConnections = data.maxConnections;
+            if (data.port !== undefined) {
+                this.port = data.port;
+            }
+            if (data.socketPort !== undefined) {
+                this.socketPort = data.socketPort;
+            }
+            if (data.environment !== undefined) {
+                this.environment = data.environment;
+            }
+            if (data.maxConnections !== undefined) {
+                this.maxConnections = data.maxConnections;
+            }
+            if (data.connection !== undefined) {
+                if (data.connection.type !== undefined) {
+                    this.connection.type = data.connection.type;
+                }
+                if (data.connection.host !== undefined) {
+                    this.connection.host = data.connection.host;
+                }
+                if (data.connection.port !== undefined) {
+                    this.connection.port = data.connection.port;
+                }
+                if (data.connection.username !== undefined) {
+                    this.connection.username = data.connection.username;
+                }
+                if (data.connection.password !== undefined) {
+                    this.connection.password = data.connection.password;
+                }
+                if (data.connection.database !== undefined) {
+                    this.connection.database = data.connection.database;
+                }
+            }
         }
     }
 }

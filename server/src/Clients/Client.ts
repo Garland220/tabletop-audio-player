@@ -78,8 +78,15 @@ export class Client {
         this.socket = socket;
 
         this.user = user || null;
+        this.room = null;
 
         ClientController.Add(this);
+    }
+
+    public Join(room: Room, password: string) {
+        if (room) {
+            room.Join(this, password);
+        }
     }
 
     public Disconnect(close: boolean = false): void {
@@ -103,7 +110,19 @@ export class Client {
         this.Delete();
     }
 
+    public Message(message: string): void {
+        if (!this.socket) {
+            return;
+        }
+
+        this.socket.send('message', message);
+    }
+
     public Send(...args:any[]): void {
+        if (!this.socket) {
+            return;
+        }
+
         this.OnBeforeSend();
 
         this.socket.send(args);

@@ -9,7 +9,7 @@ const routes: any = {
     'get /': home,
     'get /library': library,
 
-    'post /channel/new': RoomController.New,
+    'get /channel/new': RoomController.New,
     'get /channel/:id/edit': RoomController.Edit,
     'post /channel/:id/edit': RoomController.Save,
     'get /channel/:id/control': RoomController.Control,

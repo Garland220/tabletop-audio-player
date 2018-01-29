@@ -1,0 +1,323 @@
+
+
+<div class="channel">
+
+  <h1>
+    <label class="volume">
+      <span>Volume</span>
+
+      <i class="fa fa-volume-down"></i>
+      <input type="range" id="masterVolume" min=1 max=10 value=10 />
+      <i class="fa fa-volume-up"></i>
+
+      <h3 id="connection">Disonnected</h3>
+    </label>
+
+    <div class="name">{{channel.name}} :: Admin</div>
+  </h1>
+
+  <style>
+    {{#if channel.picture }}
+      html { background-image: url({{channel.picture}}); }
+    {{/if}}
+  </style>
+
+  <div class="sounds">
+
+    {{#if sounds}}
+      {{#each sounds as |sound|}}
+        <button id="{{sound.key}}" title="{{sound.description}}" onclick="">
+        {{#if sound.name}}
+          {{sound.name}}
+        {{else}}
+          {{sound.key}}
+        {{/if}}
+        </button>
+      {{/each}}
+    {{/if}}
+
+
+    <div class="music">
+      <h3>
+        Music
+
+        <label>
+          Volume
+          <i class="fa fa-volume-down"></i>
+          <input type="range" id="musicVolume" min=1 max=10 value=5 />
+          <i class="fa fa-volume-up"></i>
+        </label>
+      </h3>
+    </div>
+<!--
+    div(id="funSounds")
+      h3 Fun Sounds
+
+      button(id="criticalHit") Critical Hit
+      button(id="criticalMiss") Critical Miss
+      button(id="levelUp") Level Up
+      button(id="ff7Goodnight") Sleep
+      button(id="ff5Victory") Victory
+      button(id="zeldaSecret") Secret
+      button(id="zeldaItem") Item
+      button(id="metalgearSpotted") Detected
+      button(id="boos") Boos
+      button(id="sitcomLaugh") Sitcom Laugh
+      button(id="badumtss") Badumtss
+      button(id="toasty") Toasty
+      button(id="wilhelm") Wilhelm
+      button(id="timAllenGrunt") Tim Allen
+      button(id="inception") Inception
+      button(id="dramaticChipmunk") Dramatic Chipmunk
+      button(id="bringOutYourDead") Bring out your Dead
+      button(id="dungeonMaster") Dungeon Master
+      button(id="retardAlert") Retard Alert
+
+
+    div(id="environmentSounds")
+      h3 Environment Sounds
+
+      button(id="cicadas") Cicadas
+      button(id="crickets") Crickets
+      button(id="stream1") Stream1
+      button(id="stream2") Stream2
+      button(id="breeze") Breeze
+      button(id="wind1") Wind1
+      button(id="wind2") Wind2
+      button(id="wind3") Wind3
+      button(id="rain1") Rain1
+      button(id="rain2") Rain2
+      button(id="rain3") Rain3
+      button(id="rainOutside") Rain Outside
+      button(id="rainOutside2") Rain Outside2
+      button(id="drips") Drip
+      button(id="thunder1") Thunder1
+      button(id="thunder2") Thunder2
+      button(id="rumble") Rumble
+
+    div(id="civilizationSounds")
+      h3 Civilization Sounds
+      button(id="fanfare") Fanfare
+      button(id="blacksmith") Blacksmith
+      button(id="boatHarbor") Boat Harbor
+      button(id="knifeSharpen") Knife Sharpening
+      button(id="repairs") Repairs
+      button(id="construction") Construction
+      button(id="backgroundChatter") backgroundChatter
+      button(id="tavernBG") TavernBG
+      button(id="serveStew") Serve Stew
+      button(id="pourDrink") Pour Drink
+      button(id="coinsFall") Coins Fall
+      button(id="coinsCounter") Coins on Counter
+      button(id="footsteps1") Footsteps1
+      button(id="footsteps2") Footsteps2
+      button(id="footsteps3") Footsteps3
+      button(id="snoring") Snoring
+
+
+    div(id="propSounds")
+      h3 Prop Sounds
+
+      button(id="torches") Torches
+      button(id="campfire1") Campfire1
+      button(id="campfire2") Campfire2
+      button(id="flagWind") Flag Wind
+      button(id="signWind") Sign Wind
+      button(id="houseRattle") House Rattle
+      button(id="ropeCreak") Rope Creak
+      button(id="fountain") Fountain
+      button(id="doorKnock") Door Knock
+      button(id="doorWindy") Door Windy
+      button(id="doorOpen1") Door Open1
+      button(id="doorClose1") Door Close1
+      button(id="doorOpen2") Door Open2
+      button(id="doorClose2") Door Close2
+      button(id="doorOpen3") Door Open3
+      button(id="doorClose3") Door Close3
+      button(id="gateOpen") Gate Open
+      button(id="churchBell") Church Bell
+      button(id="clock") Clock
+      button(id="clockchime") Clockchime
+      button(id="musixBox") Music Box
+      button(id="woodChimes") Wood Chimes
+      button(id="distantDrums") Distant Drums
+      button(id="warDrums") War Drums
+      button(id="warHorn") War Horn
+      button(id="boiling") Boiling
+      button(id="bodyFall") Body Fall
+
+
+    div(id="horrorSounds")
+      h3 Horror Sounds
+
+      button(id="heartbeat1") Heartbeat1
+      button(id="heartbeat2") Heartbeat2
+      button(id="lowDrone1") Low Drone1
+      button(id="lowDrone2") Low Drone2
+      button(id="tone1") Tone1
+      button(id="tone2") Tone2
+      button(id="tone3") Tone3
+      button(id="tone4") Tone4
+      button(id="hiTone1") High Tone1
+      button(id="hiTone2") High Tone2
+      button(id="ethereal1") Ethereal1
+      button(id="ethereal2") Ethereal2
+      button(id="ethereal3") Ethereal3
+      button(id="ethereal4") Ethereal4
+      button(id="eerieTone") Eerie Tone
+      button(id="longPulse") Long Pulse
+      button(id="shortTone") Short Tone
+      button(id="bellpad") Bellpad
+      button(id="shakerRhythm") Shaker Rhythm
+      button(id="riser1") Riser1
+      button(id="riser2") Riser2
+      button(id="pianohit") Piano Hit
+      button(id="dungeonBG") Dungeon BG
+      button(id="floorCreak") Floor Creak
+      button(id="scrape1") Scrape
+      button(id="screams") Screams
+      button(id="spiritBreath") Spirit Breath
+      button(id="creepyLaugh") Creepy Laugh
+      button(id="childrenLaugh") Children Laugh
+      button(id="wail") Wail
+      button(id="whispers1") Whispers1
+      button(id="whispers2") Whispers2
+      button(id="vortex") Vortex
+
+
+    div(id="combatSounds")
+      h3 Combat Sounds
+
+      button(id="bow") Bow
+      button(id="club") Club
+      button(id="staff") Staff
+      button(id="stab") Stab
+      button(id="shieldBash") Shield Bash
+      button(id="heal") Heal
+      button(id="conjuring") Conjuring
+      button(id="earthSpell") Earth Spell
+      button(id="fireSpell") Fire Spell
+      button(id="iceSpell") Ice Spell
+      button(id="miscSpell") Misc Spell
+      button(id="musicSpell") Music Spell
+      button(id="natureSpell") Nature Spell
+      button(id="explosion1") Explosion1
+      button(id="explosion2") Explosion2
+      button(id="trapArrow") Trap Arrow
+      button(id="trapSpike") Trap Spike
+      button(id="trapBlade") Trap Blade
+      button(id="trapMagic") Trap Magic
+      button(id="trapPoison") Trap Poison
+      button(id="trapPit") Trap Pit
+      button(id="trapGate") Trap Gate
+
+
+    div(id="animalSounds")
+      h3 Animal Sounds
+
+      button(id="birdsong") Bird Song
+      button(id="dogsBarking1") Dogs Barking1
+      button(id="dogsBarking2") Dogs Barking2
+      button(id="wolfHowl") Wolf Howling
+      button(id="wolfSnarl") Wolf Snarl
+      button(id="roar") Bear Roar
+      button(id="owl") Owl
+      button(id="hawk") Hawk
+      button(id="bats") Bats
+      button(id="rats") Rats
+      button(id="flies") Flies
+      button(id="cows") Cows
+      button(id="vultures") Vultures
+      button(id="chickens") Chickens
+      button(id="creature") Creature
+      button(id="slime") Slime
+
+
+    div(id="music")
+      h3 Music
+        label Volume
+          <i class="fa fa-volume-down"></i>
+          input(type="range", id="musicVolume", min=1, max=10, value=5)
+          <i class="fa fa-volume-up"></i>
+
+
+      //- Horror Music
+      button(id="grave") Grave
+      button(id="descentDone") Descent Done
+      button(id="heartbeatDrone") Heartbeat Drone
+      button(id="music1") Mysterious Investigation
+      button(id="forestAction1") Mysterious Action
+      button(id="musicBox") Somber Music Box
+      button(id="eerieFlute1") Eerie Flute
+      button(id="sirenSong") Siren Song
+      button(id="sorrow") Sorrow
+      button(id="unseenHorrors") Unseen Horrors
+      button(id="forgotenTombs") Forgoten Tombs
+      button(id="underwater") Underwater
+      button(id="egmont") Egmont
+      button(id="tocattaFugue") Tocatta &amp; Fugue
+      button(id="harpsichordConcerto") Harpsichord Concerto
+      button(id="supernatural") Supernatural
+      button(id="lightlessDawn") Lightless Dawn
+      button(id="vampireHunters") Vampire Hunters
+      button(id="pastTheEdge") Past The Edge
+      button(id="oppressiveGloom") Oppressive Gloom
+      button(id="theChamber") The Chamber
+      button(id="darkWalk") Dark Walk
+
+      //- Civilization Music
+      button(id="pianoCelloClarinet") Piano Cello Clarinet
+      button(id="celticHarpChoir") Celtic Harp Choir
+      button(id="serenade") Wanderer Serenade
+      button(id="moletown") Moletown
+      button(id="cityWonder") City Wonder
+      button(id="lostVillage") Lost Villiage
+      button(id="caravan") Caravan
+      button(id="gypsyViolin") Gypsy Violin
+      button(id="luteMusic1") Lute Music1
+      button(id="luteMusic2") Lute Music2
+      button(id="luteMusic3") Lute Music3
+      button(id="hurdyGurdy2") Hurdy Gurdy
+      button(id="templeOfTheManes") Temple of the Manes
+
+      //- Tense music
+      button(id="music3") Signs of Battle
+      button(id="dominateLoop") Dominate Loop
+      button(id="tensionLoop1") Tension Loop1
+      button(id="tensionLoop2") Tension Loop2
+      button(id="tensionLoop3") Tension Loop3
+
+      //- Combat Music
+      button(id="combat1") Combat1
+      button(id="combat2") Combat2
+      button(id="combat3") Combat3 (Drums)
+      button(id="combat4") Combat4 (City)
+      button(id="darkWizards") Dark Wizards
+      button(id="ludwigHolyBlade") Ludwig the Holy Blade
+ -->
+  </div>
+</div>
+
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="/js/titan.js"></script>
+<script type="text/javascript" src="/js/titan.admin.js"></script>
+<script>
+  titan.el = document.getElementById('connection');
+  titan.el.innerHTML = 'Loading...';
+
+  window.onload = (function() {
+    tracks = [
+      {url: '/audio/sound/connect.ogg', key: 'connect', type: 'sound', category: 'ui', preload: 'auto', loop: false},
+      {url: '/audio/sound/disconnect.ogg', key: 'disconnect', type: 'sound', category: 'ui', preload: 'auto', loop: false}
+    ];
+
+    titan.onStarted = function() {
+      titan.admin.start(document.querySelectorAll(".sounds button"));
+    };
+
+    titan.addTracks(tracks, null, function() {
+      titan.connect({{channel.id}});
+      titan.start();
+    });
+  });
+</script>
