@@ -47,7 +47,7 @@ export class SocketController {
 
             this.server.Log(`Socket server listening on *:${this.config.SocketPort}`);
         }).catch((error) => {
-            this.server.Log(`Socket startup error: ${error}`);
+            this.server.Error(`Socket startup error: ${error}`);
         });
     }
 

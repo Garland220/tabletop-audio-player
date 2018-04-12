@@ -1,8 +1,8 @@
-import { Entity, Column, ManyToOne, OneToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, BaseEntity, Column, ManyToOne, OneToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 
 @Entity()
-export class Tag {
+export class Tag extends BaseEntity {
     @PrimaryGeneratedColumn()
     private id: number;
 
@@ -10,6 +10,6 @@ export class Tag {
     private name: string;
 
     constructor() {
-
+        super();
     }
 }

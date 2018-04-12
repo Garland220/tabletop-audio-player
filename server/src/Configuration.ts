@@ -20,7 +20,7 @@ export class Configuration {
         port: '',
         username: '',
         password: '',
-        database: '',
+        database: 'database.db',
         synchronize: true,
         logging: false
     }

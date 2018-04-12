@@ -1,6 +1,6 @@
 
 <div style="padding: 20px">
-  <form action="/channel/{{channel.id}}/edit" method="post">
+  <form action="{% if channel.id %}/channel/{{channel.id}}/edit{% else %}/channel/create{% endif %}" method="post">
     <p>
       <label>Name
       <input type="text" name="name" placeholder="Name" value="{{channel.name}}" />

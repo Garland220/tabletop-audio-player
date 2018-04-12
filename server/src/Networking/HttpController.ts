@@ -1,7 +1,7 @@
 import * as path from 'path';
-
-import { Server as HttpServer } from 'http';
 import * as express from 'express';
+import * as BodyParser from 'body-parser';
+import { Server as HttpServer } from 'http';
 
 import { Routes, Configuration } from '../';
 
@@ -35,11 +35,14 @@ export class HttpController {
 
             this.express.set('views', path.join(__dirname, '../../views'));
 
+            this.express.use(BodyParser.json());
+            this.express.use(BodyParser.urlencoded({extended: true}));
+
             nunjuck(this.express, {
                 autoescape: true,
-                throwOnUndefined: this.config.Environment === 'development',
-                watch: this.config.Environment !== 'development',
-                noCache: this.config.Environment !== 'development'
+                throwOnUndefined: false,
+                watch: this.config.Environment === 'development',
+                noCache: this.config.Environment === 'development'
             });
 
             Routes.MakeRoutes(this.express);
@@ -49,7 +52,7 @@ export class HttpController {
                 return resolve(this.http);
             });
         }).catch((error) => {
-            this.server.Log(`Web startup error: ${error}`);
+            this.server.Error(`Web startup error: ${error}`);
         });
     }
 

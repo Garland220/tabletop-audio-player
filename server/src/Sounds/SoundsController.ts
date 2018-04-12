@@ -9,6 +9,7 @@ export class SoundHash {
 export class SoundController {
     // Dictionaries
     private static sounds: SoundHash = {};
+    private static soundArray: Sound[] = [];
     private static soundCount: number = 0;
 
     public static get List(): SoundHash {
@@ -20,13 +21,17 @@ export class SoundController {
     }
 
     public static get Array(): Sound[] {
-        return Object.keys(SoundController.sounds).map(function(soundId: string) {
-            return SoundController.sounds[<any>soundId];
-        });
+        if (!SoundController.soundArray || SoundController.soundArray.length === 0) {
+            SoundController.soundArray = Object.keys(SoundController.sounds).map(function(soundId: string) {
+                return SoundController.sounds[<any>soundId];
+            });
+        }
+        return SoundController.soundArray;
     }
 
     public static Add(sound: Sound): void {
         if (!(sound instanceof Sound)) {
+            console.error('SoundController :: Add', 'Argument is not an instance of `Sound`');
             return;
         }
 
@@ -38,6 +43,7 @@ export class SoundController {
 
     public static Remove(sound: Sound): void {
         if (!(sound instanceof Sound)) {
+            console.error('SoundController :: Remove', 'Argument is not an instance of `Sound`');
             return;
         }
 
@@ -53,5 +59,29 @@ export class SoundController {
             return SoundController.sounds[soundId];
         }
         return null;
+    }
+
+    public static LoadAll(): Promise<any> {
+        return Sound.find().then((sounds) => {
+            for (let index in sounds) {
+                let sound = sounds[index];
+
+                if (sound && sound.ID) {
+                    SoundController.Add(sound);
+                }
+            }
+        }).catch((err) => {
+            console.error('SoundController :: LoadAll', err);
+        });
+    }
+
+    public static Load(soundId: number): Promise<any> {
+        return Sound.findOneById(soundId).then((sound) => {
+            if (sound && sound.ID) {
+                SoundController.Add(sound);
+            }
+        }).catch((err) => {
+            console.error('SoundController :: Load', err);
+        });
     }
 }

@@ -1,11 +1,10 @@
+import { Entity, BaseEntity, Column, ManyToOne, OneToMany, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { Tag } from '../Tags';
 import { User } from '../Users';
 
-import { Entity, Column, ManyToOne, OneToMany, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
-
 
 @Entity()
-export class Sound {
+export class Sound extends BaseEntity {
     @PrimaryGeneratedColumn()
     private id: number;
 
@@ -96,6 +95,6 @@ export class Sound {
     }
 
     constructor() {
-
+        super();
     }
 }

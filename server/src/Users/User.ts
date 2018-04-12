@@ -1,8 +1,8 @@
-import { Entity, Column, ManyToOne, OneToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, BaseEntity, Column, ManyToOne, OneToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 
 @Entity()
-export class User {
+export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
     private id: number;
 
@@ -41,6 +41,8 @@ export class User {
     }
 
     constructor(email: string, password: string, name: string) {
+        super();
+
         this.name = name;
         this.email = email;
         this.password = password;

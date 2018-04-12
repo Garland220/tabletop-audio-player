@@ -1,5 +1,4 @@
-import { Entity, Column, ManyToOne, OneToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
-
+import { Entity, BaseEntity, Column, ManyToOne, ManyToMany, OneToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { Server } from '../';
 import { Client, ClientHash, ClientController } from '../Clients';
 import { Sound, SoundGroup } from '../Sounds';
@@ -7,7 +6,7 @@ import { User } from '../Users';
 
 
 @Entity()
-export class Room {
+export class Room extends BaseEntity {
     @PrimaryGeneratedColumn()
     private id: number;
 
@@ -15,25 +14,25 @@ export class Room {
     private name: string;
 
     @Column('text')
-    private description: string | null;
+    private description: string = '';
 
     @Column('text')
-    private styleCSS: string | null;
+    private styleCSS: string = '';
 
-    @Column()
-    private password: string | null;
+    @Column({ length: 100 })
+    private password: string = '';
 
-    @Column()
-    private customURL: string | null;
+    @Column({ length: 255 })
+    private customURL: string = '';
 
-    @Column()
-    private imageURL: string | null;
+    @Column({ length: 255 })
+    private imageURL: string = '';
 
     @Column('double')
     private roomVolumeModifier: number = 1.0;
 
-    @Column()
-    private ownerPassword: string | null;
+    @Column({ length: 100 })
+    private ownerPassword: string = '';
 
     @OneToOne(type => SoundGroup, soundGroup => soundGroup, {
         cascadeInsert: true,
@@ -42,10 +41,12 @@ export class Room {
     @JoinColumn()
     private soundGroup: SoundGroup;
 
-    @ManyToOne(type => User, user => user, {})
+    @ManyToOne(type => User)
     @JoinColumn()
     private owner: User;
 
+    @ManyToMany(type => User)
+    @JoinColumn()
     private fullAccess: User[]; // Other users allowed to control this room
 
     @Column()
@@ -57,10 +58,11 @@ export class Room {
     @Column()
     private blockGuests: boolean = false;
 
+    @Column()
+    private lastActivity: Date = new Date();
+
     private clientCount: number = 0;
     private clientList: string[] = [];
-
-    private lastActivity: Date;
     private active: boolean = false;
 
     public get ID(): number {
@@ -71,7 +73,18 @@ export class Room {
         return this.name;
     }
     public set Name(value: string) {
-        this.name = name;
+        this.name = value;
+    }
+
+    public get Description(): string {
+        return this.description;
+    }
+    public set Description(value: string) {
+        this.description = value;
+    }
+
+    public get SoundGroup(): SoundGroup {
+        return this.soundGroup;
     }
 
     public get Channel(): string {
@@ -96,9 +109,12 @@ export class Room {
         return !!this.password;
     }
 
-    constructor(owner: User, name: string) {
+    constructor(owner: User, name: string, description: string = '') {
+        super();
+
         this.owner = owner;
         this.name = name;
+        this.description = description;
     }
 
     public Kick(client: Client): void {
@@ -170,6 +186,13 @@ export class Room {
             return ClientController.Get(id);
         }
         return null;
+    }
+
+    public Clients(): { count: number, clients: string[] } {
+        return {
+            count: this.clientCount,
+            clients: this.ListNames()
+        };
     }
 
     public List(): string[] {

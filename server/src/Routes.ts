@@ -10,9 +10,12 @@ const routes: any = {
     'get /library': library,
 
     'get /channel/new': RoomController.New,
+    'post /channel/create': RoomController.Save,
+    'get /channel/list': RoomController.ListAll,
     'get /channel/:id/edit': RoomController.Edit,
     'post /channel/:id/edit': RoomController.Save,
     'get /channel/:id/control': RoomController.Control,
+    'get /channel/:id/payload': RoomController.Payload,
     'get /channel/:id': RoomController.View,
 
     // 'get /sound/new': SoundController.new,

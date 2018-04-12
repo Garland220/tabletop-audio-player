@@ -13,7 +13,7 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "moduleResolution": "node",
-        "lib": ["es2015", "dom"],
+        "lib": ["es5", "es6", "dom"],
         "baseUrl": "./",
         "outDir": "./build/",
         "typeRoots": [

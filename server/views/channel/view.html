@@ -1,8 +1,12 @@
+{% extends 'layouts/default.html' %}
 
+{% block content %}
 <div class="channel">
 
   <h1>
-    <label class="volume">
+    {% include "partials/volume.html" %}
+
+<!--     <label class="volume">
       <span>Volume</span>
 
       <i class="fa fa-volume-down"></i>
@@ -10,31 +14,31 @@
       <i class="fa fa-volume-up"></i>
 
       <h3 id="connection">Disonnected</h3>
-    </label>
+    </label> -->
 
     <div class="name">{{channel.name}}</div>
   </h1>
 
-  {{#if channel.description}}
+  {% if channel.description %}
     <div class="description">
       {{channel.description}}
     </div>
-  {{/if}}
+  {% endif %}
 
 </div>
 
-
 <style>
-  {{#if channel.picture }}
+  {% if channel.picture %}
     html { background-image: url({{channel.picture}}); }
-  {{/if}}
+  {% endif %}
 </style>
+{% endblock %}
 
 
+{% block scripts %}
 <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-<!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.0/seedrandom.min.js"></script> -->
 <script type="text/javascript" src="/js/titan.js"></script>
-{{!-- <script type="text/javascript" src="/js/titan.tracks.js"></script> --}}
+<!-- <script type="text/javascript" src="/js/titan.tracks.js"></script> -->
 <script>
   titan.el = document.getElementById('connection');
   titan.el.innerHTML = 'Loading...';
@@ -51,3 +55,4 @@
     });
   });
 </script>
+{% endblock %}

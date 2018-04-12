@@ -1,5 +1,4 @@
 import { Entity, Column, ManyToMany, ManyToOne, OneToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
-
 import { Sound, SoundData } from './';
 
 
@@ -26,7 +25,7 @@ export class SoundGroup {
     @JoinColumn()
     private importedSounds: Sound[];
 
-    @Column('simple-json')
+    @Column('json')
     private soundState: SoundDataHash = {};
 
     constructor() {
