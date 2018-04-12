@@ -6,9 +6,6 @@ import { SoundController } from './Sounds';
 
 
 const routes: any = {
-    'get /': home,
-    'get /library': library,
-
     'get /channel/new': RoomController.New,
     'post /channel/create': RoomController.Save,
     'get /channel/list': RoomController.ListAll,
@@ -24,6 +21,9 @@ const routes: any = {
     // 'get /sound/:id/edit': SoundController.edit,
     // 'post /sound/:id/edit': SoundController.save,
     // 'post /sound/:id': SoundController.view
+
+    'get /library': library,
+    'get /': home
 }
 
 function home(req: Request, res: Response) {
@@ -31,8 +31,8 @@ function home(req: Request, res: Response) {
 }
 
 function library(req: Request, res: Response) {
-    // server.models.sound.find().exec(function(err: Error, results: any) {
-        // res.status(200).render('library', { sounds: results });
+    // Sound.find().then((err: Error, results: any) => {
+    // res.status(200).render('library', { sounds: results });
     // });
 }
 
@@ -58,14 +58,11 @@ export class Routes {
         }
 
         express.use(function(req: Request, res: Response) {
-            res.status(400);
-            res.render('errors/404.html', { title: '404: File Not Found' });
+            res.status(404).render('errors/404.html', { title: '404: File Not Found' });
         });
 
-        // Handle 500
         express.use(function(error: Error, req: Request, res: Response, next: any) {
-            res.status(500);
-            res.render('errors/500.html', { title: '500: Internal Server Error', error: error });
+            res.status(500).render('errors/500.html', { title: '500: Internal Server Error', error: error });
         });
     }
 }

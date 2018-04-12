@@ -34,6 +34,9 @@ export class HttpController {
             this.http = new HttpServer(<any>this.express);
 
             this.express.set('views', path.join(__dirname, '../../views'));
+            this.express.use(express.static(path.join(__dirname, '../../../client')));
+
+            Routes.MakeRoutes(this.express);
 
             this.express.use(BodyParser.json());
             this.express.use(BodyParser.urlencoded({extended: true}));
@@ -44,8 +47,6 @@ export class HttpController {
                 watch: this.config.Environment === 'development',
                 noCache: this.config.Environment === 'development'
             });
-
-            Routes.MakeRoutes(this.express);
 
             this.http.listen(this.config.WebPort, () => {
                 this.server.Log(`Web server listening on *:${this.config.WebPort}`);
