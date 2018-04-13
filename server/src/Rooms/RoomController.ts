@@ -1,18 +1,17 @@
 import { Application, Request, Response } from 'express';
 import { Promise } from 'bluebird';
-import { Room } from '../Rooms'
 
+import { Server } from '../';
+import { Hash } from '../Shared';
+import { Room } from '../Rooms';
 
-export class RoomHash {
-    [id: number]: Room;
-}
 
 export class RoomController {
-    private static rooms: RoomHash = {};
+    private static rooms: Hash<Room> = {};
     private static roomArray: Room[] = [];
     private static roomCount: number = 0;
 
-    public static get List(): RoomHash {
+    public static get List(): Hash<Room> {
         return RoomController.rooms;
     }
 
@@ -54,7 +53,7 @@ export class RoomController {
 
     public static Add(room: Room): void {
         if (!(room instanceof Room)) {
-            console.error('RoomController :: Add', 'Argument is not an instance of `Room`');
+            Server.Error('(RoomController :: Add)', 'Argument is not an instance of `Room`');
             return;
         }
 
@@ -66,7 +65,7 @@ export class RoomController {
 
     public static Remove(room: Room): void {
         if (!(room instanceof Room)) {
-            console.error('RoomController :: Remove', 'Argument is not an instance of `Sound`');
+            Server.Error('(RoomController :: Remove)', 'Argument is not an instance of `Sound`');
             return;
         }
 
@@ -83,18 +82,16 @@ export class RoomController {
 
     public static View(req: Request, res: Response): void {
         RoomController.VerifyID(req, res).then((id: number) => {
-            console.log(id);
             Room.findOneById(id).then((room: Room) => {
-                console.log('t', room)
                 if (!room) {
                     res.status(404).send('That room was not found.');
                 }
                 res.render('channel/view', { channel: room });
-            }).catch((error) => {
-                console.error('SoundController :: View', error);
-                res.status(500).send(error);
             });
-        }).catch((err) => console.log(err));
+        }).catch((error) => {
+            Server.Error('(SoundController :: View)', error);
+            res.status(500).send(error);
+        });
     }
 
     public static Payload(req: Request, res: Response): void {
@@ -104,7 +101,7 @@ export class RoomController {
                     res.json(room.SoundGroup);
                 }
             }).catch((error) => {
-                console.error('SoundController :: Payload', error);
+                Server.Error('(SoundController :: Payload)', error);
                 res.status(500).send(error);
             });
         });
@@ -117,7 +114,7 @@ export class RoomController {
                     res.json(room.Clients);
                 }
             }).catch((error) => {
-                console.error('SoundController :: Clients', error);
+                Server.Error('(SoundController :: Clients)', error);
                 res.status(500).send(error);
             });
         });
@@ -154,7 +151,7 @@ export class RoomController {
             Room.findOneById(id).then((room: Room) => {
                 res.render('channel/admin', { channel: room });
             }).catch((error) => {
-                console.error('SoundController :: Control', error);
+                Server.Error('(SoundController :: Control)', error);
                 res.status(500).send(error);
             });
         });
@@ -181,10 +178,10 @@ export class RoomController {
                 }
             }
 
-            console.log(`Loaded ${rooms.length} rooms from database.`);
+            Server.Log('(SoundController :: LoadAll)', `Loaded ${rooms.length} rooms from database.`);
             return rooms;
         }).catch((error) => {
-            console.error('SoundController :: LoadAll', error);
+            Server.Error('(SoundController :: LoadAll)', error);
         });
     }
 
@@ -194,7 +191,7 @@ export class RoomController {
                 RoomController.Add(room);
             }
         }).catch((error) => {
-            console.error('SoundController :: Load', error);
+            Server.Error('(SoundController :: Load)', error);
         });
     }
 }

@@ -3,11 +3,12 @@ import 'reflect-metadata';
 
 import { createConnection, Connection } from 'typeorm';
 
-import { Configuration } from '../';
+import { Configuration } from '../Shared';
 
 import { Sound, SoundGroup } from '../Sounds';
 import { User, UserController } from '../Users';
 import { Room, RoomController } from '../Rooms';
+
 
 export class DatabaseController {
     private connection: Connection;

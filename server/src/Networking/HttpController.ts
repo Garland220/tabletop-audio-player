@@ -3,7 +3,8 @@ import * as express from 'express';
 import * as BodyParser from 'body-parser';
 import { Server as HttpServer } from 'http';
 
-import { Routes, Configuration } from '../';
+import { Configuration } from '../Shared';
+import { Routes } from '../';
 
 const nunjuck = require('express-nunjucks');
 

@@ -1,7 +1,7 @@
 import * as SocketIO from 'socket.io';
 import { Server as HttpServer } from 'http';
 
-import { Configuration } from '../';
+import { Configuration } from '../Shared';
 import { Client, ClientController } from '../Clients';
 import { User, UserController } from '../Users';
 

@@ -1,62 +1,59 @@
+import { Hash } from '../Shared';
 import { Server } from '../';
 import { Sound } from './';
 
 
-export class SoundHash {
-    [id: number]: Sound;
-}
-
 export class SoundController {
     // Dictionaries
-    private static sounds: SoundHash = {};
-    private static soundArray: Sound[] = [];
-    private static soundCount: number = 0;
+    private static data: Hash<Sound> = {};
+    private static array: Sound[] = [];
+    private static count: number = 0;
 
-    public static get List(): SoundHash {
-        return SoundController.sounds;
+    public static get List(): Hash<Sound> {
+        return SoundController.data;
     }
 
     public static get Count(): number {
-        return SoundController.soundCount;
+        return SoundController.count;
     }
 
     public static get Array(): Sound[] {
-        if (!SoundController.soundArray || SoundController.soundArray.length === 0) {
-            SoundController.soundArray = Object.keys(SoundController.sounds).map(function(soundId: string) {
-                return SoundController.sounds[<any>soundId];
+        if (!SoundController.array || SoundController.array.length === 0) {
+            SoundController.array = Object.keys(SoundController.data).map(function(soundId: string) {
+                return SoundController.data[<any>soundId];
             });
         }
-        return SoundController.soundArray;
+        return SoundController.array;
     }
 
     public static Add(sound: Sound): void {
         if (!(sound instanceof Sound)) {
-            console.error('SoundController :: Add', 'Argument is not an instance of `Sound`');
+            Server.Error('(SoundController :: Add)', 'Argument is not an instance of `Sound`');
             return;
         }
 
-        if (!SoundController.sounds[sound.ID]) {
-            SoundController.sounds[sound.ID] = sound;
-            SoundController.soundCount += 1;
+        if (!SoundController.data[sound.ID]) {
+            SoundController.data[sound.ID] = sound;
+            SoundController.count += 1;
         }
     }
 
     public static Remove(sound: Sound): void {
         if (!(sound instanceof Sound)) {
-            console.error('SoundController :: Remove', 'Argument is not an instance of `Sound`');
+            Server.Error('(SoundController :: Remove)', 'Argument is not an instance of `Sound`');
             return;
         }
 
-        if (SoundController.sounds[sound.ID]) {
-            SoundController.sounds[sound.ID] = null;
-            delete SoundController.sounds[sound.ID];
-            SoundController.soundCount -= 1;
+        if (SoundController.data[sound.ID]) {
+            SoundController.data[sound.ID] = null;
+            delete SoundController.data[sound.ID];
+            SoundController.count -= 1;
         }
     }
 
     public static Get(soundId: number): Sound {
-        if (SoundController.sounds[soundId]) {
-            return SoundController.sounds[soundId];
+        if (SoundController.data[soundId]) {
+            return SoundController.data[soundId];
         }
         return null;
     }
@@ -71,7 +68,7 @@ export class SoundController {
                 }
             }
         }).catch((err) => {
-            console.error('SoundController :: LoadAll', err);
+            Server.Error('(SoundController :: LoadAll)', err);
         });
     }
 
@@ -81,7 +78,7 @@ export class SoundController {
                 SoundController.Add(sound);
             }
         }).catch((err) => {
-            console.error('SoundController :: Load', err);
+            Server.Error('(SoundController :: Load)', err);
         });
     }
 }

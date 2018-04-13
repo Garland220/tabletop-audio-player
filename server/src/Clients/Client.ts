@@ -1,6 +1,7 @@
 import * as SocketIO from 'socket.io';
 
 import { Server } from '../';
+import { HardwareInfo, Version } from '../Shared';
 import { User } from '../Users';
 import { Room } from '../Rooms';
 import { ClientController } from './';
@@ -11,6 +12,7 @@ declare type IPAddress = string;
 export class Client {
     private socket: SocketIO.Socket;
     private address: IPAddress;
+    private hardwareInfo: HardwareInfo;
 
     private connectedOn: Date;
 

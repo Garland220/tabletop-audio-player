@@ -1,17 +1,14 @@
+import { Hash } from '../Shared';
 import { Server } from '../';
 import { Client } from './';
 
 
-export class ClientHash {
-    [id: string]: Client;
-}
-
 export class ClientController {
     // Dictionaries
-    private static clients: ClientHash = {};
+    private static clients: Hash<Client> = {};
     private static clientCount: number = 0;
 
-    public static get List(): ClientHash {
+    public static get List(): Hash<Client> {
         return ClientController.clients;
     }
 

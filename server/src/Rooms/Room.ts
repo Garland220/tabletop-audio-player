@@ -1,6 +1,6 @@
 import { Entity, BaseEntity, Column, ManyToOne, ManyToMany, OneToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { Server } from '../';
-import { Client, ClientHash, ClientController } from '../Clients';
+import { Client, ClientController } from '../Clients';
 import { Sound, SoundGroup } from '../Sounds';
 import { User } from '../Users';
 
