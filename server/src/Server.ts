@@ -1,41 +1,9 @@
 import * as fs from 'fs';
 import * as util from 'util';
 
-import { Configuration } from './Shared';
 import { ClientController } from './Clients';
+import { Colors, Configuration } from './Shared';
 import { DatabaseController, HttpController, SocketController } from './Networking';
-
-const colors = {
-    Reset: "\x1b[0m",
-    Bright: "\x1b[1m",
-    Dim: "\x1b[2m",
-    Underscore: "\x1b[4m",
-    Blink: "\x1b[5m",
-    Reverse: "\x1b[7m",
-    Hidden: "\x1b[8m",
-    fg: {
-        Black: "\x1b[30m",
-        Red: "\x1b[31m",
-        Green: "\x1b[32m",
-        Yellow: "\x1b[33m",
-        Blue: "\x1b[34m",
-        Magenta: "\x1b[35m",
-        Cyan: "\x1b[36m",
-        White: "\x1b[37m",
-        Crimson: "\x1b[38m"
-    },
-    bg: {
-        Black: "\x1b[40m",
-        Red: "\x1b[41m",
-        Green: "\x1b[42m",
-        Yellow: "\x1b[43m",
-        Blue: "\x1b[44m",
-        Magenta: "\x1b[45m",
-        Cyan: "\x1b[46m",
-        White: "\x1b[47m",
-        Crimson: "\x1b[48m"
-    }
-};
 
 
 export class Server {
@@ -73,7 +41,7 @@ export class Server {
     }
 
     public static Broadcast(message: string): void {
-        Server.Log(colors.fg.Blue + 'BROADCAST:', `"${message}"` + colors.fg.White);
+        Server.Log(Colors.fg.Blue + 'BROADCAST:', `"${message}"` + Colors.fg.White);
 
         if (Server.sockets) {
             Server.sockets.IO.send('broadcast', message);
@@ -86,14 +54,14 @@ export class Server {
     }
 
     public static Warn(...args: any[]): void {
-        args.unshift(colors.fg.Yellow + '[WARNING]');
-        args.push(colors.fg.White);
+        args.unshift(Colors.fg.Yellow + '[WARNING]');
+        args.push(Colors.fg.White);
         console.warn.apply(console, args);
     }
 
     public static Error(...args: any[]): void {
-        args.unshift(colors.fg.Red + '[ERROR]');
-        args.push(colors.fg.White);
+        args.unshift(Colors.fg.Red + '[ERROR]');
+        args.push(Colors.fg.White);
         console.error.apply(console, args);
     }
 
@@ -157,4 +125,3 @@ process.on('warning', (warning) => {
 process.on(<any>'uncaughtException', (reason: string, location: string) => {
     Server.Error(reason, location);
 });
-

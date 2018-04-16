@@ -1,4 +1,5 @@
 
+export * from './Colors';
 export * from './Configuration';
 export * from './HardwareInfo';
 export * from './Interfaces';

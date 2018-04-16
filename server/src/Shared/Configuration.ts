@@ -1,5 +1,4 @@
 
-
 export class Configuration {
     // Web Listener Port
     private port: number = 8080;
