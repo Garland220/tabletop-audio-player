@@ -23,6 +23,7 @@ export class SoundController {
                 return SoundController.data[<any>soundId];
             });
         }
+
         return SoundController.array;
     }
 
@@ -55,6 +56,7 @@ export class SoundController {
         if (SoundController.data[soundId]) {
             return SoundController.data[soundId];
         }
+
         return null;
     }
 

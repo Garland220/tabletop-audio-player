@@ -23,6 +23,7 @@ export class UserController {
                 return UserController.data[<any>id];
             });
         }
+
         return UserController.array;
     }
 
@@ -49,6 +50,7 @@ export class UserController {
         if (id && UserController.data[id]) {
             return UserController.data[id];
         }
+
         return null;
     }
 

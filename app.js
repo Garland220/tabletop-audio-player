@@ -2,7 +2,8 @@
 
 const fs = require('fs');
 const Reflect = require('./server/node_modules/reflect-metadata');
-const Server = require('./server/build/Server').Server;
+const Server = require('./server/build').Server;
+
 
 /**
  * Locates local configuration file,

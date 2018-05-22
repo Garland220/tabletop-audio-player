@@ -5,7 +5,7 @@ import { createConnection, Connection } from 'typeorm';
 
 import { Configuration } from '../Shared';
 
-import { Sound, SoundGroup } from '../Sounds';
+import { Sound, SoundController } from '../Sounds';
 import { User, UserController } from '../Users';
 import { Room, RoomController } from '../Rooms';
 
@@ -41,7 +41,6 @@ export class DatabaseController {
             entities: [
                 User,
                 Sound,
-                SoundGroup,
                 Room
             ],
             synchronize: true,

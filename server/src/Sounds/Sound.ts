@@ -50,6 +50,10 @@ export class Sound extends BaseEntity {
         return this.id;
     }
 
+    public get Owner(): User {
+        return this.owner;
+    }
+
     public get Name(): string {
         return this.name;
     }
@@ -78,20 +82,16 @@ export class Sound extends BaseEntity {
         return this.loop;
     }
 
-    public get Deleted(): boolean {
+    public get isDeleted(): boolean {
         return this.deleted;
     }
 
-    public get Public(): boolean {
+    public get isPublic(): boolean {
         return this.public;
     }
 
-    public get Music(): boolean {
+    public get isMusic(): boolean {
         return this.music;
-    }
-
-    public get Owner(): User {
-        return this.owner;
     }
 
     constructor() {

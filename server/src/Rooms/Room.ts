@@ -1,7 +1,7 @@
-import { Entity, BaseEntity, Column, ManyToOne, ManyToMany, OneToOne, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, BaseEntity, Column, ManyToOne, ManyToMany, OneToOne, JoinColumn, PrimaryGeneratedColumn, AfterLoad } from 'typeorm';
 import { Server } from '../';
 import { Client, ClientController } from '../Clients';
-import { Sound, SoundGroup } from '../Sounds';
+import { Sound, SoundState } from '../Sounds';
 import { User } from '../Users';
 
 
@@ -34,12 +34,8 @@ export class Room extends BaseEntity {
     @Column({ length: 100 })
     private ownerPassword: string = '';
 
-    @OneToOne(type => SoundGroup, soundGroup => soundGroup, {
-        cascadeInsert: true,
-        cascadeRemove: true
-    })
-    @JoinColumn()
-    private soundGroup: SoundGroup;
+    @Column('blob', { nullable: true })
+    private stateJSON: string = '';
 
     @ManyToOne(type => User)
     @JoinColumn()
@@ -60,6 +56,8 @@ export class Room extends BaseEntity {
 
     @Column()
     private lastActivity: Date = new Date();
+
+    private soundState: SoundState;
 
     private clientCount: number = 0;
     private clientList: string[] = [];
@@ -83,14 +81,15 @@ export class Room extends BaseEntity {
         this.description = value;
     }
 
-    public get SoundGroup(): SoundGroup {
-        return this.soundGroup;
+    public get SoundState(): SoundState {
+        return this.soundState;
     }
 
     public get Channel(): string {
         if (this.customURL) {
             return this.customURL;
         }
+
         return this.id.toString();
     }
 
@@ -115,6 +114,26 @@ export class Room extends BaseEntity {
         this.owner = owner;
         this.name = name;
         this.description = description;
+    }
+
+    @AfterLoad()
+    protected afterLoad(): void {
+        // Handle loading state from JSON
+        if (this.stateJSON) {
+            this.soundState = new SoundState(JSON.parse(this.stateJSON));
+        }
+    }
+
+    protected beforeSave(): void {
+        // Handle saving state as JSON
+        if (this.soundState) {
+            this.stateJSON = JSON.stringify(this.soundState);
+        }
+    }
+
+    public save(): Promise<this> {
+        this.beforeSave()
+        return super.save();
     }
 
     public Kick(client: Client): void {
@@ -158,7 +177,8 @@ export class Room extends BaseEntity {
 
             Server.Log(`${client.Name} joined room '${this.name} (${this.id})'`);
 
-        } else {
+        }
+        else {
             client.Message(`Failed to join room.`);
             Server.Log(`${client.Name} failed to join room '${this.name} (${this.id})'`);
         }
@@ -185,6 +205,7 @@ export class Room extends BaseEntity {
         if (ClientController.Get(id)) {
             return ClientController.Get(id);
         }
+
         return null;
     }
 

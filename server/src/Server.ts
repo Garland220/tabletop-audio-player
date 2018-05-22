@@ -41,26 +41,38 @@ export class Server {
     }
 
     public static Broadcast(message: string): void {
-        Server.Log(Colors.fg.Blue + 'BROADCAST:', `"${message}"` + Colors.fg.White);
+        console.log(
+            `${Colors.fg.Blue}${Server.DateString()}`,
+            '[BROADCAST]',
+            `"${message}"${Colors.fg.White}`
+        );
 
         if (Server.sockets) {
             Server.sockets.IO.send('broadcast', message);
         }
     }
 
+    public static DateString(color: boolean = false): string {
+        const dt = new Date().toLocaleString();
+        if (color) {
+            return `${Colors.fg.Green}[${dt}]${Colors.fg.White}`;
+        }
+        return `[${dt}]`;
+    }
+
     public static Log(...args: any[]): void {
-        // args.unshift(colors.fg.Green);
+        args.unshift(Server.DateString(true));
         console.log.apply(console, args);
     }
 
     public static Warn(...args: any[]): void {
-        args.unshift(Colors.fg.Yellow + '[WARNING]');
+        args.unshift(`${Colors.fg.Yellow}${Server.DateString()}`, '[WARNING]');
         args.push(Colors.fg.White);
         console.warn.apply(console, args);
     }
 
     public static Error(...args: any[]): void {
-        args.unshift(Colors.fg.Red + '[ERROR]');
+        args.unshift(`${Colors.fg.Red}${Server.DateString()}`, '[ERROR]');
         args.push(Colors.fg.White);
         console.error.apply(console, args);
     }
@@ -77,7 +89,7 @@ export class Server {
             Server.sockets = new SocketController(this, Server.Configuration);
             return Server.sockets.Open();
         }).catch((error) => {
-            Server.Error(`Startup failed with error: ${error}`);
+            throw new Error(`Startup failed with error: ${error}`)
         });
     }
 
@@ -123,5 +135,10 @@ process.on('warning', (warning) => {
     Server.Warn(warning);
 });
 process.on(<any>'uncaughtException', (reason: string, location: string) => {
-    Server.Error(reason, location);
+    if (location) {
+        Server.Error(reason, location);
+    }
+    else {
+        Server.Error(reason);
+    }
 });

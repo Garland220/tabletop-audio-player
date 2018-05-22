@@ -27,8 +27,9 @@ export class Client {
 
     public get Name(): string {
         if (this.IsRegistered) {
-            return (this.user.Name ? this.user.Name : 'User') + ` (${this.address})`;
+            return `${(this.user.Name ? this.user.Name : 'User')} (${this.address})`;
         }
+
         return `Guest (${this.Address}) `;
     }
 
@@ -71,6 +72,7 @@ export class Client {
         if (this.IsGuest) {
             return false;
         }
+
         return this.user.IsAdmin;
     }
 
@@ -93,6 +95,7 @@ export class Client {
 
     public Disconnect(close: boolean = false): void {
         Server.Log(`${this.Name} has been manually disconnected.`);
+
         this.socket.disconnect(close);
     }
 

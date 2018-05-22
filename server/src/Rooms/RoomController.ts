@@ -33,6 +33,7 @@ export class RoomController {
         if (id) {
             return true;
         }
+        Server.Error('(RoomController :: Add)', 'ID is not valid', id);
         return false
     }
 
@@ -53,7 +54,7 @@ export class RoomController {
 
     public static Add(room: Room): void {
         if (!(room instanceof Room)) {
-            Server.Error('(RoomController :: Add)', 'Argument is not an instance of `Room`');
+            Server.Error('(RoomController :: Add)', 'Argument is not an instance of `Room`', room);
             return;
         }
 
@@ -65,7 +66,7 @@ export class RoomController {
 
     public static Remove(room: Room): void {
         if (!(room instanceof Room)) {
-            Server.Error('(RoomController :: Remove)', 'Argument is not an instance of `Sound`');
+            Server.Error('(RoomController :: Remove)', 'Argument is not an instance of `Room`', room);
             return;
         }
 
@@ -98,7 +99,7 @@ export class RoomController {
         RoomController.VerifyID(req, res).then((id: number) => {
             Room.findOneById(id).then((room: Room) => {
                 if (room) {
-                    res.json(room.SoundGroup);
+                    res.json(room.SoundState);
                 }
             }).catch((error) => {
                 Server.Error('(SoundController :: Payload)', error);
@@ -125,6 +126,9 @@ export class RoomController {
             Room.findOneById(id).then((room) => {
                 res.render('channel/edit', { channel: room });
             });
+        }).catch((error) => {
+            Server.Error('(SoundController :: Edit)', error);
+            res.status(500).send(error);
         });
     }
 
@@ -134,6 +138,9 @@ export class RoomController {
         if (id) {
             RoomController.VerifyID(req, res).then((id: number) => {
 
+            }).catch((error) => {
+                Server.Error('(SoundController :: Save)', error);
+                res.status(500).send(error);
             });
         }
         else {
@@ -181,7 +188,7 @@ export class RoomController {
             Server.Log('(SoundController :: LoadAll)', `Loaded ${rooms.length} rooms from database.`);
             return rooms;
         }).catch((error) => {
-            Server.Error('(SoundController :: LoadAll)', error);
+            throw new Error(`(SoundController :: LoadAll) ${error}`);
         });
     }
 
@@ -191,7 +198,7 @@ export class RoomController {
                 RoomController.Add(room);
             }
         }).catch((error) => {
-            Server.Error('(SoundController :: Load)', error);
+            throw new Error(`(SoundController :: Load) ${error}`);
         });
     }
 }

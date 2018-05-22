@@ -52,6 +52,7 @@ export class HardwareInfo {
                 json[key] = this[key];
             }
         }
+
         return json;
     }
 

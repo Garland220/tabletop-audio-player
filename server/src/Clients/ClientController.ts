@@ -45,6 +45,7 @@ export class ClientController {
         if (id && ClientController.clients[id]) {
             return ClientController.clients[id];
         }
+
         return null;
     }
 }

@@ -1,4 +1,6 @@
+{% extends 'layouts/default.html' %}
 
+{% block content %}
 <div class="channel">
 
   <h1>
@@ -16,25 +18,24 @@
   </h1>
 
   <style>
-    {{#if channel.picture }}
+    {% if channel.picture %}
       html { background-image: url({{channel.picture}}); }
-    {{/if}}
+    {% endif %}
   </style>
 
   <div class="sounds">
 
-    {{#if sounds}}
-      {{#each sounds as |sound|}}
+    {% if sounds %}
+      {% for sound in channel.soundState.importedSounds %}
         <button id="{{sound.key}}" title="{{sound.description}}" onclick="">
-        {{#if sound.name}}
+        {% if sound.name %}
           {{sound.name}}
-        {{else}}
+        {% else %}
           {{sound.key}}
-        {{/if}}
+        {% endif %}
         </button>
-      {{/each}}
-    {{/if}}
-
+      {% endfor %}
+    {% endif %}
 
     <div class="music">
       <h3>
@@ -320,3 +321,4 @@
     });
   });
 </script>
+{% endblock %}
