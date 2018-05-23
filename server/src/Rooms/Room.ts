@@ -1,4 +1,4 @@
-import { Entity, BaseEntity, Column, ManyToOne, ManyToMany, OneToOne, JoinColumn, PrimaryGeneratedColumn, AfterLoad } from 'typeorm';
+import { Entity, BaseEntity, Column, ManyToOne, ManyToMany, OneToOne, JoinTable, PrimaryGeneratedColumn, AfterLoad } from 'typeorm';
 import { Server } from '../';
 import { Client, ClientController } from '../Clients';
 import { Sound, SoundState } from '../Sounds';
@@ -38,11 +38,11 @@ export class Room extends BaseEntity {
     private stateJSON: string = '';
 
     @ManyToOne(type => User)
-    @JoinColumn()
+    @JoinTable()
     private owner: User;
 
     @ManyToMany(type => User)
-    @JoinColumn()
+    @JoinTable()
     private fullAccess: User[]; // Other users allowed to control this room
 
     @Column()
@@ -81,8 +81,23 @@ export class Room extends BaseEntity {
         this.description = value;
     }
 
+    public get ImageURL(): string {
+        return this.imageURL;
+    }
+    public set ImageURL(value: string) {
+        this.imageURL = value;
+    }
+
     public get SoundState(): SoundState {
         return this.soundState;
+    }
+
+    public get StateJSON(): string {
+        return this.stateJSON;
+    }
+    public set StateJSON(value: string) {
+        this.stateJSON = value;
+        this.Deserialize();
     }
 
     public get Channel(): string {
@@ -116,24 +131,38 @@ export class Room extends BaseEntity {
         this.description = description;
     }
 
+    public save(): Promise<this> {
+        this.Serialize()
+        return super.save();
+    }
+
     @AfterLoad()
     protected afterLoad(): void {
-        // Handle loading state from JSON
-        if (this.stateJSON) {
-            this.soundState = new SoundState(JSON.parse(this.stateJSON));
-        }
+        this.Deserialize();
     }
 
-    protected beforeSave(): void {
+    protected Serialize(): void {
         // Handle saving state as JSON
         if (this.soundState) {
-            this.stateJSON = JSON.stringify(this.soundState);
+            this.stateJSON = JSON.stringify(this.soundState, (key, value) => {
+                if (key === 'parent' || !value) {
+                    return;
+                }
+                if (key === 'sound' && value.id) {
+                    return value.id;
+                }
+
+                return value;
+            });
         }
     }
 
-    public save(): Promise<this> {
-        this.beforeSave()
-        return super.save();
+    protected Deserialize(): void {
+        // Handle loading state from JSON
+        if (this.stateJSON) {
+            let data = JSON.parse(this.stateJSON);
+            this.soundState = new SoundState(data);
+        }
     }
 
     public Kick(client: Client): void {

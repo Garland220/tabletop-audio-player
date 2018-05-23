@@ -4,6 +4,7 @@ import { Promise } from 'bluebird';
 import { Server } from '../';
 import { Hash } from '../Shared';
 import { Room } from '../Rooms';
+import { Sound, SoundData, SoundCategory } from '../Sounds';
 
 
 export class RoomController {
@@ -31,7 +32,9 @@ export class RoomController {
     public static ValidID(id: number): boolean {
         // TODO: Add additional verification
         if (id) {
-            return true;
+            if (RoomController.List[id]) {
+                return true;
+            }
         }
         Server.Error('(RoomController :: Add)', 'ID is not valid', id);
         return false
@@ -40,13 +43,10 @@ export class RoomController {
     public static VerifyID(req: Request, res: Response) {
         return new Promise((resolve, reject) => {
             const id = req.params['id'];
-
             if (RoomController.ValidID(id)) {
                 resolve(id);
             }
-            else {
-                reject('Room not found');
-            }
+            reject('Room not found');
         }).catch((error) => {
             res.status(404).send(error);
         });
@@ -97,14 +97,11 @@ export class RoomController {
 
     public static Payload(req: Request, res: Response): void {
         RoomController.VerifyID(req, res).then((id: number) => {
-            Room.findOneById(id).then((room: Room) => {
-                if (room) {
-                    res.json(room.SoundState);
-                }
-            }).catch((error) => {
-                Server.Error('(SoundController :: Payload)', error);
-                res.status(500).send(error);
-            });
+            let room = RoomController.List[id];
+            res.json(room.StateJSON);
+        }).catch((error) => {
+            Server.Error('(SoundController :: Payload)', error);
+            res.status(500).send(error);
         });
     }
 
@@ -134,21 +131,35 @@ export class RoomController {
 
     public static Save(req: Request, res: Response): void {
         const id = req.params['id'];
+        const name = req.body['name'];
+        const url = req.body['picture'];
+        const description = req.body['description'];
+        const json = req.body['audioLibrary'];
 
         if (id) {
             RoomController.VerifyID(req, res).then((id: number) => {
+                let room = RoomController.List[id];
+                room.Name = name;
+                room.ImageURL = url;
+                room.Description = description;
+                room.StateJSON = json;
 
+                // let cat = new SoundCategory();
+                // let soundData = new SoundData();
+                // let sound = new Sound();
+
+                // soundData.Sound = sound;
+                // cat.Sounds.push(soundData);
+                // // room.SoundState.Categories = [];
+                // room.SoundState.Categories.push(cat);
+                return room.save();
             }).catch((error) => {
                 Server.Error('(SoundController :: Save)', error);
                 res.status(500).send(error);
             });
         }
         else {
-            const name = req.body.name;
-            const description = req.body.description;
-
             let room = new Room(null, name, description);
-
             room.save();
         }
     }

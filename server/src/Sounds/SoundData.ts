@@ -1,4 +1,5 @@
 import { Sound, SoundController } from './';
+import { Deserializer } from '../Shared';
 
 
 export class SoundData {
@@ -101,19 +102,9 @@ export class SoundData {
         return this.preload;
     }
 
-    constructor(data?: SoundData) {
+    constructor(data?: any) {
         if (data) {
-            this.active = data.active;
-            this.volume = data.volume;
-            this.fadeIn = data.fadeIn;
-            this.fadeOut = data.fadeOut;
-            this.note = data.note;
-
-            this.delayMin = data.delayMin;
-            this.delayMax = data.delayMax;
-            this.preload = data.preload;
-            this.loop = data.loop;
-            this.forceLoop = data.forceLoop;
+            Deserializer.extend(this, data);
 
             if (data.sound) {
                 this.sound = SoundController.Get(data.sound.ID);

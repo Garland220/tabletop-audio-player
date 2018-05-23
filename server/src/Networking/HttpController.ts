@@ -36,11 +36,10 @@ export class HttpController {
 
             this.express.set('views', path.join(__dirname, '../../views'));
             this.express.use(express.static(path.join(__dirname, '../../../client')));
-
-            Routes.MakeRoutes(this.express);
-
             this.express.use(BodyParser.json());
             this.express.use(BodyParser.urlencoded({extended: true}));
+
+            Routes.MakeRoutes(this.express);
 
             nunjuck(this.express, {
                 autoescape: true,

@@ -3,23 +3,23 @@
   <form action="{% if channel.id %}/channel/{{channel.id}}/edit{% else %}/channel/create{% endif %}" method="post">
     <p>
       <label>Name
-      <input type="text" name="name" placeholder="Name" value="{{channel.name}}" />
+      <input type="text" name="name" placeholder="Name" value="{{channel.Name}}" />
       </label>
     </p>
     <p>
       <label>Description
-      <input type="text" name="description" placeholder="Description" value="{{channel.description}}" />
+      <input type="text" name="description" placeholder="Description" value="{{channel.Description}}" />
       </label>
     </p>
     <p>
       <label>Picture URL
-      <input type="text" name="picture" placeholder="Picture URL" value="{{channel.picture}}" />
+      <input type="text" name="picture" placeholder="Picture URL" value="{{channel.ImageURL}}" />
       </label>
     </p>
 
     <p>
       <label>Audio Library JSON
-      <textarea name="audioLibrary" width="100%" height="400" placeholder="Audio Library JSON">{{channel.audioLibrary}}</textarea>
+      <textarea name="audioLibrary" width="100%" height="400" placeholder="Audio Library JSON">{{channel.stateJSON}}</textarea>
       </label>
     </p>
 

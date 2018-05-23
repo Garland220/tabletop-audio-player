@@ -1,4 +1,5 @@
 import { Sound, SoundState, SoundGroup, SoundData, SoundDataHash } from './';
+import { Deserializer } from '../Shared';
 
 
 export class SoundCategory {
@@ -83,18 +84,11 @@ export class SoundCategory {
 
     constructor(data?: SoundCategory) {
         if (data) {
-            this.name = data.name;
-            this.description = data.description;
+            Deserializer.extend(this, data);
 
-            this.backgroundImage = data.backgroundImage;
-            this.backgroundColor = data.backgroundColor;
-            this.fontColor = data.fontColor;
-
-            this.hidden = data.hidden;
-            this.singleActiveSound = data.singleActiveSound;
-
+            let size = data.sounds.length;
             if (data.sounds) {
-                for (let i = 0; i < data.sounds.length; i += 1) {
+                for (let i = 0; i < size; i += 1) {
                     this.sounds.push(new SoundData(data.sounds[i]));
                 }
             }
@@ -105,7 +99,7 @@ export class SoundCategory {
         let data = new SoundData({
             loop: sound.Loop,
         });
-        data.Loop = ;
+        // data.Loop = ;
         data.Name = sound.Name;
     }
 
