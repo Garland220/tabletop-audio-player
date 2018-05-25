@@ -1,0 +1,10 @@
+{
+    "allowedExtensions":[".less"],
+    "enableJs": false,
+    "minified": false,
+    "sourceMap": true,
+    "plugins": "less-plugin-clean-css",
+    "mainFile": "main.less",
+    "watchFolder": "../client/css",
+    "outputFolder": "../client/css"
+}

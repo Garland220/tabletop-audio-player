@@ -5,8 +5,8 @@
   "main": "../app.js",
   "scripts": {
     "start": "node ../app.js",
-    "build": "./node_modules/typescript/bin/tsc",
-    "watch": "./node_modules/typescript/bin/tsc --watch",
+    "build": "./node_modules/typescript/bin/tsc && ./node_modules/less/bin/lessc --silent --clean-css ../client/css/main.less > ../client/css/main.css",
+    "watch": "./node_modules/concurrently/src/main.js \"./node_modules/typescript/bin/tsc --watch\"  \"./node_modules/less-watch-compiler/dist/less-watch-compiler.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -17,6 +17,10 @@
     "@types/node": "^9.6.12",
     "@types/nunjucks": "^3.0.0",
     "@types/socket.io": "^1.4.33",
+    "concurrently": "^3.5.1",
+    "less": "^3.0.4",
+    "less-plugin-clean-css": "^1.5.1",
+    "less-watch-compiler": "^1.11.3",
     "typescript": "^2.8.3"
   },
   "dependencies": {

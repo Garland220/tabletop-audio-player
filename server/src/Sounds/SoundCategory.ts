@@ -44,7 +44,7 @@ export class SoundCategory {
     }
 
     public get BackgroundColorString(): string {
-        return this.backgroundColor.toString(16);
+        return `000000${this.backgroundColor.toString(16)}`.substr(-6);
     }
     public set BackgroundColorString(value: string) {
         this.backgroundColor = parseInt(value, 16);
@@ -58,7 +58,7 @@ export class SoundCategory {
     }
 
     public get FontColorString(): string {
-        return this.fontColor.toString(16);
+        return `000000${this.fontColor.toString(16)}`.substr(-6);
     }
     public set FontColorString(value: string) {
         this.fontColor = parseInt(value, 16);

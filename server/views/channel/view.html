@@ -4,7 +4,7 @@
 <div class="channel">
 
   <h1>
-    {% include "partials/volume.html" %}
+    <!-- {% include "partials/volume.html" %} -->
 
 <!--     <label class="volume">
       <span>Volume</span>
@@ -16,13 +16,21 @@
       <h3 id="connection">Disonnected</h3>
     </label> -->
 
-    <div class="name">{{channel.name}}</div>
+    <!-- <div class="name">{{channel.name}}</div> -->
   </h1>
-
+<!--
   {% if channel.description %}
     <div class="description">
       {{channel.description}}
     </div>
+  {% endif %} -->
+
+  {% if channel.soundState %}
+    {% for category in channel.soundState.categories %}
+    <div class="category" style="background-color: #{{category.BackgroundColorString}}; color: #{{category.FontColorString}}">
+      {{category.name}}test
+    </div>
+    {% endfor %}
   {% endif %}
 
 </div>
