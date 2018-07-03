@@ -40,41 +40,52 @@ export class Server {
         return Server.sockets;
     }
 
-    public static Broadcast(message: string): void {
-        console.log(
-            `${Colors.fg.Blue}${Server.DateString()}`,
-            '[BROADCAST]',
-            `"${message}"${Colors.fg.White}`
-        );
-
-        if (Server.sockets) {
-            Server.sockets.IO.send('broadcast', message);
-        }
-    }
-
     public static DateString(color: boolean = false): string {
         const dt = new Date().toLocaleString();
         if (color) {
-            return `${Colors.fg.Green}[${dt}]${Colors.fg.White}`;
+            return <string>Colors.Apply(['Green', 'Bright'], `[${dt}]`);
         }
         return `[${dt}]`;
     }
 
-    public static Log(...args: any[]): void {
-        args.unshift(Server.DateString(true));
+    public static Print(...args: any[]): void {
         console.log.apply(console, args);
     }
 
+    public static Log(...args: any[]): void {
+        args.unshift(Server.DateString(true));
+        Server.Print.apply(console, args);
+    }
+
     public static Warn(...args: any[]): void {
-        args.unshift(`${Colors.fg.Yellow}${Server.DateString()}`, '[WARNING]');
-        args.push(Colors.fg.White);
-        console.warn.apply(console, args);
+        let array: string[];
+
+        args.unshift('[WARNING]');
+        array = <string[]>Colors.Apply(['Yellow', 'Bright'], args);
+
+        Server.Log.apply(console, array);
     }
 
     public static Error(...args: any[]): void {
-        args.unshift(`${Colors.fg.Red}${Server.DateString()}`, '[ERROR]');
-        args.push(Colors.fg.White);
-        console.error.apply(console, args);
+        let array: string[];
+
+        args.unshift('[ERROR]');
+        array = <string[]>Colors.Apply(['Red', 'Bright'], args);
+
+        Server.Log.apply(console, array);
+    }
+
+    public static Broadcast(message: string): void {
+        let array: string[] = <string[]>Colors.Apply(['Blue', 'Bright'], [
+            `[BROADCAST]${Colors.Assemble('Italic')}`,
+            `"${message}"`
+        ]);
+
+        Server.Log.apply(console, array);
+
+        if (Server.sockets) {
+            Server.sockets.IO.send('broadcast', message);
+        }
     }
 
     public static Start(config: any): void {
