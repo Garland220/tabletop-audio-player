@@ -46,32 +46,55 @@ export class Sound extends BaseEntity {
     @JoinColumn()
     private owner: User;
 
+    private version: number = 0;
+
     public get ID(): number {
         return this.id;
+    }
+    public set ID(value: number) {
+        this.id = value;
     }
 
     public get Owner(): User {
         return this.owner;
     }
+    public set Owner(value: User) {
+        this.owner = value;
+    }
 
     public get Name(): string {
         return this.name;
+    }
+    public set Name(value: string) {
+        this.name = value;
     }
 
     public get Description(): string {
         return this.description;
     }
+    public set Description(value: string) {
+        this.description = value;
+    }
 
     public get Attribution(): string {
         return this.attribution;
+    }
+    public set Attribution(value: string) {
+        this.attribution = value;
     }
 
     public get ImageURL(): string {
         return this.imageURL;
     }
+    public set ImageURL(value: string) {
+        this.imageURL = value;
+    }
 
     public get IconURL(): string {
         return this.iconURL;
+    }
+    public set IconURL(value: string) {
+        this.iconURL = value;
     }
 
     // public get Tags(): Tag[] {
@@ -81,17 +104,33 @@ export class Sound extends BaseEntity {
     public get Loop(): boolean {
         return this.loop;
     }
+    public set Loop(value: boolean) {
+        this.loop = value;
+    }
 
     public get isDeleted(): boolean {
         return this.deleted;
+    }
+    public set isDeleted(value: boolean) {
+        this.deleted = value;
     }
 
     public get isPublic(): boolean {
         return this.public;
     }
+    public set isPublic(value: boolean) {
+        this.public = value;
+    }
 
     public get isMusic(): boolean {
         return this.music;
+    }
+    public set isMusic(value: boolean) {
+        this.music = value;
+    }
+
+    public get Version(): number {
+        return this.version;
     }
 
     constructor() {

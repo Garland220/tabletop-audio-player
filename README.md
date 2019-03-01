@@ -43,14 +43,3 @@ Roadmap
 7. Sound searching
 8. Soundcloud integration
 9. Fantasy Grounds integration
-
-
-Requirements
-------
-* Express
-* Bunyan
-* Socket.io
-* Waterline
-* SQLite3
-* Handlebars
-* Lodash

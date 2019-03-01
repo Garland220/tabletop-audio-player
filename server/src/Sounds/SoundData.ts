@@ -22,6 +22,8 @@ export class SoundData {
     private loop: boolean = false; // Disabled looping
     private forceLoop: boolean = false; // Forces looping
 
+    private version: number = 0;
+
     public get Active(): boolean {
         return this.active;
     }
@@ -104,7 +106,7 @@ export class SoundData {
 
     constructor(data?: any) {
         if (data) {
-            Deserializer.extend(this, data);
+            Deserializer.Extend(this, data);
 
             if (data.sound) {
                 this.sound = SoundController.Get(data.sound.ID);

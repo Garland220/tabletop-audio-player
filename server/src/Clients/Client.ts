@@ -13,6 +13,7 @@ export class Client {
     private socket: SocketIO.Socket;
     private address: IPAddress;
     private hardwareInfo: HardwareInfo;
+    private clientVersion: Version;
 
     private connectedOn: Date;
 

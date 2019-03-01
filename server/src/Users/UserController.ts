@@ -1,3 +1,5 @@
+import { Request, Response } from 'express';
+
 import { Server } from '../';
 import { Hash } from '../Shared';
 import { User } from './';
@@ -64,7 +66,7 @@ export class UserController {
                 }
             }
 
-            Server.Log(`Loaded ${users.length} users from database.`);
+            Server.Log(`(UserController :: LoadAll) Loaded ${users.length} users from database.`);
             return users;
         }).catch((error) => {
             Server.Error('(UserController :: LoadAll)', error);
@@ -79,5 +81,16 @@ export class UserController {
         }).catch((error) => {
             Server.Error('(UserController :: Load)', error);
         });
+    }
+
+    public static ListAll(req: Request, res: Response): void {
+        const userList = UserController.Array.map((user: any) => {
+            return {
+                id: user.id,
+                name: user.name,
+            }
+        });
+
+        res.json(userList);
     }
 }

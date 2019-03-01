@@ -2,6 +2,9 @@ import { Hash } from './';
 
 
 export class Colors {
+    /**
+     * Applies assembled color string to input strings
+     */
     public static Apply(color: string | string[], input: string | string[]): string | string[] {
         if (typeof input === 'string') {
             let inputString: string = <string>input;
@@ -17,6 +20,9 @@ export class Colors {
         }
     }
 
+    /**
+     * Builds valid terminal color strings
+     */
     public static Assemble(colors: string | string[], sequence: string = '\x1b', finisher: string = 'm'): string {
         let codeString: string = '';
 
@@ -36,14 +42,23 @@ export class Colors {
         return `${sequence}[${codeString}${finisher}`;
     }
 
+    /**
+     * Help make color strings more user friendly
+     */
     public static CapitalizeFirstLetter(input: string): string {
         return `${input.charAt(0).toUpperCase()}${input.slice(1)}`;
     }
 
+    /**
+     * Returns the numeric code for the color string
+     */
     public static GetCode(color: string): number {
         return ColorList[Colors.CapitalizeFirstLetter(color)];
     }
 
+    /**
+     * Resets all options back to default
+     */
     public static Reset(): string {
         return Colors.Assemble('ResetAll')
     }

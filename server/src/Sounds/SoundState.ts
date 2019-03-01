@@ -7,8 +7,13 @@ export class SoundState {
     // private soundState: SoundDataHash = {};
     // private musicState: MusicData;
 
+    private version: number = 0;
+
     public get Categories(): SoundCategory[] {
         return this.categories;
+    }
+    public set Categories(value: SoundCategory[]) {
+        this.categories = value;
     }
 
     public get ImportedSounds(): Sound[] {
@@ -30,6 +35,7 @@ export class SoundState {
             // this.musicState = data.musicState;
 
             if (data.categories) {
+                this.categories.length = 0;
                 for (let i = 0; i < data.categories.length; i += 1) {
                     this.categories.push(new SoundCategory(data.categories[i]));
                 }

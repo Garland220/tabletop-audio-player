@@ -4,7 +4,7 @@ import { Promise } from 'bluebird';
 import { Server } from '../';
 import { Hash } from '../Shared';
 import { Room } from '../Rooms';
-import { Sound, SoundData, SoundCategory } from '../Sounds';
+import { Sound, SoundData, SoundCategory, SoundState } from '../Sounds';
 
 
 export class RoomController {
@@ -36,7 +36,7 @@ export class RoomController {
                 return true;
             }
         }
-        Server.Error('(RoomController :: Add)', 'ID is not valid', id);
+        Server.Error('(RoomController :: Add)', `ID '${id}' is not valid`);
         return false
     }
 
@@ -90,7 +90,7 @@ export class RoomController {
                 res.render('channel/view', { channel: room });
             });
         }).catch((error) => {
-            Server.Error('(SoundController :: View)', error);
+            Server.Error('(RoomController :: View)', error);
             res.status(500).send(error);
         });
     }
@@ -98,11 +98,45 @@ export class RoomController {
     public static Payload(req: Request, res: Response): void {
         RoomController.VerifyID(req, res).then((id: number) => {
             let room = RoomController.List[id];
-            res.json(room.StateJSON);
+            res.send(room.StateJSON);
         }).catch((error) => {
-            Server.Error('(SoundController :: Payload)', error);
+            Server.Error('(RoomController :: Payload)', error);
             res.status(500).send(error);
         });
+    }
+
+    public static PayloadTest(req: Request, res: Response): void {
+        let room = new Room(null, 'Test Room');
+        let category1 = new SoundCategory({ name: 'TEST1' });
+        let category2 = new SoundCategory({ name: 'TEST2' });
+        let category3 = new SoundCategory({ name: 'TEST3' });
+        let sound1 = new Sound();
+        let sound2 = new Sound();
+
+        sound1.ID = 1;
+        sound1.Name = 'test123';
+
+        sound2.ID = 2;
+        sound2.Name = 'test321';
+
+        category1.Name = 'TEST1';
+        category2.Name = 'TEST2';
+
+        category1.Add(sound1);
+        category1.Add(sound2);
+
+        category3.Add(sound2);
+
+        room.SoundState.Categories = [
+            category1,
+            category2,
+            category3
+        ];
+
+        let result = JSON.stringify(JSON.parse(room.Test()), undefined, 4);
+        // Server.Log(result);
+        Server.Log(JSON.stringify(room.SoundState, undefined, 4));
+        res.send(result);
     }
 
     public static Clients(req: Request, res: Response): void {
@@ -112,7 +146,7 @@ export class RoomController {
                     res.json(room.Clients);
                 }
             }).catch((error) => {
-                Server.Error('(SoundController :: Clients)', error);
+                Server.Error('(RoomController :: Clients)', error);
                 res.status(500).send(error);
             });
         });
@@ -124,7 +158,7 @@ export class RoomController {
                 res.render('channel/edit', { channel: room });
             });
         }).catch((error) => {
-            Server.Error('(SoundController :: Edit)', error);
+            Server.Error('(RoomController :: Edit)', error);
             res.status(500).send(error);
         });
     }
@@ -144,17 +178,9 @@ export class RoomController {
                 room.Description = description;
                 room.StateJSON = json;
 
-                // let cat = new SoundCategory();
-                // let soundData = new SoundData();
-                // let sound = new Sound();
-
-                // soundData.Sound = sound;
-                // cat.Sounds.push(soundData);
-                // // room.SoundState.Categories = [];
-                // room.SoundState.Categories.push(cat);
                 return room.save();
             }).catch((error) => {
-                Server.Error('(SoundController :: Save)', error);
+                Server.Error('(RoomController :: Save)', error);
                 res.status(500).send(error);
             });
         }
@@ -169,7 +195,7 @@ export class RoomController {
             Room.findOneById(id).then((room: Room) => {
                 res.render('channel/admin', { channel: room });
             }).catch((error) => {
-                Server.Error('(SoundController :: Control)', error);
+                Server.Error('(RoomController :: Control)', error);
                 res.status(500).send(error);
             });
         });
@@ -196,10 +222,10 @@ export class RoomController {
                 }
             }
 
-            Server.Log('(SoundController :: LoadAll)', `Loaded ${rooms.length} rooms from database.`);
+            Server.Log('(RoomController :: LoadAll)', `Loaded ${rooms.length} rooms from database.`);
             return rooms;
         }).catch((error) => {
-            throw new Error(`(SoundController :: LoadAll) ${error}`);
+            throw new Error(`(RoomController :: LoadAll) ${error}`);
         });
     }
 
@@ -209,7 +235,7 @@ export class RoomController {
                 RoomController.Add(room);
             }
         }).catch((error) => {
-            throw new Error(`(SoundController :: Load) ${error}`);
+            throw new Error(`(RoomController :: Load) ${error}`);
         });
     }
 }

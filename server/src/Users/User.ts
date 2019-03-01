@@ -21,6 +21,8 @@ export class User extends BaseEntity {
     @Column()
     private admin: boolean = false;
 
+    private version: number = 0;
+
     public get ID(): number {
         return this.id;
     }

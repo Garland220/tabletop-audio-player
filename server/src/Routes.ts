@@ -6,6 +6,7 @@ import { SoundController } from './Sounds';
 
 
 const routes: any = {
+    'get /channel/test': RoomController.PayloadTest,
     'get /channel/new': RoomController.New,
     'post /channel/create': RoomController.Save,
     'get /channel/list': RoomController.ListAll,
@@ -16,7 +17,7 @@ const routes: any = {
     'get /channel/:id': RoomController.View,
 
     // 'get /sound/new': SoundController.new,
-    // 'get /sound/list': SoundController.list,
+    'get /sound/list': SoundController.ListAll,
     // 'post /sound/import': SoundController.import,
     // 'get /sound/:id/edit': SoundController.edit,
     // 'post /sound/:id/edit': SoundController.save,

@@ -15,6 +15,8 @@ export class SoundCategory {
 
     private sounds: SoundData[] = [];
 
+    private version: number = 0;
+
     public get Name(): string {
         return this.name;
     }
@@ -82,12 +84,13 @@ export class SoundCategory {
         return this.sounds;
     }
 
-    constructor(data?: SoundCategory) {
+    constructor(data?: any) {
         if (data) {
-            Deserializer.extend(this, data);
+            Deserializer.Extend(this, data);
 
-            let size = data.sounds.length;
             if (data.sounds) {
+                let size = data.sounds.length;
+                this.sounds.length = 0;
                 for (let i = 0; i < size; i += 1) {
                     this.sounds.push(new SoundData(data.sounds[i]));
                 }
@@ -97,10 +100,10 @@ export class SoundCategory {
 
     public Add(sound: Sound) {
         let data = new SoundData({
+            name: sound.Name,
             loop: sound.Loop,
         });
-        // data.Loop = ;
-        data.Name = sound.Name;
+        this.sounds.push(data);
     }
 
     public Remove(sound: Sound) {

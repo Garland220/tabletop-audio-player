@@ -17,7 +17,7 @@ export class ClientController {
     }
 
     public static get Array(): Client[] {
-        return Object.keys(ClientController.clients).map(function(id: string) {
+        return Object.keys(ClientController.clients).map((id: string) => {
             return ClientController.clients[<any>id];
         });
     }

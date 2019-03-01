@@ -9,6 +9,8 @@ export class Tag extends BaseEntity {
     @Column({ length: 100 })
     private name: string;
 
+    private version: number = 0;
+
     constructor() {
         super();
     }

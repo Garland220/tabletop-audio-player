@@ -43,7 +43,7 @@ export class Room extends BaseEntity {
 
     @ManyToMany(type => User)
     @JoinTable()
-    private fullAccess: User[]; // Other users allowed to control this room
+    private fullAccess: User[] = []; // Other users allowed to control this room
 
     @Column()
     private deleted: boolean = false;
@@ -62,6 +62,8 @@ export class Room extends BaseEntity {
     private clientCount: number = 0;
     private clientList: string[] = [];
     private active: boolean = false;
+
+    private version: number = 0;
 
     public get ID(): number {
         return this.id;
@@ -129,6 +131,7 @@ export class Room extends BaseEntity {
         this.owner = owner;
         this.name = name;
         this.description = description;
+        this.soundState = new SoundState();
     }
 
     public save(): Promise<this> {
@@ -148,8 +151,11 @@ export class Room extends BaseEntity {
                 if (key === 'parent' || !value) {
                     return;
                 }
-                if (key === 'sound' && value.id) {
-                    return value.id;
+                if (key === 'sound') {
+                    if (value.id) {
+                        return value.id;
+                    }
+                    return;
                 }
 
                 return value;
@@ -163,6 +169,12 @@ export class Room extends BaseEntity {
             let data = JSON.parse(this.stateJSON);
             this.soundState = new SoundState(data);
         }
+    }
+
+    public Test(): string {
+        this.Serialize();
+        this.Deserialize();
+        return this.stateJSON;
     }
 
     public Kick(client: Client): void {

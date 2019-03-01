@@ -50,6 +50,8 @@ export class DatabaseController {
             this.connection = connection;
 
             RoomController.LoadAll();
+            SoundController.LoadAll();
+            UserController.LoadAll();
 
             return this.connection;
         }).catch((error: Error) => {
